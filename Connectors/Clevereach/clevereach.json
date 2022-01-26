@@ -1,0 +1,320 @@
+{
+  "enabled": false,
+  "resources": {
+    "openapi": "3.0.0",
+    "paths": {
+      "/groups.json/{listId}/receivers/upsert": {
+        "post": {
+		 "x-cdp-operation-settings": {
+			   
+				"rateLimitConfig": {
+					"type": "RPS",
+					"rateLimitParameters": {
+						"ratePerSecond": 5,
+						"errorCodes": [
+							606,
+							607,
+							608
+						],
+						"delayAfterRateLimitInSecond": 20
+					}
+				}
+			},
+          "summary": "Send recipients to Clever Reach",
+          "parameters": [
+            {
+              "name": "listId",
+              "in": "path",
+              "type": "string",
+              "schema": {
+                "type": "string",
+				"default": "$listId"
+              },
+              "required": true
+            }
+          ],
+          "tags": [
+            "consume"
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }	
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+					
+					
+					  "type": "array",
+						"items": {
+						  "type": "object",
+						  "properties": {
+							"email": {
+							  "type": "string"
+							},
+							"source": {
+							  "type": "string"
+							},
+							"attributes": {
+							  "type": "object",
+							  
+							  "properties": {}
+							},
+							"global_attributes": {
+							  "type": "object",
+							  
+							  "properties": {}
+							}
+						  }
+						}
+                }
+              }
+            }
+          }
+        }
+      },
+	  "/groups.json/{listId}/receivers/{id}/deactivate": {
+        "put": {
+		
+          "summary": "Send recipients to Clever Reach",
+          "parameters": [
+            {
+              "name": "listId",
+              "in": "path",
+              "type": "string",
+              "schema": {
+                "type": "string",
+				"default": "$listId"
+              },
+              "required": true
+            },
+			 {
+              "name": "id",
+              "in": "path",
+              "type": "string",
+              "schema": {
+                "type": "string"
+				
+              },
+              "required": true
+            }
+          ],
+          "tags": [
+            "consume"
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }	
+            }
+          },
+		   "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                   
+                    }
+                  
+                  
+                }
+              }
+            }
+          }
+        }
+      },
+	  "/receivers/filter.json": {
+        "post": {
+          "summary": "Get Receivers  From Clever Reach",
+		  "x-cdp-operation-settings": {
+                        "pagingConfig": {
+                           "type": "sequential",
+					       "pageFieldName": "page",
+						    "pageSizeFieldName": "pagesize"
+                        }
+                    },
+          "parameters": [],
+          "tags": [
+            "produce"
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+					  "x-cdp-schema-settings": {
+											
+										"recordsLocatorPath": "$"
+										},
+					  "type": "array",
+                      "items": {
+						"type": "object",
+						"properties": {
+						  "id": {
+							"type": "string"
+						  },
+						  "email": {
+							"type": "string"
+						  },
+						  "activated": {
+							"type": "integer"
+							
+						  },
+						  "attributes": {
+							"type": "object",
+							
+							"properties": {}
+						  },
+						  "global_attributes": {
+							"type": "object",
+							
+							"properties": {}
+						  }
+						}
+					  }
+                  }
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "operator": {
+                      "type": "string",
+					  "default": "OR"
+                    },
+                    "rules": {
+                      "type": "array",
+					  "default":[{"field":"activated", "logic":"bg","condition":"${lastRunTime:UNIX}"}],
+                      "items": {
+                        "type": "object",
+                       
+                        "properties": {
+                          "field": {
+                            "type": "string"
+                            
+                          },
+                          "logic": {
+                            "type": "string"
+                            
+                          },
+                          "condition": {
+                            "type": "string"
+							
+                          }
+                        }
+                      }
+                      
+                    },
+                    "detail": {
+                      "type": "integer",
+                      "default": 7
+                    },
+                    "pagesize": {
+                      "type": "integer",
+                      "default": 1000
+                    },
+                    "page": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "title": "Clever Reach",
+      "version": "1"
+    },
+    "components": {
+      "securitySchemes": {
+        "default": {
+          "type": "oauth2",
+          "flows": {
+            "clientCredentials": {
+              "scopes": {},
+              "tokenUrl": "https://rest.cleverreach.com/oauth/token.php",
+              "refreshUrl": "https://rest.cleverreach.com/oauth/token.php"
+            }
+          }
+        }
+      }
+    },
+    "servers": [
+      {
+        "url": "https://rest.cleverreach.com/v3"
+      }
+    ]
+  },
+  "version": "1.0.0.0",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/cleverreach.svg",
+  "type": "Rest",
+  "category": "Commerce",
+  "name": "Clevereach",
+  "description": "Creating audience, sending user data and retrieving recipients from Clever Reach ",
+  "externalDocs": "https://rest.cleverreach.com/explorer/v3/?_ga=2.164280127.1455479656.1636014993-1377226808.1635855761#!/groups-v3/removeMultiple_group_post",
+  
+  "preDefinedActions": [
+    {
+      "name": "Create and update recipients in a batch or real time",
+      "resourcePath": "/groups.json/{listId}/receivers/upsert/post",
+      "description": "Send recipients to Clever Reach",
+      "enrichments": []
+    },
+	{
+      "name": "Deactivate recipient in real time",
+      "resourcePath": "/groups.json/{listId}/receivers/{id}/deactivate/put",
+      "description": "Send recipients to Clever Reach",
+      "enrichments": []
+    }
+  ],
+  "preDefinedEvents": [
+    {
+      "name": "Recieve recipients in a batch",
+      "resourcePath": "/receivers/filter.json/post",
+      "description": "Get Receivers  From Clever Reach",
+      "enrichments": []
+    }
+  ],
+   
+  "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        
+        "properties": {
+            
+			
+            
+            "listId":
+            {
+                "title": "List Id",
+                "description": "The name of the recipients list",
+                "type": "string",
+                "scopes": [
+                    "action", "journey-action"
+                ]
+            }
+			
+		
+            
+        }
+    }
+  
+}

@@ -1,0 +1,421 @@
+{
+    "enabled": false,
+    "name": "Hubspot",
+    "description": "Generic Hubspot Connector",
+    "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/hubspot.svg",
+    "category": "Marketing",
+    "externalDocs": "https://developers.hubspot.com/",
+    "resources": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Hubspot Connector",
+            "version": "1"
+        },
+        "paths": {
+            "/crm/v3/objects/contacts/{contactId}": {
+                "patch": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Perform a partial update of an Object identified by {contactId}. Provided property values will be overwritten. Read-only and non-existent properties will be ignored. Properties values can be cleared by passing an empty string.",
+                    "parameters": [
+                        {
+                            "name": "contactId",
+                            "in": "path",
+                            "description": "The ID of the contact to update in Hubspot.",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    ],
+                    "requestBody": {
+                        "description": "The customer object, with those fields that are to be updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateContact"
+                                }
+                            }
+                        },
+                        "required": true
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "OK - Everything worked as expected",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/CreateContactObject"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Bad Request - Often due to a missing request parameter",
+                            "content": {}
+                        }
+                    }
+                }
+            },
+            "/crm/v3/objects/contacts/search": {
+                "post": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "summary": "Read a page of contacts. Control what is returned via the properties query param.",
+                    "requestBody": {
+                        "description": "The query, selecting the contacts to return.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetContact"
+                                }
+                            }
+                        },
+                        "required": true
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "ok",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/GetContactResult"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/crm/v3/objects/contacts": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Create contact data in Hubspot",
+                    "requestBody": {
+                        "description": "Create a contact with the given properties and return a copy of the object, including the ID.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateContact"
+                                }
+                            }
+                        },
+                        "required": true
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "OK - Everything worked as expected",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/CreateContactObject"
+                                    }
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "Bad Request - The requested resource could not be found",
+                            "content": {}
+                        }
+                    }
+                }
+            }
+        },
+        "servers": [
+            {
+                "url": "$baseUrl"
+            }
+        ],
+        "components": {
+            "schemas": {
+                "CreateContactObject": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "createdAt": {
+                            "type": "string"
+                        },
+                        "updatedAt": {
+                            "type": "string"
+                        },
+                        "archived": {
+                            "type": "boolean"
+                        },
+                        "properties": {
+                            "$ref": "#/components/schemas/CreateContactRequest"
+                        }
+                    }
+                },
+                "beforeAfter": {
+                    "type": "object",
+                    "properties": {
+                        "next": {
+                            "$ref": "#/components/schemas/next"
+                        },
+                        "prev": {
+                            "$ref": "#/components/schemas/prev"
+                        }
+                    }
+                },
+                "next": {
+                    "type": "object",
+                    "properties": {
+                        "link": {
+                            "type": "string"
+                        },
+                        "after": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "prev": {
+                    "type": "object",
+                    "properties": {
+                        "link": {
+                            "type": "string"
+                        },
+                        "before": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "ProductDetails": {
+                    "type": "object",
+                    "properties": {
+                        "createdate": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "firstname": {
+                            "type": "string"
+                        },
+                        "hs_object_id": {
+                            "type": "string"
+                        },
+                        "lastmodifieddate": {
+                            "type": "string"
+                        },
+                        "lastname": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "CreateContact": {
+                    "type": "object",
+                    "required": [
+                        "properties"
+                    ],
+                    "properties": {
+                        "properties": {
+                            "$ref": "#/components/schemas/CreateContactRequest"
+                        }
+                    }
+                },
+                "GetContact": {
+                    "type": "object",
+                    "properties": {
+                        "after": {
+                            "type": "number",
+                            "default": 0
+                        },
+                        "limit": {
+                            "type": "number",
+                            "default": "$limit"
+                        },
+                        "filterGroups": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/FilterGroupArray"
+                            },
+                            "default": [
+                                {
+                                    "filters": [
+                                        {
+                                            "operator": "GT",
+                                            "propertyName": "lastmodifieddate",
+                                            "value": "${lastRunTime:UNIXMS}"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "sorts": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "propertyName": {
+                                        "type": "string"
+                                    },
+                                    "direction": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "default": [
+                                {
+                                    "propertyName": "lastmodifieddate",
+                                    "direction": "DESCENDING"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "FilterGroupArray": {
+                    "type": "object",
+                    "properties": {
+                        "filters": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/FilterObject"
+                            }
+                        }
+                    }
+                },
+                "FilterObject": {
+                    "type": "object",
+                    "properties": {
+                        "operator": {
+                            "type": "string"
+                        },
+                        "propertyName": {
+                            "type": "string"
+                        },
+                        "value": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "CreateContactRequest": {
+                    "type": "object",
+                    "properties": {
+                        "company": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "firstname": {
+                            "type": "string"
+                        },
+                        "lastname": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        },
+                        "website": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "CreateContactResult": {
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/CreateContactObject"
+                            }
+                        }
+                    }
+                },
+                "GetContactResult": {
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/CreateContactObject"
+                            }
+                        },
+                        "paging": {
+                            "$ref": "#/components/schemas/beforeAfter"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/crm/v3/objects/contacts/post",
+            "name": "Create contact in Hubspot"
+        },
+        {
+            "resourcePath": "/crm/v3/objects/contacts/{contactId}/patch",
+            "name": "Update contact on Hubspot"
+        }
+    ],
+    "preDefinedEvents": [
+        {
+            "resourcePath": "/crm/v3/objects/contacts/search/post",
+            "name": "Get contacts from Hubspot"
+        }
+    ],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "baseUrl"
+        ],
+        "properties": {
+            "limit": {
+                "type": "number",
+                "title": "Record size limit",
+                "description": "The maximum number of items to return per page",
+                "default": 10,
+                "scopes": [
+                    "event"
+                ]
+            },
+            "baseUrl": {
+                "type": "string",
+                "title": "Hubspot base url",
+                "description": "The URL (e.g. https://api.hubapi.com) to initiate the integration with Hubspot",
+                "format": "uri",
+                "default": "https://api.hubapi.com",
+                "scopes": [
+                    "application"
+                ]
+            }
+        }
+    },
+    "securitySchemes": {
+        "apikey": {
+            "type": "object",
+            "allowAdditionalProperties": false,
+            "required": [
+                "hapikey"
+            ],
+            "properties": {
+                "hapikey": {
+                    "title": "API Key (HAPI key)",
+                    "description": "The api key of the site to use for authentication",
+                    "type": "string",
+                    "in": "query"
+                }
+            }
+        }
+    },
+    "pollingConfigs": {
+        "/crm/v3/objects/contacts/search/post": {
+            "recordsLocator": "results",
+            "pagingConfig": {
+                "type": "offset",
+                "pageFieldName": "after",
+                "pageSizeFieldName": "limit"
+            }
+        }
+    },
+    "version": "1.0.0.0"
+}

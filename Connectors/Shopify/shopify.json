@@ -1,0 +1,1853 @@
+{
+    "enabled": false,
+    "name": "Shopify",
+    "description": "Shopify Connector",
+    "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/shopify.svg",
+    "category": "Commerce",
+    "externalDocs": "https://shopify.dev/concepts/shopify-introduction",
+    "resources": {
+        "openapi": "3.0.1",
+        "info": {
+            "title": "Shopify",
+            "description": "Add a Shopify Instance to connect your existing Shopify account",
+            "version": "1"
+        },
+        "paths": {
+            "/customers/{customerId}.json": {
+                "patch": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Update a customer associated with a given ID in Shopify. The update\nAPI uses the PATCH HTTP verb, so only those fields provided in the customer\nobject will be updated, and those fields not provided will be left alone.\nProviding an ID that does not exist will result in an error response.",
+                    "parameters": [
+                        {
+                            "name": "customerId",
+                            "in": "path",
+                            "description": "The ID of the customer to update in Shopify.",
+                            "required": true,
+                            "schema": {
+                                "type": "integer"
+                            }
+                        }
+                    ],
+                    "requestBody": {
+                        "description": "The customer object, with those fields that are to be updated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerPATCH"
+                                }
+                            }
+                        },
+                        "required": true
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "OK - Everything worked as expected",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Customer"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Bad Request - Often due to a missing request parameter",
+                            "content": {}
+                        },
+                        "401": {
+                            "description": "Unauthorized - An invalid element token, user secret and/or\norg secret provided",
+                            "content": {}
+                        },
+                        "403": {
+                            "description": "Forbidden - Access to the resource by the provider is forbidden",
+                            "content": {}
+                        },
+                        "404": {
+                            "description": "Not found - The requested resource is not found",
+                            "content": {}
+                        },
+                        "405": {
+                            "description": "Method not allowed - Incorrect HTTP verb used, e.g., GET used\nwhen POST expected",
+                            "content": {}
+                        },
+                        "406": {
+                            "description": "Not acceptable - The response content type does not match the\n'Accept' header value",
+                            "content": {}
+                        },
+                        "409": {
+                            "description": "Conflict - If a resource being created already exists",
+                            "content": {}
+                        },
+                        "415": {
+                            "description": "Unsupported media type - The server cannot handle the requested\nContent-Type",
+                            "content": {}
+                        },
+                        "500": {
+                            "description": "Server error - Something went wrong on the Cloud Elements server",
+                            "content": {}
+                        },
+                        "502": {
+                            "description": "Provider server error - Something went wrong on the Provider\nor Endpoint's server",
+                            "content": {}
+                        }
+                    }
+                }
+            },
+            "/customers.json": {
+                "get": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "summary": "Retrieve a list of customers.",
+                    "parameters": [
+                        {
+                            "name": "ids",
+                            "in": "query",
+                            "description": "Restrict results to customers specified by a comma-separated list of IDs.",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "since_id",
+                            "in": "query",
+                            "description": "Restrict results to those after the specified ID.",
+                            "schema": {
+                                "type": "integer"
+                            }
+                        },
+                        {
+                            "name": "created_at_min",
+                            "in": "query",
+                            "description": "Show customers created after the specified date. (format 2014-04-25T16:15:47-04:00)",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "created_at_max",
+                            "in": "query",
+                            "description": "Show customers created before the specified date. (format 2014-04-25T16:15:47-04:00)",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "updated_at_min",
+                            "in": "query",
+                            "description": "Show customers last updated after the specified date. (format 2014-04-25T16:15:47-04:00)",
+                            "schema": {
+                                "type": "string",
+                                "default": "${lastRunTime:ISO}"
+                            }
+                        },
+                        {
+                            "name": "updated_at_max",
+                            "in": "query",
+                            "description": "Show customers last updated before a specified date. (format 2014-04-25T16:15:47-04:00)",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "limit",
+                            "in": "query",
+                            "description": "The maximum number of results to show.(default 50)(maximum 250)",
+                            "schema": {
+                                "type": "integer",
+                                "default": "$limit"
+                            }
+                        },
+                        {
+                            "name": "fields",
+                            "in": "query",
+                            "description": "Show only certain fields, specified by a comma-separated list of field names.",
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "OK - Everything worked as expected",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/CustData"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Bad Request - Often due to a missing request parameter",
+                            "content": {}
+                        },
+                        "401": {
+                            "description": "Unauthorized - An invalid element token, user secret and/or\norg secret provided",
+                            "content": {}
+                        },
+                        "403": {
+                            "description": "Forbidden - Access to the resource by the provider is forbidden",
+                            "content": {}
+                        },
+                        "404": {
+                            "description": "Not found - The requested resource is not found",
+                            "content": {}
+                        },
+                        "405": {
+                            "description": "Method not allowed - Incorrect HTTP verb used, e.g., GET used\nwhen POST expected",
+                            "content": {}
+                        },
+                        "406": {
+                            "description": "Not acceptable - The response content type does not match the\n'Accept' header value",
+                            "content": {}
+                        },
+                        "409": {
+                            "description": "Conflict - If a resource being created already exists",
+                            "content": {}
+                        },
+                        "415": {
+                            "description": "Unsupported media type - The server cannot handle the requested\nContent-Type",
+                            "content": {}
+                        },
+                        "500": {
+                            "description": "Server error - Something went wrong on the Cloud Elements server",
+                            "content": {}
+                        },
+                        "502": {
+                            "description": "Provider server error - Something went wrong on the Provider\nor Endpoint's server",
+                            "content": {}
+                        }
+                    }
+                }
+            },
+            "/orders.json": {
+                "get": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "summary": "Find orders in Shopify.",
+                    "parameters": [
+                        {
+                            "name": "ids",
+                            "in": "query",
+                            "description": "Retrieve only orders specified by a comma-separated list of order IDs from Shopify.",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "limit",
+                            "in": "query",
+                            "description": "The maximum number of results to show on a page default is 50, maximum is 250.",
+                            "schema": {
+                                "type": "integer",
+                                "default": "$limit"
+                            }
+                        },
+                        {
+                            "name": "since_id",
+                            "in": "query",
+                            "description": "Show orders after the specified ID.",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "created_at_min",
+                            "in": "query",
+                            "description": "Show orders created at or after date (format 2014-04-25T16:15:47-04:00).",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "created_at_max",
+                            "in": "query",
+                            "description": "Show orders created at or before date (format 2014-04-25T16:15:47-04:00).",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "updated_at_min",
+                            "in": "query",
+                            "description": "Show orders last updated at or after date (format 2014-04-25T16:15:47-04:00). .",
+                            "schema": {
+                                "type": "string",
+                                "default": "${lastRunTime:ISO}"
+                            }
+                        },
+                        {
+                            "name": "updated_at_max",
+                            "in": "query",
+                            "description": "Show orders last updated at or before date (format 2014-04-25T16:15:47-04:00).",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "processed_at_min",
+                            "in": "query",
+                            "description": "Show orders imported at or after date (format 2014-04-25T16:15:47-04:00).",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "processed_at_max",
+                            "in": "query",
+                            "description": "Show orders imported at or before date (format 2014-04-25T16:15:47-04:00).",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "attribution_app_id",
+                            "in": "query",
+                            "description": "Show orders attributed to a certain app, specified by the app ID. Set as `current` to show orders for the app currently consuming the API.",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "status",
+                            "in": "query",
+                            "description": "Filter orders by their status.(default open)",
+                            "schema": {
+                                "type": "string"
+                            }
+                        },
+                        {
+                            "name": "fulfillment_status",
+                            "in": "query",
+                            "description": "Filter orders by their fulfillment status.(default any)",
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "OK - Everything worked as expected",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/OrdData"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Bad Request - Often due to a missing request parameter",
+                            "content": {}
+                        },
+                        "401": {
+                            "description": "Unauthorized - An invalid element token, user secret and/or\norg secret provided",
+                            "content": {}
+                        },
+                        "403": {
+                            "description": "Forbidden - Access to the resource by the provider is forbidden",
+                            "content": {}
+                        },
+                        "404": {
+                            "description": "Not found - The requested resource is not found",
+                            "content": {}
+                        },
+                        "405": {
+                            "description": "Method not allowed - Incorrect HTTP verb used, e.g., GET used\nwhen POST expected",
+                            "content": {}
+                        },
+                        "406": {
+                            "description": "Not acceptable - The response content type does not match the\n'Accept' header value",
+                            "content": {}
+                        },
+                        "409": {
+                            "description": "Conflict - If a resource being created already exists",
+                            "content": {}
+                        },
+                        "415": {
+                            "description": "Unsupported media type - The server cannot handle the requested\nContent-Type",
+                            "content": {}
+                        },
+                        "500": {
+                            "description": "Server error - Something went wrong on the Cloud Elements server",
+                            "content": {}
+                        },
+                        "502": {
+                            "description": "Provider server error - Something went wrong on the Provider\nor Endpoint's server",
+                            "content": {}
+                        }
+                    }
+                }
+            }
+        },
+        "servers": [
+            {
+                "url": "$baseUrl"
+            }
+        ],
+        "security": [
+            {
+                "basicAuth": []
+            }
+        ],
+        "components": {
+            "securitySchemes": {
+                "basicAuth": {
+                    "type": "http",
+                    "description": "Username & password to authorize requests.",
+                    "scheme": "basic"
+                }
+            },
+            "schemas": {
+                "CustData": {
+                    "type": "object",
+                    "properties": {
+                        "customers": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/Customer"
+                            }
+                        }
+                    }
+                },
+                "OrdData": {
+                    "type": "object",
+                    "properties": {
+                        "orders": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/Order"
+                            }
+                        }
+                    }
+                },
+                "CustomerPATCH": {
+                    "type": "object",
+                    "properties": {
+                        "customer": {
+                            "type": "object",
+                            "properties": {
+                                "accepts_marketing": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the customer has consented to be sent marketing\nmaterial via email. Valid values are true or false",
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "description": "The unique email address of the customer. Attempting to assign\nthe same email address to multiple customers will return an error",
+                                    "x-sub-format": "Email",
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                },
+                                "first_name": {
+                                    "type": "string",
+                                    "description": "The customer's first name",
+                                    "x-sub-format": "First Name",
+                                    "x-name": true,
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                },
+                                "last_name": {
+                                    "type": "string",
+                                    "description": "The customer's last name",
+                                    "x-sub-format": "Last Name",
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                },
+                                "id": {
+                                    "type": "integer",
+                                    "description": "A unique numeric identifier for the customer",
+                                    "x-readOnly": true
+                                },
+                                "note": {
+                                    "type": "string",
+                                    "description": "A note about the customer",
+                                    "nullable": true,
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                },
+                                "phone": {
+                                    "type": "string",
+                                    "description": "The unique phone number for this customer. Attempting to assign\nthe same phone number to multiple customers will return an error",
+                                    "x-sub-format": "Phone",
+                                    "x-mask": "xxxxxxxxxx,+1xxxxxxxxxx,(xxx)xxx-xxxx,+1 xxx-xxx-xxxx,1-xxx-xxx-xxxx,xxx-xxx-xxxx,+1-xxx-xxx-xxxx,+1(xxx)xxx-xxxx",
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                },
+                                "tax_exempt": {
+                                    "type": "boolean",
+                                    "description": "Indicates whether the customer should be charged taxes when\nplacing orders. Valid values are true or false",
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                },
+                                "tags": {
+                                    "type": "string",
+                                    "description": "Tags are additional short descriptors formatted as a string\nof comma-separated values. For example, if an article has three tags:\ntag1, tag2, tag3.",
+                                    "nullable": true,
+                                    "x-conditionally-required-description": "At least one of the accepts_marketing,email,first_name,last_name,note,phone,tax_exempt,tags\nfields must be provided for successful PATCH request"
+                                }
+                            }
+                        }
+                    },
+                    "description": "A customer resource instance represents a customer account with\nthe shop.",
+                    "x-primary-key": [
+                        "id"
+                    ],
+                    "x-vendor-objectname": "customer"
+                },
+                "Order": {
+                    "type": "object",
+                    "properties": {
+                        "checkout_id": {
+                            "type": "integer"
+                        },
+                        "confirmed": {
+                            "type": "boolean"
+                        },
+                        "buyer_accepts_marketing": {
+                            "type": "boolean",
+                            "description": "Indicates whether the person who placed the order would like\nto receive email updates from the shop. This is set when the customer\nselects the Submit to our newsletter checkbox during checkout. The store's\nsettings about email marketing don't affect this value",
+                            "default": false
+                        },
+                        "created_at": {
+                            "type": "string",
+                            "description": "This auto-generated property is the date and time when the\norder was created in Shopify, in ISO 8601 format",
+                            "format": "date-time",
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ",
+                            "x-readOnly": true
+                        },
+                        "currency": {
+                            "type": "string",
+                            "description": "The three letter code (ISO 4217) for the currency used for\nthe payment.",
+                            "enum": [
+                                "AFA",
+                                "ALL",
+                                "DZD",
+                                "USD",
+                                "ESP",
+                                "AOA",
+                                "XCD",
+                                "ARS",
+                                "AMD",
+                                "AWG",
+                                "AUD",
+                                "ATS",
+                                "AZM",
+                                "BSD",
+                                "BHD",
+                                "BDT",
+                                "BBD",
+                                "BYB",
+                                "BEF",
+                                "BZD",
+                                "BMD",
+                                "BTN",
+                                "BOB",
+                                "BAM",
+                                "BWP",
+                                "NOK",
+                                "BRL",
+                                "BND",
+                                "BGL",
+                                "BGN",
+                                "BIF",
+                                "KHR",
+                                "XAF",
+                                "CAD",
+                                "CVE",
+                                "KYD",
+                                "CLP",
+                                "CLF",
+                                "CNY",
+                                "HKD",
+                                "MOP",
+                                "COP",
+                                "KMF",
+                                "CDF",
+                                "NZD",
+                                "CRC",
+                                "HRK",
+                                "CUP",
+                                "CYP",
+                                "CZK",
+                                "DKK",
+                                "DJF",
+                                "DOP",
+                                "TPE",
+                                "IDE",
+                                "ECS",
+                                "ECV",
+                                "EGP",
+                                "SVC",
+                                "ERN",
+                                "EEK",
+                                "ETB",
+                                "XEU",
+                                "EUR",
+                                "FKP",
+                                "FJD",
+                                "FIM",
+                                "FRF",
+                                "XPF",
+                                "GMD",
+                                "GEL",
+                                "DEM",
+                                "GHC",
+                                "GIP",
+                                "GRD",
+                                "GTQ",
+                                "GNF",
+                                "GWP",
+                                "GYD",
+                                "HTG",
+                                "ITL",
+                                "HNL",
+                                "HUF",
+                                "ISK",
+                                "INR",
+                                "IDR",
+                                "XDR",
+                                "IRR",
+                                "IQD",
+                                "IEP",
+                                "ILS",
+                                "JMD",
+                                "JPY",
+                                "JOD",
+                                "KZT",
+                                "KES",
+                                "KPW",
+                                "KRW",
+                                "KWD",
+                                "KGS",
+                                "LAK",
+                                "LVL",
+                                "LBP",
+                                "ZAR",
+                                "LSL",
+                                "LRD",
+                                "LYD",
+                                "CHF",
+                                "LTL",
+                                "LUF",
+                                "MKD",
+                                "MGF",
+                                "MWK",
+                                "MYR",
+                                "MVR",
+                                "MTL",
+                                "MRO",
+                                "MUR",
+                                "MXN",
+                                "MXV",
+                                "MDL",
+                                "MNT",
+                                "MAD",
+                                "MZM",
+                                "MMK",
+                                "NPR",
+                                "ANG",
+                                "NLG",
+                                "NIO",
+                                "NGN",
+                                "OMR",
+                                "PKR",
+                                "PAB",
+                                "PGK",
+                                "PYG",
+                                "PEN",
+                                "PHP",
+                                "PLN",
+                                "PTE",
+                                "QAR",
+                                "ROL",
+                                "RUR",
+                                "RWF",
+                                "SHP",
+                                "WST",
+                                "STD",
+                                "SAR",
+                                "SCR",
+                                "SLL",
+                                "SGD",
+                                "SKK",
+                                "SIT",
+                                "SBD",
+                                "SOS",
+                                "LKR",
+                                "SDP",
+                                "SRG",
+                                "SZL",
+                                "SEK",
+                                "SYP",
+                                "TWD",
+                                "TJR",
+                                "TZS",
+                                "THB",
+                                "TOP",
+                                "TTD",
+                                "TND",
+                                "TRL",
+                                "TMM",
+                                "UGX",
+                                "UAH",
+                                "AED",
+                                "GBP",
+                                "USS",
+                                "USN",
+                                "UYU",
+                                "UZS",
+                                "VUV",
+                                "VEB",
+                                "VND",
+                                "YER",
+                                "YUN",
+                                "ZRN",
+                                "ZMK",
+                                "ZWD",
+                                "ADP",
+                                "NAD",
+                                "RUB",
+                                "RYR",
+                                "BOV"
+                            ],
+                            "x-sub-format": "Currency Code"
+                        },
+                        "customer": {
+                            "$ref": "#/components/schemas/OrderCustomer"
+                        },
+                        "email": {
+                            "type": "string",
+                            "description": "The customer's email address",
+                            "x-sub-format:": "Email"
+                        },
+                        "financial_status": {
+                            "type": "string",
+                            "enum": [
+                                "authorized",
+                                "pending",
+                                "paid",
+                                "partially_paid",
+                                "refunded",
+                                "voided",
+                                "partially_refunded"
+                            ],
+                            "x-sub-format": "Enum",
+                            "x-searchable": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "id": {
+                            "type": "integer",
+                            "description": "The unique numeric identifier for the order. This one is used\nfor API purposes.This is different from the order_number property",
+                            "x-readOnly": true
+                        },
+                        "line_items": {
+                            "type": "array",
+                            "description": "A list of line item objects, each one containing information\nabout an item in the order",
+                            "items": {
+                                "$ref": "#/components/schemas/OrderLineItem"
+                            }
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The customer's order name as represented by a number.",
+                            "x-searchable": true,
+                            "x-name": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "number": {
+                            "type": "integer",
+                            "description": "Numerical identifier unique to the shop. A number is sequential\nand starts at 1000",
+                            "format": "int32"
+                        },
+                        "processed_at": {
+                            "type": "string",
+                            "description": "The date and time when the order was imported, in ISO 8601\nformat",
+                            "format": "date-time",
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ"
+                        },
+                        "processing_method": {
+                            "type": "string",
+                            "description": "States the type of payment processing method",
+                            "enum": [
+                                "",
+                                "checkout",
+                                "direct",
+                                "manual",
+                                "offsite",
+                                "express"
+                            ],
+                            "x-sub-format": "Enum"
+                        },
+                        "subtotal_price": {
+                            "type": "string",
+                            "description": "Price of the order before shipping and taxes",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "taxes_included": {
+                            "type": "boolean",
+                            "description": "States whether or not taxes are included in the order subtotal"
+                        },
+                        "total_discounts": {
+                            "type": "string",
+                            "description": "The total amount of the discounts to be applied to the price\nof the order",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "total_line_items_price": {
+                            "type": "string",
+                            "description": "The sum of all the prices of all the items in the order",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "total_price": {
+                            "type": "string",
+                            "description": "The sum of all the prices of all the items in the order, taxes\nand discounts included (must be positive)",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "total_price_usd": {
+                            "type": "string",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "total_tax": {
+                            "type": "string",
+                            "description": "The sum of all the taxes applied to the order (must be positive)",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "total_weight": {
+                            "type": "integer",
+                            "description": "The sum of all the weights of the line items in the order,\nin grams.",
+                            "format": "int32"
+                        },
+                        "updated_at": {
+                            "type": "string",
+                            "description": "Date and time when the order was last modified. The API returns\nthis value in ISO 8601 format",
+                            "format": "date-time",
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ",
+                            "x-readOnly": true
+                        },
+                        "contact_email": {
+                            "type": "string",
+                            "x-sub-format": "Email"
+                        },
+                        "shipping_address": {
+                            "$ref": "#/components/schemas/Address"
+                        },
+                        "cancel_reason": {
+                            "type": "boolean",
+                            "description": "The reason why the order was cancelled. If the order was not\ncancelled, this value is null.If the order was cancelled, the value will\nbe one of the customer,fraud,inventory,declined,other",
+                            "nullable": true,
+                            "enum": [
+                                false
+                            ],
+                            "x-sub-format": "Enum"
+                        },
+                        "cancelled_at": {
+                            "type": "string",
+                            "description": "The date and time when the order was cancelled. If the order\nwas cancelled, the API returns this value in ISO 8601 format. If the order\nwas not cancelled, this value is null.",
+                            "format": "date-time",
+                            "nullable": true,
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ",
+                            "x-readOnly": true
+                        },
+                        "phone": {
+                            "type": "string",
+                            "description": "The customer's phone number.",
+                            "x-sub-format": "Phone",
+                            "x-mask": "xxxxxxxxxx,+1xxxxxxxxxx,(xxx)xxx-xxxx,+1 xxx-xxx-xxxx,1-xxx-xxx-xxxx,xxx-xxx-xxxx,+1-xxx-xxx-xxxx,+1(xxx)xxx-xxxx"
+                        }
+                    },
+                    "description": "An order is a customer's completed request to purchase one or more\nproducts from a shop. An order is created when a customer completes the checkout\nprocess, during which time they provide an email address or phone number,\nbilling address and payment information",
+                    "x-primary-key": [
+                        "id"
+                    ],
+                    "x-vendor-objectname": "order",
+                    "x-searchable": true
+                },
+                "OrderCustomer": {
+                    "type": "object",
+                    "properties": {
+                        "accepts_marketing": {
+                            "type": "boolean",
+                            "description": "Indicates whether the customer has consented to be sent marketing\nmaterial via email. Valid values are true or false"
+                        },
+                        "created_at": {
+                            "type": "string",
+                            "description": "The date and time when the customer was created.The API returns\nthis value in ISO 8601 format",
+                            "format": "date-time",
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ",
+                            "x-readOnly": true
+                        },
+                        "default_address": {
+                            "$ref": "#/components/schemas/CustomerAddress"
+                        },
+                        "email": {
+                            "type": "string",
+                            "description": "The unique email address of the customer. Attempting to assign\nthe same email address to multiple customers will return an error",
+                            "x-sub-format": "Email"
+                        },
+                        "first_name": {
+                            "type": "string",
+                            "description": "The customer's first name",
+                            "x-sub-format": "First Name",
+                            "x-name": true
+                        },
+                        "id": {
+                            "type": "integer",
+                            "description": "A unique numeric identifier for the customer",
+                            "x-readOnly": true
+                        },
+                        "last_name": {
+                            "type": "string",
+                            "description": "The customer's last name",
+                            "x-sub-format": "Last Name"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "description": "The unique phone number for this customer. Attempting to assign\nthe same phone number to multiple customers will return an error",
+                            "x-sub-format": "Phone",
+                            "x-mask": "+1xxxxxxxxxx"
+                        },
+                        "updated_at": {
+                            "type": "string",
+                            "description": "The date and time when the customer information was updated.\nThe API returns this value in ISO 8601 format",
+                            "format": "date-time",
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ",
+                            "x-readOnly": true
+                        }
+                    },
+                    "description": "A customer resource instance represents a customer account with\nthe shop.",
+                    "x-primary-key": [
+                        "id"
+                    ],
+                    "x-vendor-objectname": "customer"
+                },
+                "OrderLineItem": {
+                    "type": "object",
+                    "properties": {
+                        "fulfillment_service": {
+                            "type": "string",
+                            "description": "Service provider who is doing the fulfilment,Valid values\nare either manual or the name of the provider. eg: amazon, shipwire,\netc"
+                        },
+                        "gift_card": {
+                            "type": "boolean",
+                            "description": "States whether or not the line_item is a gift card. If so,\nthe item is not taxed or considered for shipping charges"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the product variant",
+                            "x-name": true
+                        },
+                        "price": {
+                            "type": "string",
+                            "description": "The price of the item before discounts have been applied",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "product_id": {
+                            "type": "integer",
+                            "description": "The unique numeric identifier for the product in the fulfilment.Can\nbe null if the original product associated with the order is deleted at\na later date",
+                            "nullable": true,
+                            "x-reference-objectname": "product",
+                            "x-readOnly": true
+                        },
+                        "quantity": {
+                            "type": "integer",
+                            "description": "The number of products that were purchased",
+                            "format": "int32"
+                        },
+                        "taxable": {
+                            "type": "boolean",
+                            "description": "States whether or not the product was taxable"
+                        },
+                        "title": {
+                            "type": "string",
+                            "description": "The title of the product"
+                        },
+                        "variant_id": {
+                            "type": "integer",
+                            "description": "The id of the product variant",
+                            "x-reference-objectname": "variants"
+                        },
+                        "vendor": {
+                            "type": "string",
+                            "description": "The name of the supplier of the item"
+                        },
+                        "total_discount": {
+                            "type": "string",
+                            "description": "The total discount amount applied to this line item. This value\nis not subtracted in the line item price",
+                            "x-sub-format": "Amount",
+                            "x-precision": 2
+                        },
+                        "product_exists": {
+                            "type": "boolean"
+                        },
+                        "id": {
+                            "type": "integer",
+                            "description": "The id of the line item",
+                            "x-readOnly": true
+                        }
+                    },
+                    "description": "A list of line item objects, each one containing information about\nan item in the order",
+                    "x-primary-key": [
+                        "id"
+                    ]
+                },
+                "CustomerAddress": {
+                    "type": "object",
+                    "properties": {
+                        "address1": {
+                            "type": "string",
+                            "description": "The customer's mailing address",
+                            "x-sub-format": "Street Number"
+                        },
+                        "city": {
+                            "type": "string",
+                            "description": " The customer's city",
+                            "x-sub-format": "City"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The customer's name",
+                            "x-sub-format": "Full Name"
+                        },
+                        "country": {
+                            "type": "string",
+                            "description": "The customer's country",
+                            "x-sub-format": "Country",
+                            "x-conditionally-required-description": "If province or province_code is present\nthen either country or country_code must be present"
+                        },
+                        "country_code": {
+                            "type": "string",
+                            "description": "The two-letter country code corresponding to the customer's\ncountry",
+                            "enum": [
+                                "AD",
+                                "AE",
+                                "AF",
+                                "AG",
+                                "AI",
+                                "AL",
+                                "AM",
+                                "AO",
+                                "AQ",
+                                "AR",
+                                "AS",
+                                "AT",
+                                "AU",
+                                "AW",
+                                "AX",
+                                "AZ",
+                                "BA",
+                                "BB",
+                                "BD",
+                                "BE",
+                                "BF",
+                                "BG",
+                                "BH",
+                                "BI",
+                                "BJ",
+                                "BL",
+                                "BM",
+                                "BN",
+                                "BO",
+                                "BQ",
+                                "BR",
+                                "BS",
+                                "BT",
+                                "BV",
+                                "BW",
+                                "BY",
+                                "BZ",
+                                "CA",
+                                "CC",
+                                "CD",
+                                "CF",
+                                "CG",
+                                "CH",
+                                "CI",
+                                "CK",
+                                "CL",
+                                "CM",
+                                "CN",
+                                "CO",
+                                "CR",
+                                "CU",
+                                "CV",
+                                "CW",
+                                "CX",
+                                "CY",
+                                "CZ",
+                                "DE",
+                                "DJ",
+                                "DK",
+                                "DM",
+                                "DO",
+                                "DZ",
+                                "EC",
+                                "EE",
+                                "EG",
+                                "EH",
+                                "ER",
+                                "ES",
+                                "ET",
+                                "FI",
+                                "FJ",
+                                "FK",
+                                "FM",
+                                "FO",
+                                "FR",
+                                "GA",
+                                "GB",
+                                "GD",
+                                "GE",
+                                "GF",
+                                "GG",
+                                "GH",
+                                "GI",
+                                "GL",
+                                "GM",
+                                "GN",
+                                "GP",
+                                "GQ",
+                                "GR",
+                                "GS",
+                                "GT",
+                                "GU",
+                                "GW",
+                                "GY",
+                                "HK",
+                                "HM",
+                                "HN",
+                                "HR",
+                                "HT",
+                                "HU",
+                                "ID",
+                                "IE",
+                                "IL",
+                                "IM",
+                                "IN",
+                                "IO",
+                                "IQ",
+                                "IR",
+                                "IS",
+                                "IT",
+                                "JE",
+                                "JM",
+                                "JO",
+                                "JP",
+                                "KE",
+                                "KG",
+                                "KH",
+                                "KI",
+                                "KM",
+                                "KN",
+                                "KP",
+                                "KR",
+                                "KW",
+                                "KY",
+                                "KZ",
+                                "LA",
+                                "LB",
+                                "LC",
+                                "LI",
+                                "LK",
+                                "LR",
+                                "LS",
+                                "LT",
+                                "LU",
+                                "LV",
+                                "LY",
+                                "MA",
+                                "MC",
+                                "MD",
+                                "ME",
+                                "MF",
+                                "MG",
+                                "MH",
+                                "MK",
+                                "ML",
+                                "MM",
+                                "MN",
+                                "MO",
+                                "MP",
+                                "MQ",
+                                "MR",
+                                "MS",
+                                "MT",
+                                "MU",
+                                "MV",
+                                "MW",
+                                "MX",
+                                "MY",
+                                "MZ",
+                                "NA",
+                                "NC",
+                                "NE",
+                                "NF",
+                                "NG",
+                                "NI",
+                                "NL",
+                                "NO",
+                                "NP",
+                                "NR",
+                                "NU",
+                                "NZ",
+                                "OM",
+                                "PA",
+                                "PE",
+                                "PF",
+                                "PG",
+                                "PH",
+                                "PK",
+                                "PL",
+                                "PM",
+                                "PN",
+                                "PR",
+                                "PS",
+                                "PT",
+                                "PW",
+                                "PY",
+                                "QA",
+                                "RE",
+                                "RO",
+                                "RS",
+                                "RU",
+                                "RW",
+                                "SA",
+                                "SB",
+                                "SC",
+                                "SD",
+                                "SE",
+                                "SG",
+                                "SH",
+                                "SI",
+                                "SJ",
+                                "SK",
+                                "SL",
+                                "SM",
+                                "SN",
+                                "SO",
+                                "SR",
+                                "SS",
+                                "ST",
+                                "SV",
+                                "SX",
+                                "SY",
+                                "SZ",
+                                "TC",
+                                "TD",
+                                "TF",
+                                "TG",
+                                "TH",
+                                "TJ",
+                                "TK",
+                                "TL",
+                                "TM",
+                                "TN",
+                                "TO",
+                                "TR",
+                                "TT",
+                                "TV",
+                                "TW",
+                                "TZ",
+                                "UA",
+                                "UG",
+                                "UM",
+                                "US",
+                                "UY",
+                                "UZ",
+                                "VA",
+                                "VC",
+                                "VE",
+                                "VG",
+                                "VI",
+                                "VN",
+                                "VU",
+                                "WF",
+                                "WS",
+                                "YE",
+                                "YT",
+                                "ZA",
+                                "ZM",
+                                "ZW"
+                            ],
+                            "x-sub-format": "Country Code",
+                            "x-conditionally-required-description": "If province or province_code is present\nthen either country or country_code must be present"
+                        },
+                        "first_name": {
+                            "type": "string",
+                            "description": "The customer's first name",
+                            "x-sub-format": "First Name"
+                        },
+                        "id": {
+                            "type": "integer",
+                            "description": "A unique numeric identifier for the address",
+                            "x-readOnly": true
+                        },
+                        "last_name": {
+                            "type": "string",
+                            "description": "The customer's last name",
+                            "x-sub-format": "Last Name"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "description": "The customer's phone number for this mailing address",
+                            "x-sub-format": "Phone"
+                        },
+                        "zip": {
+                            "type": "string",
+                            "description": "The customer's zip or postal code",
+                            "x-sub-format": "Postal Code"
+                        },
+                        "customer_id": {
+                            "type": "integer",
+                            "description": "A unique numeric identifier for the customer",
+                            "x-reference-objectname": "customer",
+                            "x-readOnly": true
+                        }
+                    },
+                    "description": "A customer address resource instance represents one of the many\naddresses a customer may have",
+                    "x-primary-key": [
+                        "id"
+                    ],
+                    "x-vendor-objectname": "addresses"
+                },
+                "Customer": {
+                    "type": "object",
+                    "properties": {
+                        "admin_graphql_api_id": {
+                            "type": "string"
+                        },
+                        "accepts_marketing": {
+                            "type": "boolean",
+                            "description": "Indicates whether the customer has consented to be sent marketing\nmaterial via email. Valid values are true or false",
+                            "x-searchable": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "addresses": {
+                            "type": "array",
+                            "description": "A list of the ten most recently updated addresses for the customer",
+                            "items": {
+                                "$ref": "#/components/schemas/CustomerAddress"
+                            }
+                        },
+                        "created_at": {
+                            "type": "string",
+                            "description": "The date and time when the customer was created.The API returns\nthis value in ISO 8601 format",
+                            "format": "date-time",
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ",
+                            "x-readOnly": true
+                        },
+                        "default_address": {
+                            "$ref": "#/components/schemas/CustomerAddress"
+                        },
+                        "email": {
+                            "type": "string",
+                            "description": "The unique email address of the customer. Attempting to assign\nthe same email address to multiple customers will return an error",
+                            "x-sub-format": "Email",
+                            "x-searchable": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "first_name": {
+                            "type": "string",
+                            "description": "The customer's first name",
+                            "x-sub-format": "First Name",
+                            "x-searchable": true,
+                            "x-name": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "id": {
+                            "type": "integer",
+                            "description": "A unique numeric identifier for the customer",
+                            "x-searchable": true,
+                            "x-readOnly": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "last_name": {
+                            "type": "string",
+                            "description": "The customer's last name",
+                            "x-sub-format": "Last Name",
+                            "x-searchable": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "last_order_id": {
+                            "type": "integer",
+                            "description": "The id of the customer's last order",
+                            "x-readOnly": true
+                        },
+                        "last_order_name": {
+                            "type": "string",
+                            "description": "The name of the customer's last order. This is directly related\nto the Order's name field",
+                            "x-readOnly": true
+                        },
+                        "note": {
+                            "type": "string",
+                            "description": "A note about the customer"
+                        },
+                        "orders_count": {
+                            "type": "integer",
+                            "description": "The number of orders associated with this customer",
+                            "format": "int32",
+                            "x-searchable": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "multipass_identifier": {
+                            "type": "string",
+                            "description": "The customer's identifier used with Multipass login"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "description": "The unique phone number for this customer. Attempting to assign\nthe same phone number to multiple customers will return an error",
+                            "x-sub-format": "Phone",
+                            "x-searchable": true,
+                            "x-mask": "xxxxxxxxxx,+1xxxxxxxxxx,(xxx)xxx-xxxx,+1 xxx-xxx-xxxx,1-xxx-xxx-xxxx,xxx-xxx-xxxx,+1-xxx-xxx-xxxx,+1(xxx)xxx-xxxx",
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "tax_exempt": {
+                            "type": "boolean",
+                            "description": "Indicates whether the customer should be charged taxes when\nplacing orders. Valid values are true or false"
+                        },
+                        "state": {
+                            "type": "string",
+                            "description": "The state of the customer's account in a shop. The state can\nbe changed in the shop admin or by the customer, but not through the API",
+                            "enum": [
+                                "disabled",
+                                "invited",
+                                "enabled",
+                                "declined"
+                            ],
+                            "x-sub-format": "Enum",
+                            "x-searchable": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "tags": {
+                            "type": "string",
+                            "description": "Tags are additional short descriptors formatted as a string\nof comma-separated values. For example, if an article has three tags:\ntag1, tag2, tag3."
+                        },
+                        "total_spent": {
+                            "type": "string",
+                            "description": "The total amount of money that the customer has spent at the\nshop",
+                            "x-sub-format": "Amount",
+                            "x-searchable": true,
+                            "x-precision": 2,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "updated_at": {
+                            "type": "string",
+                            "description": "The date and time when the customer information was updated.\nThe API returns this value in ISO 8601 format",
+                            "format": "date-time",
+                            "x-sub-format": "Date Time - ISO 8601",
+                            "x-searchable": true,
+                            "x-mask": "yyyy-MM-dd'T'HH:mm:ssZ",
+                            "x-readOnly": true,
+                            "x-searchable-operators": [
+                                "="
+                            ]
+                        },
+                        "verified_email": {
+                            "type": "boolean",
+                            "description": "States whether or not the email address has been verified"
+                        }
+                    },
+                    "description": "A customer resource instance represents a customer account with\nthe shop.",
+                    "x-primary-key": [
+                        "id"
+                    ],
+                    "x-vendor-objectname": "customer",
+                    "x-searchable": true
+                },
+                "Address": {
+                    "type": "object",
+                    "properties": {
+                        "address1": {
+                            "type": "string",
+                            "description": "The customer's mailing address",
+                            "x-sub-format": "Street Number"
+                        },
+                        "city": {
+                            "type": "string",
+                            "description": " The customer's city",
+                            "x-sub-format": "City"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "The customer's name",
+                            "x-sub-format": "Full Name"
+                        },
+                        "country": {
+                            "type": "string",
+                            "description": "The customer's country",
+                            "x-sub-format": "Country",
+                            "x-conditionally-required-description": "If province or province_code is present\nthen either country or country_code must be present"
+                        },
+                        "country_code": {
+                            "type": "string",
+                            "description": "The two-letter country code corresponding to the customer's\ncountry",
+                            "enum": [
+                                "AD",
+                                "AE",
+                                "AF",
+                                "AG",
+                                "AI",
+                                "AL",
+                                "AM",
+                                "AO",
+                                "AQ",
+                                "AR",
+                                "AS",
+                                "AT",
+                                "AU",
+                                "AW",
+                                "AX",
+                                "AZ",
+                                "BA",
+                                "BB",
+                                "BD",
+                                "BE",
+                                "BF",
+                                "BG",
+                                "BH",
+                                "BI",
+                                "BJ",
+                                "BL",
+                                "BM",
+                                "BN",
+                                "BO",
+                                "BQ",
+                                "BR",
+                                "BS",
+                                "BT",
+                                "BV",
+                                "BW",
+                                "BY",
+                                "BZ",
+                                "CA",
+                                "CC",
+                                "CD",
+                                "CF",
+                                "CG",
+                                "CH",
+                                "CI",
+                                "CK",
+                                "CL",
+                                "CM",
+                                "CN",
+                                "CO",
+                                "CR",
+                                "CU",
+                                "CV",
+                                "CW",
+                                "CX",
+                                "CY",
+                                "CZ",
+                                "DE",
+                                "DJ",
+                                "DK",
+                                "DM",
+                                "DO",
+                                "DZ",
+                                "EC",
+                                "EE",
+                                "EG",
+                                "EH",
+                                "ER",
+                                "ES",
+                                "ET",
+                                "FI",
+                                "FJ",
+                                "FK",
+                                "FM",
+                                "FO",
+                                "FR",
+                                "GA",
+                                "GB",
+                                "GD",
+                                "GE",
+                                "GF",
+                                "GG",
+                                "GH",
+                                "GI",
+                                "GL",
+                                "GM",
+                                "GN",
+                                "GP",
+                                "GQ",
+                                "GR",
+                                "GS",
+                                "GT",
+                                "GU",
+                                "GW",
+                                "GY",
+                                "HK",
+                                "HM",
+                                "HN",
+                                "HR",
+                                "HT",
+                                "HU",
+                                "ID",
+                                "IE",
+                                "IL",
+                                "IM",
+                                "IN",
+                                "IO",
+                                "IQ",
+                                "IR",
+                                "IS",
+                                "IT",
+                                "JE",
+                                "JM",
+                                "JO",
+                                "JP",
+                                "KE",
+                                "KG",
+                                "KH",
+                                "KI",
+                                "KM",
+                                "KN",
+                                "KP",
+                                "KR",
+                                "KW",
+                                "KY",
+                                "KZ",
+                                "LA",
+                                "LB",
+                                "LC",
+                                "LI",
+                                "LK",
+                                "LR",
+                                "LS",
+                                "LT",
+                                "LU",
+                                "LV",
+                                "LY",
+                                "MA",
+                                "MC",
+                                "MD",
+                                "ME",
+                                "MF",
+                                "MG",
+                                "MH",
+                                "MK",
+                                "ML",
+                                "MM",
+                                "MN",
+                                "MO",
+                                "MP",
+                                "MQ",
+                                "MR",
+                                "MS",
+                                "MT",
+                                "MU",
+                                "MV",
+                                "MW",
+                                "MX",
+                                "MY",
+                                "MZ",
+                                "NA",
+                                "NC",
+                                "NE",
+                                "NF",
+                                "NG",
+                                "NI",
+                                "NL",
+                                "NO",
+                                "NP",
+                                "NR",
+                                "NU",
+                                "NZ",
+                                "OM",
+                                "PA",
+                                "PE",
+                                "PF",
+                                "PG",
+                                "PH",
+                                "PK",
+                                "PL",
+                                "PM",
+                                "PN",
+                                "PR",
+                                "PS",
+                                "PT",
+                                "PW",
+                                "PY",
+                                "QA",
+                                "RE",
+                                "RO",
+                                "RS",
+                                "RU",
+                                "RW",
+                                "SA",
+                                "SB",
+                                "SC",
+                                "SD",
+                                "SE",
+                                "SG",
+                                "SH",
+                                "SI",
+                                "SJ",
+                                "SK",
+                                "SL",
+                                "SM",
+                                "SN",
+                                "SO",
+                                "SR",
+                                "SS",
+                                "ST",
+                                "SV",
+                                "SX",
+                                "SY",
+                                "SZ",
+                                "TC",
+                                "TD",
+                                "TF",
+                                "TG",
+                                "TH",
+                                "TJ",
+                                "TK",
+                                "TL",
+                                "TM",
+                                "TN",
+                                "TO",
+                                "TR",
+                                "TT",
+                                "TV",
+                                "TW",
+                                "TZ",
+                                "UA",
+                                "UG",
+                                "UM",
+                                "US",
+                                "UY",
+                                "UZ",
+                                "VA",
+                                "VC",
+                                "VE",
+                                "VG",
+                                "VI",
+                                "VN",
+                                "VU",
+                                "WF",
+                                "WS",
+                                "YE",
+                                "YT",
+                                "ZA",
+                                "ZM",
+                                "ZW"
+                            ],
+                            "x-sub-format": "Country Code",
+                            "x-conditionally-required-description": "If province or province_code is present\nthen either country or country_code must be present"
+                        },
+                        "first_name": {
+                            "type": "string",
+                            "description": "The customer's first name",
+                            "x-sub-format": "First Name"
+                        },
+                        "last_name": {
+                            "type": "string",
+                            "description": "The customer's last name",
+                            "x-sub-format": "Last Name"
+                        },
+                        "phone": {
+                            "type": "string",
+                            "description": "The customer's phone number for this mailing address",
+                            "x-sub-format": "Phone"
+                        },
+                        "zip": {
+                            "type": "string",
+                            "description": "The customer's zip or postal code",
+                            "x-sub-format": "Postal Code"
+                        }
+                    },
+                    "description": "A customer address resource instance represents one of the many\naddresses a customer may have",
+                    "x-primary-key": [
+                        "id"
+                    ],
+                    "x-vendor-objectname": "addresses"
+                }
+            }
+        }
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/customers/{customerId}.json/patch",
+            "name": "Update a customer associated with a given ID in Shopify."
+        }
+    ],
+    "preDefinedEvents": [
+        {
+            "resourcePath": "/orders.json/get",
+            "name": "Find orders in Shopify"
+        },
+        {
+            "resourcePath": "/customers.json/get",
+            "name": "Retrieve a list of customers from Shopify"
+        }
+    ],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "baseUrl"
+        ],
+        "properties": {
+            "limit": {
+                "type": "integer",
+                "title": "Limit",
+                "description": "The maximum number of results to show (maximum 250)",
+                "default": 200,
+                "scopes": [
+                    "event"
+                ]
+            },
+            "baseUrl": {
+                "type": "string",
+                "title": "baseUrl",
+                "description": "The baseUrl of the provider e.g. https://shopname.myshopify.com/admin/api/YOURAPIVERSION",
+                "scopes": [
+                    "application"
+                ]
+            }
+        }
+    },
+    "pollingConfigs": {
+        "/customers.json/get": {
+            "recordsLocator": "customers"
+        },
+        "/orders.json/get": {
+            "recordsLocator": "orders"
+        }
+    },
+    "version": "1.0.0.0"
+}

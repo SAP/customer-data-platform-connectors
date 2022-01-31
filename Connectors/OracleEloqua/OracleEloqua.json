@@ -1,0 +1,291 @@
+{
+  "enabled": false,
+  "name": "Oracle Eloqua",
+  "type": "REST",
+  "version": "1.0.0.0",
+  "category": "Marketing",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/marketing.svg",
+  "externalDocs": "https://docs.oracle.com/en/cloud/saas/marketing/eloqua-rest-api/index.html",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "baseUrl"
+    ],
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "title": "Oracle Eloqua base URL",
+        "scopes": [
+          "application"
+        ]
+      },
+      "uriNumber": {
+        "type": "string",
+        "title": "uriNumber",
+        "description": "Once you create an import definition, Eloqua's respond will have a uri field. Enter here only the import's number. For example: in the response you will have 'uri: /contacts/imports/1182' so enter '1182' in the following field. For more information visit https://docs.oracle.com/en/cloud/saas/marketing/eloqua-develop/Developers/BulkAPI/Tutorials/Import.htm",
+        "scopes": [
+          "action"
+        ]
+      },
+      "readTimeout": {
+        "type": "integer",
+        "title": "timeout",
+        "description": "Request timeout",
+        "scopes": [
+          "event"
+        ]
+      },
+      "eloquaPageSize": {
+        "type": "integer",
+        "title": "Pgae size",
+        "description": "Items per page",
+        "scopes": [
+          "event"
+        ]
+      },
+      "eloquaExportDefinitionId": {
+        "type": "integer",
+        "title": "Export definition ID",
+        "description": "Export definnition ID, to reuse same object",
+        "scopes": [
+          "event"
+        ]
+      },
+      "eloquaExportDefinitionName": {
+        "type": "string",
+        "title": "Export definition name",
+        "description": "Export definition name",
+        "scopes": [
+          "event"
+        ]
+      }
+    }
+  },
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Oracle Eloqua Connector",
+      "version": "1"
+    },
+    "paths": {
+      "/api/bulk/2.0/contacts/imports/{uriNumber}/data": {
+        "post": {
+          "x-cdp-operation-settings": {
+            "rateLimitConfig": {
+              "type": "RPS",
+              "rateLimitParameters": {
+                "ratePerSecond": 1,
+                "errorCodes": [404],
+                "delayAfterRateLimitInSecond": 300
+              }
+            }
+          },
+          "tags": [
+            "Actions"
+          ],
+          "summary": "Import Contacts",
+          "description": "Send bulk of contacts from CDP to Oracle Eloqua",
+          "parameters": [
+            {
+              "name": "uriNumber",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "default": "$uriNumber"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "the body",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "maxItems": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/ElementsArray"
+                  },
+                  "x-cdp-schema-settings": {
+                    "recordsLocatorPath": ""
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "results": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/idxStep": {
+        "get": {
+          "tags": [
+            "Events"
+          ],
+          "x-cdp-operation-settings": {
+            "pagingConfig": {
+              "type": "none"
+            },
+            "customSteps": [
+              {
+                "name": "read.cdp.custom.eloqua",
+                "provider": "idx"
+              }
+            ]
+          },
+          "summary": "Get contacts",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string",
+                "default": "aaa"
+              },
+              "in": "query",
+              "required": false,
+              "name": "aaa"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "x-cdp-schema-settings": {
+                      "recordsLocatorPath": "items"
+                    },
+                    "properties": {
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "properties": {
+                            "ID": {
+                              "type": "string"
+                            },
+                            "FirstName": {
+                              "type": "string"
+                            },
+                            "LastName": {
+                              "type": "string"
+                            },
+                            "Email": {
+                              "type": "string"
+                            },
+                            "Country": {
+                              "type": "string"
+                            },
+                            "DateCreated": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "DateModified": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        },
+                        "additionalItems": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "servers": [
+      {
+        "url": "$baseUrl"
+      }
+    ],
+    "security": [
+      {
+        "basicAuth": []
+      },
+      {
+        "oAuth2": []
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "basicAuth": {
+          "type": "http",
+          "scheme": "basic"
+        },
+        "oAuth2": {
+          "type": "oauth2",
+          "flows": {
+            "authorizationCode": {
+              "tokenUrl": "https://login.eloqua.com/auth/oauth2/token",
+              "refreshUrl": "https://login.eloqua.com/auth/oauth2/token",
+              "authorizationUrl": "https://login.eloqua.com/auth/oauth2/authorize",
+              "scopes": {
+                "full": "full"
+              }
+            }
+          }
+        }
+      },
+      "schemas": {
+        "ElementsArray": {
+          "type": "object",
+          "properties": {
+            "businessPhone": {
+              "type": "string"
+            },
+            "emailAddress": {
+              "type": "string"
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "preDefinedActions": [
+    {
+      "resourcePath": "/api/bulk/2.0/contacts/imports/{uriNumber}/data/post",
+      "name": "Create contacts in batch",
+      "description": " Send bulk of contacts from CDP to Oracle Eloqua"    }
+  ],
+  "preDefinedEvents": [
+    {
+      "resourcePath": "/idxStep/get",
+      "name": "Get Eloqua contacts",
+      "description": "",
+      "enrichments": []
+    }
+  ],
+  "pollingConfigs": {
+    "/idxStep/get": {}
+  }
+}

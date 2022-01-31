@@ -1,0 +1,511 @@
+{
+	"enabled": true,
+	"name": "Constant Contact",
+	"description": "Constant Contact Connector",
+	"logoUrl": "assets/img/connectors/default-icons/marketing.svg",
+	"category": "Marketing",
+	"type": "Rest",
+	"configSchema": {
+		"type": "object",
+		"additionalProperties": false,
+		"properties": {
+			"list_id": {
+				"type": "string",
+				"title": "List ID",
+				"description": "The list id to export contacts to",
+				"scopes": [
+					"audience-action",
+					"application"
+				]
+			}
+		}
+	},
+	"preDefinedEvents": [
+		{
+			"resourcePath": "/contacts/get",
+			"name": "Get contacts",
+			"description": ""
+		}
+	],
+	"pollingConfigs": {
+		"/contacts/get": {
+			"recordsLocator": "contacts"
+		}
+	},
+	"connectorVersion": 1,
+	"resources": {
+		"openapi": "3.0.0",
+		"paths": {
+			"/activities/contacts_json_import": {
+				"post": {
+					"summary": "Export contacts to ConstantContact",
+					"parameters": [],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"x-cdp-schema-settings": {
+										"recordsLocatorPath": "import_data"
+									},
+									"type": "object",
+									"properties": {
+										"import_data": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"email": {
+														"type": "string"
+													},
+													"first_name": {
+														"type": "string"
+													},
+													"last_name": {
+														"type": "string"
+													},
+													"job_title": {
+														"type": "string"
+													},
+													"company_name": {
+														"type": "string"
+													},
+													"create_source": {
+														"type": "string"
+													},
+													"birthday_month": {
+														"type": "integer"
+													},
+													"birthday_day": {
+														"type": "integer"
+													},
+													"anniversary": {
+														"type": "string"
+													},
+													"phone": {
+														"type": "string"
+													},
+													"street": {
+														"type": "string"
+													},
+													"street2": {
+														"type": "string"
+													},
+													"city": {
+														"type": "string"
+													},
+													"zip": {
+														"type": "string"
+													},
+													"country": {
+														"type": "string"
+													},
+													"state": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"email"
+												]
+											}
+										},
+										"list_ids": {
+											"type": "string",
+											"default": "$list_id"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/contacts": {
+				"put": {
+					"summary": "updates a contact",
+					"parameters": [],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$schema": "http://json-schema.org/draft-04/schema#",
+									"type": "object",
+									"properties": {
+										"email_address": {
+											"type": "object",
+											"properties": {
+												"address": {
+													"type": "string"
+												},
+												"permission_to_send": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"address"
+											]
+										},
+										"first_name": {
+											"type": "string"
+										},
+										"last_name": {
+											"type": "string"
+										},
+										"job_title": {
+											"type": "string"
+										},
+										"company_name": {
+											"type": "string"
+										},
+										"create_source": {
+											"type": "string"
+										},
+										"birthday_month": {
+											"type": "integer"
+										},
+										"birthday_day": {
+											"type": "integer"
+										},
+										"anniversary": {
+											"type": "string"
+										},
+										"opt_out_source": {
+											"type": "string"
+										},
+										"opt_out_reason": {
+											"type": "string"
+										},
+										"confirm_status": {
+											"type": "string",
+											"enum": [
+												"off",
+												"on"
+											],
+											"widget": {
+												"formlyConfig": {
+													"type": "enum",
+													"templateOptions": {
+														"options": [
+															{
+																"value": "off",
+																"label": "off"
+															},
+															{
+																"value": "on",
+																"label": "on"
+															}
+														]
+													}
+												}
+											}
+										},
+										"opt_out_date": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"steet_addresses": {
+											"type": "object",
+											"properties": {
+												"kind": {
+													"type": "string"
+												},
+												"street": {
+													"type": "string"
+												},
+												"city": {
+													"type": "string"
+												},
+												"state": {
+													"type": "string"
+												},
+												"country": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"required": [
+										"email_address"
+									]
+								}
+							}
+						}
+					}
+				},
+				"post": {
+					"summary": "create a new contact",
+					"parameters": [],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$schema": "http://json-schema.org/draft-04/schema#",
+									"type": "object",
+									"properties": {
+										"email_address": {
+											"type": "object",
+											"properties": {
+												"address": {
+													"type": "string"
+												},
+												"permission_to_send": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"address"
+											]
+										},
+										"first_name": {
+											"type": "string"
+										},
+										"last_name": {
+											"type": "string"
+										},
+										"job_title": {
+											"type": "string"
+										},
+										"company_name": {
+											"type": "string"
+										},
+										"create_source": {
+											"type": "string"
+										},
+										"birthday_month": {
+											"type": "integer"
+										},
+										"birthday_day": {
+											"type": "integer"
+										},
+										"anniversary": {
+											"type": "string"
+										},
+										"steet_addresses": {
+											"type": "object",
+											"properties": {
+												"kind": {
+													"type": "string"
+												},
+												"street": {
+													"type": "string"
+												},
+												"city": {
+													"type": "string"
+												},
+												"state": {
+													"type": "string"
+												},
+												"country": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"kind",
+												"street",
+												"city",
+												"state",
+												"country"
+											]
+										}
+									},
+									"required": [
+										"email_address",
+										"create_source"
+									]
+								}
+							}
+						}
+					}
+				},
+				"get": {
+					"summary": "",
+					"x-cdp-schema-settings": {
+						"recordsLocatorPath": "contacts"
+					},
+					"parameters": [
+						{
+							"schema": {
+								"type": "string",
+								"default": "${lastRunTime:ISO}"
+							},
+							"in": "query",
+							"required": true,
+							"name": "updated_after"
+							
+						},
+												{
+							"schema": {
+								"type": "integer",
+								"default": 500
+							},
+							"in": "query",
+							"required": true,
+							"name": "limit"
+							
+						}
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"contacts": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"first_name": {
+															"type": "string"
+														},
+														"last_name": {
+															"type": "string"
+														},
+														"update_source": {
+															"type": "string"
+														},
+														"create_source": {
+															"type": "string"
+														},
+														"created_at": {
+															"type": "string"
+														},
+														"updated_at": {
+															"type": "string"
+														},
+														"contact_id": {
+															"type": "string"
+														},
+														"email_address": {
+															"type": "object",
+															"properties": {
+																"address": {
+																	"type": "string"
+																},
+																"permission_to_send": {
+																	"type": "string"
+																},
+																"created_at": {
+																	"type": "string"
+																},
+																"updated_at": {
+																	"type": "string"
+																},
+																"opt_in_source": {
+																	"type": "string"
+																},
+																"opt_in_date": {
+																	"type": "string"
+																},
+																"confirm_status": {
+																	"type": "string"
+																}
+															}
+														},
+														"job_title": {
+															"type": "string"
+														},
+														"company_name": {
+															"type": "string"
+														},
+														"birthday_month": {
+															"type": "integer"
+														},
+														"birthday_day": {
+															"type": "integer"
+														},
+														"anniversary": {
+															"type": "string"
+														}
+													},
+													"additionalItems": true,
+													"additionalProperties": false
+												}
+											}
+										},
+										"selected": false
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"info": {
+			"title": "constant_contact1",
+			"version": "1.0.0"
+		},
+		"components": {
+			"securitySchemes": {
+				"default": {
+					"type": "oauth2",
+					"flows": {
+						"authorizationCode": {
+							"scopes": {
+								"account_read": "account_read",
+								"account_update": "account_update",
+								"contact_data": "contact_data",
+								"campaign_data": "campaign_data"
+							},
+							"tokenUrl": "https://idfed.constantcontact.com/as/token.oauth2",
+							"refreshUrl": "https://idfed.constantcontact.com/as/token.oauth2",
+							"authorizationUrl": "https://api.cc.email/v3/idfed"
+						}
+					}
+				}
+			}
+		},
+		"externalDocs": "",
+		"servers": [
+			{
+				"url": "https://api.cc.email/v3"
+			}
+		]
+	},
+	"version": "1.0.0",
+	"preDefinedActions": [
+		{
+			"resourcePath": "/activities/contacts_json_import/post",
+			"name": "Export contacts in batch",
+			"description": "Export contacts to ConstantContact"
+		},
+		{
+			"resourcePath": "/contacts/post",
+			"name": "Create contact in real-time",
+			"description": "Creates a single contact"
+		},
+		{
+			"resourcePath": "/contacts/put",
+			"name": "Update contact in real-time",
+			"description": "Updates a single contact"
+		}
+	]
+}

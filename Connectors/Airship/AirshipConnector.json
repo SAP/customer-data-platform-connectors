@@ -1,0 +1,209 @@
+{
+  "enabled": false,
+  "name": "Airship",
+  "description": "Airship Connector",
+  "logoUrl": "assets/img/connectors/default-icons/commerce.svg",
+  "category": "Marketing",
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/idxStep/post",
+      "name": "Create and update users in batch",
+      "configValues": {}
+    }
+  ],
+  "preDefinedEvents": [
+    {
+      "resourcePath": "/api/channels/get",
+      "name": "Get channels",
+      "description": "",
+      "enrichments": []
+    }
+  ],
+  "preDefinedEventListeners": [],
+  "pollingConfigs": {
+    "/api/channels/get": {
+      "recordsLocator": "channels"
+    }
+  },
+  "externalDocs": "https://docs.airship.com/api/ua/",
+  "resources": {
+    "openapi": "3.0.0",
+    "paths": {
+      "/api/channels": {
+        "get": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string",
+                "default": "application/vnd.urbanairship+json"
+              },
+              "in": "header",
+              "required": false,
+              "name": "Accept"
+            }
+          ],
+          "tags": [
+            "produce"
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "ok": {
+                        "type": "boolean",
+                        "title": "Is OK"
+                      },
+                      "channels": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "properties": {
+                            "channel_id": {
+                              "type": "string"
+                            },
+                            "device_type": {
+                              "type": "string"
+                            },
+                            "created": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "commercial_opted_in": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "opt_in": {
+                              "type": "boolean"
+                            },
+                            "attributes": {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "firstName": {
+                                  "type": "string"
+                                },
+                                "lastName": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "additionalItems": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/idxStep": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+          "x-cdp-operation-settings": {
+            "customSteps": [
+              {
+                "name": "write.cdp.custom.airship.update",
+                "provider": "idx"
+              }
+            ],
+            "rateLimitConfig": {
+              "type": "RPS",
+              "rateLimitParameters": {
+                "ratePerSecond": 5,
+                "errorCodes": [
+                  606,
+                  607,
+                  608
+                ],
+                "delayAfterRateLimitInSecond": 20
+              }
+            }
+          },
+          "summary": "Post channels to Airship list",
+          "description": "Post channels to Airship list",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-cdp-schema-settings": {
+                    "recordsLocatorPath": "records"
+                  },
+                  "properties": {
+                    "records": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "customId": {
+                            "type": "string"
+                          },
+                          "firstName": {
+                            "type": "string"
+                          },
+                          "lastName": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "title": "Airship",
+      "version": "1.0.0"
+    },
+    "components": {
+      "securitySchemes": {
+        "default": {
+          "type": "http",
+          "scheme": "basic"
+        }
+      }
+    },
+    "servers": [
+      {
+        "url": "https://go.urbanairship.com"
+      }
+    ]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {
+      "airshipListName": {
+        "type": "string",
+        "title": "Airship list name",
+        "description": "Airship list name need - as created on airship page",
+        "scopes": [
+          "action"
+        ]
+      }
+    }
+  },
+  "version": "1.0.0.0"
+}

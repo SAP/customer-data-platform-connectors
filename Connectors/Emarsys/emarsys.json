@@ -1,0 +1,325 @@
+{
+    "enabled": false,
+    "name": "Emarsys",
+    "description": "Emarsys connector",
+    "logoUrl": "assets/img/connectors/default-icons/marketing.svg",
+    "category": "Marketing",
+    "resources": {
+        "openapi": "3.0.0",
+        "paths": {
+            "/api/v2/contact": {
+                "post": {
+                    "summary": "",
+                    "parameters": [],
+                    "responses": {
+                        "200": {
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    },
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "x-cdp-schema-settings": {
+										"recordsLocatorPath": "contacts"
+									},
+                                    "properties": {
+                                        "contacts": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "1": {
+                                                        "type": "string",
+                                                        "title": "First Name"
+                                                    },
+                                                    "2": {
+                                                        "type": "string",
+                                                        "title": "Last Name"
+                                                    },
+                                                    "3": {
+                                                        "type": "string",
+                                                        "title": "Email"
+                                                    },
+                                                    "4": {
+                                                        "type": "string",
+                                                        "title": "Date of Birth",
+                                                        "format": "date-time"
+                                                    },
+                                                    "5": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "1",
+                                                            "2"
+                                                        ],
+                                                        "widget": {
+                                                            "formlyConfig": {
+                                                                "type": "enum",
+                                                                "templateOptions": {
+                                                                    "options": [
+                                                                        {
+                                                                            "value": "1",
+                                                                            "label": "Male"
+                                                                        },
+                                                                        {
+                                                                            "value": "2",
+                                                                            "label": "Female"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "title": "Gender"
+                                                    },
+                                                    "31": {
+                                                        "type": "boolean",
+                                                        "title": "Opt-in"
+                                                    }
+                                                }
+                                            },
+                                            "additionalItems": true,
+                                            "additionalProperties": false,
+                                            "title": "contact",
+                                            "description": "contact"
+                                        },
+                                        "contact_list_id": {
+                                            "type": "string",
+                                            "title": "Contact List Id",
+                                            "default": "$list_id"
+                                        },
+                                        "key_id": {
+                                            "type": "string",
+                                            "title": "Key Identifier",
+                                            "default": "$key_id"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "put": {
+                    "summary": "",
+                    "parameters": [],
+                    "responses": {
+                        "200": {
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    },
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "x-cdp-schema-settings": {
+										"recordsLocatorPath": "contacts"
+									},
+                                    "properties": {
+                                        "contacts": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "1": {
+                                                        "type": "string",
+                                                        "title": "First Name"
+                                                    },
+                                                    "2": {
+                                                        "type": "string",
+                                                        "title": "Last Name"
+                                                    },
+                                                    "3": {
+                                                        "type": "string",
+                                                        "title": "Email"
+                                                    },
+                                                    "4": {
+                                                        "type": "string",
+                                                        "title": "Date of Birth",
+                                                        "format": "date-time"
+                                                    },
+                                                    "5": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "1",
+                                                            "2"
+                                                        ],
+                                                        "widget": {
+                                                            "formlyConfig": {
+                                                                "type": "enum",
+                                                                "templateOptions": {
+                                                                    "options": [
+                                                                        {
+                                                                            "value": "1",
+                                                                            "label": "Male"
+                                                                        },
+                                                                        {
+                                                                            "value": "2",
+                                                                            "label": "Female"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "title": "Gender"
+                                                    },
+                                                    "31": {
+                                                        "type": "boolean",
+                                                        "title": "Opt-in"
+                                                    }
+                                                }
+                                            },
+                                            "additionalItems": true,
+                                            "additionalProperties": false,
+                                            "title": "contact",
+                                            "description": "contact"
+                                        },
+                                        "contact_list_id": {
+                                            "type": "string",
+                                            "title": "Contact List Id",
+                                            "default": "$list_id"
+                                        },
+                                        "key_id": {
+                                            "type": "string",
+                                            "title": "Key Identifier",
+                                            "default": "$key_id"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/event/{eventId}/trigger": {
+                "post": {
+                    "summary": "",
+                    "parameters": [
+                        {
+                            "name": "eventId",
+                            "in": "path",
+                            "type": "string",
+                            "schema": {
+                                "type": "string",
+                                "default": "$trigger_id"
+                            },
+                            "required": true
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    },
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {}
+                                        },
+                                        "key_id": {
+                                            "type": "string",
+                                            "default": "$key_id"
+                                        },
+                                        "external_id": {
+                                            "type": "string"
+                                        },
+                                        "trigger_id": {
+                                            "type": "string",
+                                            "default": "$trigger_id"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "info": {
+            "version": "1.0.0",
+            "title": "Emarsys Connector"
+        },
+        "servers": [
+            {
+                "url": "https://api.emarsys.net"
+            }
+        ]
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/api/v2/contact/post",
+            "name": "Create a Contact in Emarsys",
+            "description": "Creates a contact"
+        },
+        {
+            "resourcePath": "/api/v2/event/{eventId}/trigger/post",
+            "name": "Trigger an External Event in Emarsys",
+            "description": "Triggers an external event on a list of contacts"
+        },
+        {
+            "resourcePath": "/api/v2/contact/put",
+            "name": "Update a Contact in Emarsys",
+            "description": "Updates a contact in Emarsys"
+        }
+    ],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "key_id"
+        ],
+        "properties": {
+            "list_id": {
+                "type": "string",
+                "title": "Contact list id (optional)",
+                "description": "The id of the contact list to add all the identifiable contacts to in the request payload",
+                "scopes": [
+                    "action"
+                ],
+				"default":null
+            },
+            "key_id": {
+                "type": "string",
+                "title": "Emarsys Key identifier (key id).",
+                "description": "Identifies the contact by their id, uid, or the integer id of a field, such as email. Default value is 3, which represents email",
+                "default": "3",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "trigger_id": {
+                "type": "string",
+                "title": "External event trigger id",
+                "description": "The unique identifier of the trigger of the external event in Emarsys.",
+                "scopes": [
+                    "action", "journey-action"
+                ]
+            }
+        }
+    },
+    "securitySchemes": {
+        "WSSE": {
+            "type": "wsse"
+        }
+    },
+    "version": "1.0.0.0"
+}

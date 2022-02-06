@@ -1,0 +1,350 @@
+{
+    "enabled": false,
+    "name": "Acoustic",
+    "description": "Generic Acoustic Connector",
+    "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/marketing.svg",
+    "category": "Marketing",
+    "externalDocs": "https://developer.goacoustic.com/acoustic-campaign/reference/overview",
+    "resources": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "CDP Acoustic Connector",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {
+                "url": "$baseURL"
+            }
+        ],
+        "paths": {
+            "/acoustic/addcontact": {
+                "post": {
+                    "operationId": "createContact",
+                    "summary": "Creates a Contact in a given Database",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateContactRequest"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "201": {
+                            "description": "201 response",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/CreateContactResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/acoustic/updatecontact": {
+                "patch": {
+                    "operationId": "updateContact",
+                    "summary": "Updates the Contact with the given contactId in the Database with the given databaseId",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateContactRequest"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "200 response",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/CreateContactResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/acoustic/getlist": {
+                "post": {
+                    "operationId": "exportList",
+                    "summary": "Export from a database with the given databaseId the contacts list",
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "timestamp",
+                            "schema": {
+                                "type": "string",
+                                "default": "$timestamp"
+                            }
+                        },
+                        {
+                            "in": "query",
+                            "name": "customFields",
+                            "schema": {
+                                "type": "string",
+                                "default": "$customFields"
+                            }
+                        },
+                        {
+                            "in": "query",
+                            "name": "databaseId",
+                            "schema": {
+                                "type": "string",
+                                "default": "$databaseId"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "200 response",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "security": [
+            {
+                "basicAuth": []
+            }
+        ],
+        "components": {
+            "securitySchemes": {
+                "basicAuth": {
+                    "type": "http",
+                    "scheme": "basic"
+                }
+            },
+            "schemas": {
+                "CreateContactRequest": {
+                    "type": "object",
+                    "properties": {
+                        "database_id": {
+                            "type": "string",
+                            "default": "$databaseId"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "emailType": {
+                            "type": "string"
+                        },
+                        "leadSource": {
+                            "type": "string"
+                        },
+                        "optInDetails": {
+                            "type": "string"
+                        },
+                        "customFields": {
+                            "type": "object"
+                        },
+                        "visitorKey": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "CreateContactResponse": {
+                    "type": "object",
+                    "properties": {
+                        "meta": {
+                            "type": "object",
+                            "properties": {
+                                "attributes": {
+                                    "type": "object"
+                                },
+                                "generalErrors": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "fieldErrors": {
+                                    "type": "object"
+                                },
+                                "links": {
+                                    "type": "array",
+                                    "items": {}
+                                },
+                                "nextPageUrl": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "data": {
+                            "type": "object",
+                            "properties": {
+                                "location": {
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                },
+                "UpdateContactRequest": {
+                    "type": "object",
+                    "properties": {
+                        "database_id": {
+                            "type": "string",
+                            "default": "$databaseId"
+                        },
+                        "contact_id": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "emailType": {
+                            "type": "string"
+                        },
+                        "leadSource": {
+                            "type": "string"
+                        },
+                        "optInDetails": {
+                            "type": "string"
+                        },
+                        "customFields": {
+                            "type": "object"
+                        },
+                        "visitorKey": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "TriggerGetCustomerDataFileRequest": {
+                    "type": "object",
+                    "properties": {
+                        "database_id": {
+                            "type": "string",
+                            "default": "$databaseId"
+                        },
+                        "date_start": {
+                            "type": "string",
+                            "default": "${lastRunTime:ISO}"
+                        }
+                    }
+                },
+                "ExportListResponse": {
+                    "type": "object",
+                    "properties": {
+                        "contacts": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/Contact"
+                            }
+                        }
+                    }
+                },
+                "Contact": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string"
+                        },
+                        "emailType": {
+                            "type": "string"
+                        },
+                        "leadSource": {
+                            "type": "string"
+                        },
+                        "optInDetails": {
+                            "type": "string"
+                        },
+                        "customFields": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "visitorKey": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/acoustic/addcontact/post",
+            "name": "Create Contact in Acoustic"
+        },
+        {
+            "resourcePath": "/acoustic/updatecontact/patch",
+            "name": "Update Contact in Acoustic"
+        }
+    ],
+    "preDefinedEvents": [
+        {
+            "resourcePath": "/acoustic/getlist/post",
+            "name": "Send request to export contacts list to your Acoustic SFTP"
+        }
+    ],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "baseURL": {
+                "type": "string",
+                "title": "SCPI Base URL",
+                "description": "The base url of the provider",
+                "format": "uri",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "databaseId": {
+                "type": "string",
+                "title": "Contact List or Database ID",
+                "description": "The contact list or database ID to read/write",
+                "scopes": [
+                    "event",
+                    "action"
+                ]
+            },
+            "customFields": {
+                "type": "string",
+                "title": "Custom Fields to retrieve",
+                "description": "A comma separated list of custom fields to retrieive from Acoustic, e.g. firstname",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "timestamp": {
+                "type": "string",
+                "title": "Timestamp",
+                "description": "Timestamp of last successful schedule execution",
+                "default": "${lastRunTime:ISO}",
+                "scopes": []
+            }
+        }
+    },
+    "pollingConfigs": {
+        "/acoustic/getlist/post": {
+            "recordsLocator": ""
+        }
+    },
+    "version": "1.0.0.0"
+}

@@ -1,0 +1,216 @@
+{
+  "enabled": false,
+  "name": "Linkedin Ads",
+  "description": "Generic Linkedin",
+  "type": "REST",
+  "version": "1.0.0.0",
+  "category": "Generic",
+  "logoUrl": "",
+  "externalDocs": "https://developers.gigya.com/",
+  "configSchema": {
+    "type": "object",
+    "allowAdditionalProperties": false,
+    "required": [
+      "baseURL",
+	  "action",
+	  "DMPSegmentId"
+    ],
+    "properties": {
+      "baseURL": {
+        "title": "Base URL",
+        "description": "The base url of the provider",
+        "type": "string",
+        "format": "uri",
+        "default": "https://api.linkedin.com/v2",
+        "scopes": [
+          "application"
+        ]
+      },
+      "action": {
+        "title": "The action to take on this entity",
+        "description": "The action must be ADD or REMOVE",
+        "default": "ADD",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+      "DMPSegmentId": {
+        "title": "The DMP segment id",
+        "description": "The DMP segment id",
+        "type": "string",
+        "scopes": [
+		  "application"
+        ]
+      }   
+    }
+  },
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Linkedin Connector",
+      "version": "1"
+    },
+    "paths": {
+      "/dmpSegments/{DMPSegmentId}/users": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+          "x-cdp-operation-settings": {
+              "rateLimitConfig": {
+                        "type": "RPS",
+                        "rateLimitParameters": {
+                        "ratePerSecond": 5,
+                        "errorCodes": [
+                                606,
+                                607,
+                                608
+                                ],
+                                "delayAfterRateLimitInSecond": 20
+                            }
+                        }
+          },
+          "summary": "Send batch audience",
+          "description": "Send batch audience from CDP to Linkedin ads",
+		  	"parameters": [{
+				"name": "DMPSegmentId",
+				"in": "path",
+				"schema": {
+					"required": true,
+					"type": "string",
+					"default": "$DMPSegmentId"
+						}
+					},
+					{
+				"name": "X-RestLi-Method",
+				"in": "header",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"default": "BATCH_CREATE"
+						}
+					}
+					],
+          "requestBody": {
+            "description": "the body",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-cdp-schema-settings": {
+                    "recordsLocatorPath": "elements"
+                  },
+                  "properties": {
+                    "elements": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Element"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "results": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "servers": [
+      {
+        "url": "$baseURL"
+      }
+    ],
+    "security": [
+      {
+        "oAuth2": []
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "oAuth2": {
+          "type": "oauth2",
+          "description": "the auth type",
+          "flows": {
+            "authorizationCode": {
+              "authorizationUrl": "https://www.linkedin.com/oauth/v2/authorization",
+			  "refreshUrl": "https://www.linkedin.com/oauth/v2/accessToken",
+              "tokenUrl": "https://www.linkedin.com/oauth/v2/accessToken",
+              "scopes": {
+				  "rw_dmp_segments": "rw_dmp_segments"
+			  }
+            }
+          }
+        }
+      },
+      "schemas": {
+        "Element": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "default": "$action"
+            },
+            "userId": {
+                "$ref": "#/components/schemas/UserId"              
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "company": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          }
+        },
+        "UserId": {
+          "type": "object",
+          "properties": {
+            "idType": {
+              "type": "string",
+              "default": "SHA256_EMAIL"
+            },
+            "idValue": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "preDefinedActions": [
+    {
+      "name": "Add and Remove users to a DMP Segment in batch",
+      "resourcePath": "/dmpSegments/{DMPSegmentId}/users/post"
+    }
+  ]
+}

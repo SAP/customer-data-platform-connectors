@@ -1,0 +1,297 @@
+{
+    "enabled": false,
+    "name": "AWS S3",
+    "description": "Read & write files to AWS S3",
+    "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/s3.svg",
+    "category": "Cloud Storage",
+    "externalDocs": "https://docs.aws.amazon.com/s3/index.html",
+    "resources": {
+        "type": "amazon.s3",
+        "read": {
+            "bucketName": "$readBucketName",
+            "objectKeyPrefix": "$readFilePath",
+            "fileNameRegex": "$readFileNameRegex",
+            "moveAfterIngest": "$moveAfterIngest",
+            "format": "$readFormat"
+        },
+        "write": {
+            "bucketName": "$writeBucketName",
+            "objectKeyPrefix": "$writeFilePath",
+            "fileName": "$writeFileName",
+            "format": "$writeFormat"
+        }
+    },
+    "type": "CloudStorage",
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "readBucketName",
+            "writeBucketName"
+        ],
+        "properties": {
+            "readBucketName": {
+                "type": "string",
+                "title": "Read Bucket Name",
+                "description": "The S3 bucket to access.",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "writeBucketName": {
+                "type": "string",
+                "title": "Write Bucket Name",
+                "description": "The name of the Amazon S3 bucket to list.",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "readFilePath": {
+                "type": "string",
+                "title": "Read File Path",
+                "description": "The remote directory to retrieve files from.",
+                "scopes": [
+                    "application",
+                    "event"
+                ]
+            },
+            "writeFilePath": {
+                "type": "string",
+                "title": "Write File Path",
+                "description": "The name of the folder in S3 to which the file is written, followed by a forward slash. If no such folder exists, it will be created.",
+                "scopes": [
+                    "application",
+                    "action",
+                    "audience-action"
+                ]
+            },
+            "readFileNameRegex": {
+                "type": "string",
+                "title": "Filename Regex",
+                "description": "A regular expression (regex) used for filtering files by name.",
+                "scopes": [
+                    "application",
+                    "event"
+                ]
+            },
+            "writeFileName": {
+                "type": "string",
+                "title": "Filename To Write",
+                "description": "The format of the name of the file created. The name can include a fixed string or placeholders, denoted by a dollar sign '$' followed by curly brackets: ${variableName}. A range of different time stamp formats are supported. Time stamp conventions (e.g., YYYY) are also supported. now (the current time when the export job was started ); now-xD (the current time when the export job was started , minus 'x' number of days) now+xD (the current time when the export job was started , plus 'x' number of days); now+xD:yyMMdd; unix",
+                "scopes": [
+                    "application",
+                    "action",
+                    "audience-action"
+                ]
+            },
+            "writeFormat": {
+                "type": "object",
+                "title": "File Format To Write",
+                "properties": {
+                    "format": {
+                        "type": "string",
+                        "title": "Format",
+                        "enum": [
+                            "csv",
+                            "json"
+                        ],
+                        "scopes": [
+                            "application",
+                            "action"
+                        ]
+                    },
+                    "fieldDelimiter": {
+                        "type": "string",
+                        "title": "Field Delimiter",
+                        "scopes": [
+                            "application",
+                            "action"
+                        ],
+                        "widget": {
+                            "formlyConfig": {
+                                "hideExpression": "!model || (model && model.format !== 'csv')"
+                            }
+                        }
+                    },
+                    "recordDelimiter": {
+                        "type": "string",
+                        "title": "Record Delimiter",
+                        "scopes": [
+                            "application",
+                            "action"
+                        ],
+                        "widget": {
+                            "formlyConfig": {
+                                "hideExpression": "!model || (model && model.format !== 'csv')"
+                            }
+                        }
+                    }
+                },
+                "scopes": [
+                    "application",
+                    "action"
+                ],
+                "if": {
+                    "properties": {
+                        "format": {
+                            "enum": [
+                                "csv"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "format"
+                    ]
+                },
+                "then": {
+                    "required": [
+                        "fieldDelimiter",
+                        "recordDelimiter"
+                    ]
+                }
+            },
+            "readFormat": {
+                "type": "object",
+                "title": "File Format To Read",
+                "properties": {
+                    "format": {
+                        "type": "string",
+                        "title": "Format",
+                        "enum": [
+                            "csv",
+                            "json"
+                        ],
+                        "scopes": [
+                            "application",
+                            "event"
+                        ]
+                    },
+                    "fieldDelimiter": {
+                        "type": "string",
+                        "title": "Field Delimiter",
+                        "scopes": [
+                            "application",
+                            "event"
+                        ],
+                        "widget": {
+                            "formlyConfig": {
+                                "hideExpression": "!model || (model && model.format !== 'csv')"
+                            }
+                        }
+                    },
+                    "recordDelimiter": {
+                        "type": "string",
+                        "title": "Record Delimiter",
+                        "scopes": [
+                            "application",
+                            "event"
+                        ],
+                        "widget": {
+                            "formlyConfig": {
+                                "hideExpression": "!model || (model && model.format !== 'csv')"
+                            }
+                        }
+                    }
+                },
+                "scopes": [
+                    "application",
+                    "event"
+                ],
+                "if": {
+                    "properties": {
+                        "format": {
+                            "enum": [
+                                "csv"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "format"
+                    ]
+                },
+                "then": {
+                    "required": [
+                        "fieldDelimiter",
+                        "recordDelimiter"
+                    ]
+                }
+            },
+            "moveAfterIngest": {
+                "type": "object",
+                "title": "Move After Ingest",
+                "description": "parameters for moving files that have been read to a different directory",
+                "properties": {
+                    "moveFilesAfterIngest": {
+                        "type": "boolean",
+                        "enum": [
+                            true,
+                            false
+                        ],
+                        "scopes": [
+                            "application",
+                            "event"
+                        ]
+                    },
+                    "folderToMove": {
+                        "type": "string",
+                        "title": "Destination Folder For Ingested Files",
+                        "description": "A directory to which ingsted files will be moved after being they are done being read",
+                        "scopes": [
+                            "application",
+                            "event"
+                        ],
+                        "widget": {
+                            "formlyConfig": {
+                                "hideExpression": "!model || (model && model.moveFilesAfterIngest !== true)"
+                            }
+                        }
+                    }
+                },
+                "scopes": [
+                    "application",
+                    "event"
+                ],
+                "if": {
+                    "properties": {
+                        "moveFilesAfterIngest": {
+                            "enum": [
+                                "true"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "moveFilesAfterIngest"
+                    ]
+                },
+                "then": {
+                    "required": [
+                        "folderToMove"
+                    ]
+                }
+            }
+        }
+    },
+    "securitySchemes": {
+        "keys": {
+            "type": "object",
+            "allowAdditionalProperties": false,
+            "required": [
+                "accessKey",
+                "secretKey"
+            ],
+            "properties": {
+                "accessKey": {
+                    "type": "string",
+                    "title": "Access Key",
+                    "description": "S3 access key"
+                },
+                "secretKey": {
+                    "type": "string",
+                    "title": "Secret Key",
+                    "description": "S3 secret key"
+                }
+            }
+        }
+    },
+    "version": "1.0.0.0"
+}

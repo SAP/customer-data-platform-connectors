@@ -1,0 +1,159 @@
+{
+  "enabled": false,
+  "name": "Twitter Ads",
+  "description": "Twitter Ads Connector",
+  "type": "REST",
+  "version": "1.0.0.0",
+  "category": "Marketing",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/twitter.svg",
+  "externalDocs": "https://developer.twitter.com/en/docs/twitter-ads-api/audiences/api-reference/custom-audience-users",
+  "configSchema": {
+    "type": "object",
+    "allowAdditionalProperties": false,
+    "required": [
+      "baseURL"
+    ],
+    "properties": {
+      "baseURL": {
+        "title": "Base URL",
+        "description": "The base url of the provider",
+        "type": "string",
+        "format": "uri",
+        "scopes": [
+          "application"
+        ]
+      },
+      "tokenUrl": {
+        "title": "Token URL",
+        "description": "The token url of the provider",
+        "type": "string",
+        "scopes": [
+          "application"
+        ]
+      }
+    }
+  },
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Twitter Ads Connector",
+      "description": "Twitter Ads Connector",
+      "version": "1"
+    },
+    "paths": {
+      "/users": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+          "x-cdp-path-settings": {
+            "customSteps": [
+              {
+                "name": "write.cdp.twitterads",
+                "provider": "idx"
+              }
+            ]
+          },
+          "summary": "Add users to custom audience",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/users"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "servers": [
+      {
+        "url": "$baseURL",
+        "description": "twitter base url"
+      }
+    ],
+    "security": [
+      {
+        "oAuth2": []
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "oAuth2": {
+          "type": "oauth2",
+          "flows": {
+            "password": {
+              "tokenUrl": "$tokenUrl"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "users": {
+        "type": "object",
+        "properties": {
+          "operation_type": {
+            "type": "string",
+            "description": "The type of operation",
+            "default": "update",
+            "enum": [
+              "update",
+              "delete"
+            ]
+          },
+          "schemas": {
+            "users": {
+              "x-cdp-schema-settings": {
+                "recordsLocatorPath": "users"
+              },
+              "type": "object",
+              "properties": {
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "device_id": {
+                        "type": "string"
+                      },
+                      "handle": {
+                        "type": "string"
+                      },
+                      "twitter_id": {
+                        "type": "string"
+                      },
+                      "partner_user_id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "preDefinedActions": [
+      {
+        "name": "Add users to custom audience",
+        "resourcePath": "/users/post"
+      }
+    ],
+    "pollingConfigs": {}
+  }
+}

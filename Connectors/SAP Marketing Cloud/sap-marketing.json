@@ -1,0 +1,846 @@
+{
+    "enabled": false,
+    "name": "SAP Marketing Cloud",
+    "description": "Generic SAP Marketing Cloud Connector through CPI",
+    "logoUrl": "/assets/img/connectors/sap.svg",
+    "category": "marketing",
+    "externalDocs": "https://help.sap.com/viewer/product/SAP_MARKETING_CLOUD/2011.500/en-US?task=discover_task",
+    "resources": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "SAP Marketing-CDP Connector",
+            "version": "1"
+        },
+        "paths": {
+            "/GetCustomerData": {
+                "get": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "summary": "Get Customer data",
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "timestamp",
+                            "schema": {
+                                "type": "string",
+                                "default": "$timestamp"
+                            },
+                            "required": true,
+                            "description": "Specify a date (YYYY-MM-DDT00:00:00) to start getting data from"
+                        },
+                        {
+                            "name": "pageSize",
+                            "in": "query",
+                            "schema": {
+                                "type": "integer",
+                                "default": "$pageSize"
+                            },
+                            "required": true,
+                            "description": "The maximum number of items to return per request"
+                        },
+                        {
+                            "name": "pageNumber",
+                            "in": "query",
+                            "schema": {
+                                "type": "integer"
+                            },
+                            "required": true,
+                            "description": "The start position for pagination"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "ok",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/CustomerData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/UpsertCustomer": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Upsert Customer",
+                    "description": "Upsert Customer",
+                    "operationId": "UpsertCustomer",
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpsertCustomerRequest"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "204": {
+                            "description": "Success with no additional response"
+                        },
+                        "400": {
+                            "description": "An error response"
+                        }
+                    }
+                }
+            },
+            "/UpdateCustomerAttribute": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Update Customer Attribute",
+                    "description": "Update Customer Attribute",
+                    "operationId": "UpdateCustomerAttribute",
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateCustomerAttributeRequest"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "204": {
+                            "description": "Success with no additional response"
+                        },
+                        "400": {
+                            "description": "An error response"
+                        }
+                    }
+                }
+            }
+        },
+        "servers": [
+            {
+                "url": "$baseUrl"
+            }
+        ],
+        "security": [
+            {
+                "basicAuth": []
+            }
+        ],
+        "components": {
+            "securitySchemes": {
+                "basicAuth": {
+                    "type": "http",
+                    "scheme": "basic"
+                }
+            },
+            "schemas": {
+                "UpdateCustomerAttributeRequest": {
+                    "type": "object",
+                    "properties": {
+                        "ContactID": {
+                            "type": "string"
+                        },
+                        "MarketingAttributeCategory": {
+                            "type": "string",
+                            "default": "$marketingAttributeCategory"
+                        },
+                        "MarketingAttributeValue": {
+                            "type": "string",
+                            "default": "$marketingAttributeValue"
+                        }
+                    }
+                },
+                "UpsertCustomerRequest": {
+                    "type": "object",
+                    "properties": {
+                        "ContactID": {
+                            "type": "string"
+                        },
+                        "EmailAddress": {
+                            "type": "string"
+                        },
+                        "Attributes": {
+                            "type": "object",
+                            "properties": {
+                                "ValidationStatus": {
+                                    "type": "string",
+                                    "default": "20"
+                                },
+                                "CityName": {
+                                    "type": "string"
+                                },
+                                "Country": {
+                                    "type": "string"
+                                },
+                                "FirstName": {
+                                    "type": "string"
+                                },
+                                "LastName": {
+                                    "type": "string"
+                                },
+                                "BirthDate": {
+                                    "type": "string"
+                                },
+                                "GenderCode": {
+                                    "type": "string"
+                                },
+                                "IsConsumer": {
+                                    "type": "string"
+                                },
+                                "IsContactPerson": {
+                                    "type": "string"
+                                },
+                                "IsObsolete": {
+                                    "type": "string"
+                                },
+                                "Language": {
+                                    "type": "string"
+                                },
+                                "MaritalStatus": {
+                                    "type": "string"
+                                },
+                                "MaritalStatusName": {
+                                    "type": "string"
+                                },
+                                "ContactPostalCode": {
+                                    "type": "string"
+                                },
+                                "AddressRegion": {
+                                    "type": "string"
+                                },
+                                "StreetName": {
+                                    "type": "string"
+                                },
+                                "AddressHouseNumber": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "CustomerData": {
+                    "type": "object",
+                    "properties": {
+                        "result": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/UserRef"
+                            }
+                        }
+                    }
+                },
+                "UserRef": {
+                    "type": "object",
+                    "properties": {
+                        "StreetName": {
+                            "type": "string"
+                        },
+                        "CreatedByUser": {
+                            "type": "string"
+                        },
+                        "FormOfAddress": {
+                            "type": "string"
+                        },
+                        "Latitude": {
+                            "type": "string"
+                        },
+                        "InteractionContactImageURL": {
+                            "type": "string"
+                        },
+                        "Industry": {
+                            "type": "string"
+                        },
+                        "Department": {
+                            "type": "string"
+                        },
+                        "RegionName": {
+                            "type": "string"
+                        },
+                        "ContactUUID": {
+                            "type": "string"
+                        },
+                        "CorporateAccountUUID": {
+                            "type": "string"
+                        },
+                        "FirstName": {
+                            "type": "string"
+                        },
+                        "FormOfAddressName": {
+                            "type": "string"
+                        },
+                        "AddressRegion": {
+                            "type": "string"
+                        },
+                        "IndustryName": {
+                            "type": "string"
+                        },
+                        "GenderCode": {
+                            "type": "string"
+                        },
+                        "ValidationStatus": {
+                            "type": "string"
+                        },
+                        "GenderCodeName": {
+                            "type": "string"
+                        },
+                        "ValidationStatusName": {
+                            "type": "string"
+                        },
+                        "WebsiteURL": {
+                            "type": "string"
+                        },
+                        "CityName": {
+                            "type": "string"
+                        },
+                        "Longitude": {
+                            "type": "string"
+                        },
+                        "EmailAddress": {
+                            "type": "string"
+                        },
+                        "CorporateAccountName": {
+                            "type": "string"
+                        },
+                        "LastChangedByUser": {
+                            "type": "string"
+                        },
+                        "MaritalStatus": {
+                            "type": "string"
+                        },
+                        "Country": {
+                            "type": "string"
+                        },
+                        "DepartmentName": {
+                            "type": "string"
+                        },
+                        "LanguageName": {
+                            "type": "string"
+                        },
+                        "LastName": {
+                            "type": "string"
+                        },
+                        "BirthDate": {
+                            "type": "string"
+                        },
+                        "ContactFunctionName": {
+                            "type": "string"
+                        },
+                        "IsContactPerson": {
+                            "type": "string"
+                        },
+                        "IsMarkedForDeletion": {
+                            "type": "string"
+                        },
+                        "IsConsumer": {
+                            "type": "string"
+                        },
+                        "Language": {
+                            "type": "string"
+                        },
+                        "MobileNumber": {
+                            "type": "string"
+                        },
+                        "CreationDateTime": {
+                            "type": "string"
+                        },
+                        "FullName": {
+                            "type": "string"
+                        },
+                        "PhoneNumber": {
+                            "type": "string"
+                        },
+                        "LastChangeDateTime": {
+                            "type": "string"
+                        },
+                        "AddressHouseNumber": {
+                            "type": "string"
+                        },
+                        "MarketingAreas": {
+                            "type": "object",
+                            "items": {
+                                "$ref": "#/components/schemas/GetMarketingAreas"
+                            }
+                        },
+                        "MarketingPermissions": {
+                            "type": "object",
+                            "items": {
+                                "$ref": "#/components/schemas/GetMarketingPermissions"
+                            }
+                        },
+                        "ContactOriginData": {
+                            "type": "object",
+                            "items": {
+                                "$ref": "#/components/schemas/GetContactOriginData"
+                            }
+                        },
+                        "AdditionalIDs": {
+                            "type": "object",
+                            "items": {
+                                "$ref": "#/components/schemas/GetAdditionalIDs"
+                            }
+                        },
+                        "Projections": {
+                            "type": "object",
+                            "items": {
+                                "$ref": "#/components/schemas/GetProjections"
+                            }
+                        }
+                    }
+                },
+                "GetContactOriginData": {
+                    "type": "object",
+                    "properties": {
+                        "Projection": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/GetContactOrigin"
+                            }
+                        }
+                    }
+                },
+                "GetContactOrigin": {
+                    "type": "object",
+                    "properties": {
+                        "StreetName": {
+                            "type": "string"
+                        },
+                        "CreatedByUser": {
+                            "type": "string"
+                        },
+                        "InteractionContactImageURL": {
+                            "type": "string"
+                        },
+                        "Industry": {
+                            "type": "string"
+                        },
+                        "Department": {
+                            "type": "string"
+                        },
+                        "RegionName": {
+                            "type": "string"
+                        },
+                        "FormOfAddressName": {
+                            "type": "string"
+                        },
+                        "AddressRegion": {
+                            "type": "string"
+                        },
+                        "IndustryName": {
+                            "type": "string"
+                        },
+                        "IsObsolete": {
+                            "type": "string"
+                        },
+                        "LastChangedByUser": {
+                            "type": "string"
+                        },
+                        "MaritalStatus": {
+                            "type": "string"
+                        },
+                        "DepartmentName": {
+                            "type": "string"
+                        },
+                        "Country": {
+                            "type": "string"
+                        },
+                        "LastName": {
+                            "type": "string"
+                        },
+                        "HasMktgPermissionForDirectMail": {
+                            "type": "string"
+                        },
+                        "CityName": {
+                            "type": "string"
+                        },
+                        "InteractionCntctProjectionUUID": {
+                            "type": "string"
+                        },
+                        "ContactOrigin": {
+                            "type": "string"
+                        },
+                        "BirthDate": {
+                            "type": "string"
+                        },
+                        "ContactFunctionName": {
+                            "type": "string"
+                        },
+                        "IsContactPerson": {
+                            "type": "string"
+                        },
+                        "CountryName": {
+                            "type": "string"
+                        },
+                        "OriginDataLastChgUTCDateTime": {
+                            "type": "string"
+                        },
+                        "TrackingID": {
+                            "type": "string"
+                        },
+                        "ContactUUID": {
+                            "type": "string"
+                        },
+                        "CorporateAccountUUID": {
+                            "type": "string"
+                        },
+                        "FirstName": {
+                            "type": "string"
+                        },
+                        "YY1_VIPCustomer_MPS": {
+                            "type": "string"
+                        },
+                        "ContactID": {
+                            "type": "string"
+                        },
+                        "CreationDateTime": {
+                            "type": "string"
+                        },
+                        "GenderCodeName": {
+                            "type": "string"
+                        },
+                        "LastChangeDateTime": {
+                            "type": "string"
+                        },
+                        "AddressHouseNumber": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "GetProjections": {
+                    "type": "object",
+                    "properties": {
+                        "Projection": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/GetProjection"
+                            }
+                        }
+                    }
+                },
+                "GetProjection": {
+                    "type": "object",
+                    "properties": {
+                        "StreetName": {
+                            "type": "string"
+                        },
+                        "InteractionContactUUID": {
+                            "type": "string"
+                        },
+                        "GenderFreeText": {
+                            "type": "string"
+                        },
+                        "MarketingArea": {
+                            "type": "string"
+                        },
+                        "LanguageCode": {
+                            "type": "string"
+                        },
+                        "PartnerFunctionName": {
+                            "type": "string"
+                        },
+                        "PartnerFunction": {
+                            "type": "string"
+                        },
+                        "MobileNumber": {
+                            "type": "string"
+                        },
+                        "ContactPostalCode": {
+                            "type": "string"
+                        },
+                        "MaritalStatus": {
+                            "type": "string"
+                        },
+                        "RelationshipCategory": {
+                            "type": "string"
+                        },
+                        "CorporateAccountUUID": {
+                            "type": "string"
+                        },
+                        "EmailAddress": {
+                            "type": "string"
+                        },
+                        "FirstName": {
+                            "type": "string"
+                        },
+                        "WebsiteURL": {
+                            "type": "string"
+                        },
+                        "CountryFreeText": {
+                            "type": "string"
+                        },
+                        "CityName": {
+                            "type": "string"
+                        },
+                        "InteractionCntctProjectionUUID": {
+                            "type": "string"
+                        },
+                        "FullName": {
+                            "type": "string"
+                        },
+                        "PhoneNumber": {
+                            "type": "string"
+                        },
+                        "Country": {
+                            "type": "string"
+                        },
+                        "LastName": {
+                            "type": "string"
+                        },
+                        "AddressHouseNumber": {
+                            "type": "string"
+                        },
+                        "InteractnCntctConsumerAccount": {
+                            "type": "string"
+                        },
+                        "BirthDate": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "GetAdditionalIDs": {
+                    "type": "object",
+                    "properties": {
+                        "AdditionalID": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/GetAdditionalID"
+                            }
+                        }
+                    }
+                },
+                "GetAdditionalID": {
+                    "type": "object",
+                    "properties": {
+                        "ContactAdditionalOrigin": {
+                            "type": "string"
+                        },
+                        "ContactAddlIDIsInvalid": {
+                            "type": "string"
+                        },
+                        "ContactUUID": {
+                            "type": "string"
+                        },
+                        "ContactAdditionalID": {
+                            "type": "string"
+                        },
+                        "ContactID": {
+                            "type": "string"
+                        },
+                        "ContactAdditionalIdUUID": {
+                            "type": "string"
+                        },
+                        "ContactOrigin": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "GetMarketingAreas": {
+                    "type": "object",
+                    "properties": {
+                        "MarketingArea": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/GetMarketingArea"
+                            }
+                        }
+                    }
+                },
+                "GetMarketingArea": {
+                    "type": "object",
+                    "properties": {
+                        "InteractionContactMktgArea": {
+                            "type": "string"
+                        },
+                        "InteractionContactAdditionalOriginUUID": {
+                            "type": "string"
+                        },
+                        "InteractionContactMktgAreaName": {
+                            "type": "string"
+                        },
+                        "ContactUUID": {
+                            "type": "string"
+                        },
+                        "ContactID": {
+                            "type": "string"
+                        },
+                        "InteractionContactMktgAreaUUID": {
+                            "type": "string"
+                        },
+                        "ContactOrigin": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "GetMarketingPermissions": {
+                    "type": "object",
+                    "properties": {
+                        "MarketingPermission": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/GetMarketingPermission"
+                            }
+                        }
+                    }
+                },
+                "GetMarketingPermission": {
+                    "type": "object",
+                    "properties": {
+                        "PermissionSourceSystem": {
+                            "type": "string"
+                        },
+                        "ContactUUID": {
+                            "type": "string"
+                        },
+                        "CommunicationMediumName": {
+                            "type": "string"
+                        },
+                        "PermissionUUID": {
+                            "type": "string"
+                        },
+                        "PermissionSourceObjectType": {
+                            "type": "string"
+                        },
+                        "PermissionSourceCommMediumName": {
+                            "type": "string"
+                        },
+                        "ContactPermissionID": {
+                            "type": "string"
+                        },
+                        "PermissionSourceCommMedium": {
+                            "type": "string"
+                        },
+                        "ContactID": {
+                            "type": "string"
+                        },
+                        "MarketingArea": {
+                            "type": "string"
+                        },
+                        "CommunicationMedium": {
+                            "type": "string"
+                        },
+                        "PermissionGranted": {
+                            "type": "string"
+                        },
+                        "PermissionNoteText": {
+                            "type": "string"
+                        },
+                        "PermissionIsImplicit": {
+                            "type": "string"
+                        },
+                        "LastChangedByUser": {
+                            "type": "string"
+                        },
+                        "PermissionSourceSystemType": {
+                            "type": "string"
+                        },
+                        "PermissionSourceObject": {
+                            "type": "string"
+                        },
+                        "IsConfirmationRequired": {
+                            "type": "string"
+                        },
+                        "PermissionUTCDateTime": {
+                            "type": "string"
+                        },
+                        "LastChangeDateTime": {
+                            "type": "string"
+                        },
+                        "MarketingAreaName": {
+                            "type": "string"
+                        },
+                        "ContactOrigin": {
+                            "type": "string"
+                        },
+                        "ContactPermissionOrigin": {
+                            "type": "string"
+                        },
+                        "ContactPermissionOriginName": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/UpsertCustomer/post",
+            "name": "Upsert Customer in SAP Marketing Cloud"
+        },
+        {
+            "resourcePath": "/UpdateCustomerAttribute/post",
+            "name": "Update customer attribute in SAP Marketing Cloud"
+        }
+    ],
+    "preDefinedEvents": [
+        {
+            "resourcePath": "/GetCustomerData/get",
+            "name": "Get customers from SAP Marketing Cloud"
+        }
+    ],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "baseUrl"
+        ],
+        "properties": {
+            "timestamp": {
+                "type": "string",
+                "title": "timestamp",
+                "description": "Timestamp of last successful schedule execution",
+                "default": "${lastRunTime:ISO}",
+                "scopes": []
+            },
+            "marketingAttributeCategory": {
+                "type": "string",
+                "title": "Marketing Attribute Category",
+                "description": "Marketing Attribute Category to update (only UpdateCustomerAttribute action)",
+                "scopes": [
+                    "action",
+                    "journey-action"
+                ]
+            },
+            "marketingAttributeValue": {
+                "type": "string",
+                "title": "Marketing Attribute Value",
+                "description": "Marketing Attribute value to update (only UpdateCustomerAttribute action)",
+                "scopes": [
+                    "action",
+                    "journey-action"
+                ]
+            },
+            "baseUrl": {
+                "type": "string",
+                "title": "CPI URL for SAP Marketing Cloud",
+                "description": "The CPI URL (e.g. https://v0634-iflmap.avtsbhf.eu1.hana.ondemand.com/http/MktCloud_CDP/OData) to initiate the integration with SAP Marketing Cloud",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "pageSize": {
+                "type": "integer",
+                "title": "Page Size",
+                "description": "The maximum number of items to return per request",
+                "scopes": [
+                    "event"
+                ]
+            }
+        }
+    },
+    "pollingConfigs": {
+        "/GetCustomerData/get": {
+            "recordsLocator": "result",
+            "pagingConfig": {
+                "pageFieldName": "pageNumber",
+                "pageSizeFieldName": "pageSize",
+                "type": "sequential"
+            }
+        }
+    },
+    "version": "1.0.0.0"
+}

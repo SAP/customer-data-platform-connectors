@@ -1,0 +1,155 @@
+{
+  "enabled": false,
+  "name": "Facebook for Business",
+  "description": "Creating audience and sending user data to facebook",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/fb.svg",
+  "category": "Marketing",
+  "externalDocs": "https://developer.salesforce.com/docs/",
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "CDP Facebook Connector",
+      "description": "CDP Facebook Connector",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "$baseURL"
+      }
+    ],
+    "paths": {
+      "/{AD_ACCOUNT_ID}/users": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+          "x-cdp-operation-settings": {
+            "customSteps": [
+              {
+                "name": "write.cdp.custom.facebook.ads.update",
+                "provider": "idx"
+              }
+            ],
+            "rateLimitConfig": {
+              "type": "RPS",
+              "rateLimitParameters": {
+                "ratePerSecond": 5,
+                "errorCodes": [
+                  606,
+                  607,
+                  608
+                ],
+                "delayAfterRateLimitInSecond": 20
+              }
+            }
+          },
+          "summary": "Post multiple accounts",
+          "description": "post multiple accounts",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "AD_ACCOUNT_ID",
+              "schema": {
+                "type": "string",
+                "default": "$AD_ACCOUNT_ID"
+              },
+              "required": true,
+              "description": "the unique id of the ad account"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-cdp-schema-settings": {
+                    "recordsLocatorPath": "data"
+                  },
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "FN": {
+                            "type": "string",
+                            "title": "firstname"
+                          },
+                          "LN": {
+                            "type": "string",
+                            "title": "lastname"
+                          },
+                          "EMAIL": {
+                            "type": "string",
+                            "title": "email"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/{AD_ACCOUNT_ID}/users/post",
+      "name": "Send customers to Facebook in batch"
+    }
+  ],
+  "preDefinedEvents": [],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "baseURL": {
+        "title": "Base URL",
+        "description": "The Facebook marketing API: https://graph.facebook.com/v11.0",
+        "type": "string",
+        "format": "uri",
+        "scopes": [
+          "application"
+        ]
+      },
+      "AD_ACCOUNT_ID": {
+        "title": "Ad Account ID",
+        "description": "The Ad account id",
+        "type": "string",
+        "scopes": [
+          "application"
+        ]
+      },
+      "fb_audience_id": {
+        "title": "Facebook audience ID",
+        "description": "Facebook Ads Audience ID",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      }
+    }
+  },
+  "securitySchemes": {
+    "facebookAuth": {
+      "type": "object",
+      "allowAdditionalProperties": false,
+      "required": [
+        "access_token"
+      ],
+      "properties": {
+        "access_token": {
+          "title": "Access Token",
+          "description": "The app access token to use for authentication",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "pollingConfigs": {},
+  "version": "1.0.0.0"
+}

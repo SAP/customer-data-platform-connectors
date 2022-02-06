@@ -1,0 +1,447 @@
+{
+  "enabled": false,
+  "name": "Facebook Conversions",
+  "description": "Sending events to facebook",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/fb.svg",
+  "category": "Marketing",
+  "externalDocs": "https://developers.facebook.com/docs/marketing-api/conversions-api",
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "CDP Facebook Connector",
+      "description": "CDP Facebook Connector",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://graph.facebook.com/v10.0"
+      }
+    ],
+    "paths": {
+      "/{PIXEL_ID}/events": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+         
+          "summary": "Post events",
+          "description": "post events",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "PIXEL_ID",
+              "schema": {
+                "type": "string",
+                "default": "$PIXEL_ID"
+              },
+              "required": true,
+              "description": "the unique id of the ad account"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+						"type": "object",
+						"properties": {
+							"data": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"event_name": {
+											"type": "string",
+											"default": "$event_name"
+										},
+										"event_time": {
+											"type": "integer"
+										},
+										"event_id": {
+											"type": "string"
+										},
+										
+										"opt_out": {
+											"type": "boolean"
+										},
+										"user_data": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"em": {
+													"type": "string",
+													"title": "email"
+												},
+												"fn": {
+													"type": "string",
+													"title": "first name"
+												},
+												"ln": {
+													"type": "string",
+													"title": "last name"
+												},
+												"ct": {
+													"type": "string",
+													"title": "city"
+												},
+												
+												
+												"country": {
+													"type": "string",
+													"title": "country"
+												},
+												
+												
+												"db": {
+													"type": "string",
+													"title": "date of birth"
+												},
+												"ph": {
+													"type": "string",
+													"title": "phone number"
+												},
+												"client_ip_address": {
+													"type": "string",
+													"title": "client ip address"
+												},
+												"client_user_agent": {
+													"type": "string",
+													"title": "client user agent"
+												},
+												"fb_login_id": {
+													"type": "integer",
+													"title": "fb login id"
+												},
+												"lead_id": {
+													"type": "integer",
+													"title": "lead id"
+												},
+												"fbc": {
+													"type": "string",
+													"title": "click id"
+												},
+												"fbp": {
+													"type": "string",
+													"title": "browser id"
+												},
+												"subscription_id": {
+													"type": "string",
+													"title": "subscription id"
+												},
+												"external_id": {
+													"type": "string",
+													"title": "external id"
+												},
+												"zp": {
+													"type": "string",
+													"title": "zipcode "
+												},
+												"st": {
+													"type": "string",
+													"title": "state"
+												}
+											}
+										},
+										"contents": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"additionalProperties": false,
+												"properties": {
+													"id": {
+														"type": "string"
+													},
+													"quantity": {
+														"type": "integer"
+													},
+													"delivery_category": {
+														"type": "string"
+													}
+												}
+											},
+											"additionalItems": true
+										},
+										"custom_data": {
+											"type": "object",
+											"additionalProperties": false,
+											"properties": {
+												"currency": {
+													"type": "string"
+												},
+												"value": {
+													"type": "number"
+												}
+												,
+												"content_category": {
+													"type": "string"
+												},
+												"content_name": {
+													"type": "string"
+												},
+												"content_type": {
+													"type": "string"
+												},
+												"predicted_ltv": {
+													"type": "number",
+													"title": "predicted ltv"
+												},
+												"num_items": {
+													"type": "string",
+													"title": "num items"
+												},
+												"search_string": {
+													"type": "string",
+													"title": "search string"
+												},
+												"content_ids": {
+													"type": "array",
+													"title": "content ids",
+													"items": {
+														"type": "string"
+													}
+												},
+												"status": {
+													"type": "string",
+													"title": "status"
+												},
+												"order_id": {
+													"type": "string",
+													"title": "order_id"
+												}
+												
+												
+												
+											}
+										},
+										"event_source_url": {
+											"type": "string"
+										},
+										"action_source": {
+											"type": "string"
+										}
+									}
+								},
+								"additionalItems": true
+							},
+							"test_event_code": {
+								"type": "string",
+								"default": "$test_event_code",
+								"title": "test event code"
+								
+							},
+							"partner_agent": {
+								"type": "string",
+								"default": "$partner_agent",
+								"title": "partner agent"
+								
+							}
+						}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Purchase to Facebook",
+	  "configValues":{
+		  "event_name":"Purchase",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Lead to Facebook",
+	   "configValues":{
+		  "event_name":"Lead",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Add to cart to Facebook",
+	   "configValues":{
+		  "event_name":"AddToCart",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Add payment info to Facebook",
+	   "configValues":{
+		  "event_name":"AddPaymentInfo",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Add to wishlist to Facebook",
+	   "configValues":{
+		  "event_name":"AddToWishlist",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Complete registration to Facebook",
+	   "configValues":{
+		  "event_name":"CompleteRegistration",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Contact Facebook",
+	   "configValues":{
+		  "event_name":"Contact",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Customize product to Facebook",
+	   "configValues":{
+		  "event_name":"CustomizeProduct",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Donate to Facebook",
+	   "configValues":{
+		  "event_name":"Donate",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Find location to Facebook",
+	   "configValues":{
+		  "event_name":"FindLocation",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Initiate checkout to Facebook",
+	   "configValues":{
+		  "event_name":"InitiateCheckout",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Schedule to Facebook",
+	   "configValues":{
+		  "event_name":"Schedule",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Search to Facebook",
+	   "configValues":{
+		  "event_name":"Search",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Start trial to Facebook",
+	   "configValues":{
+		  "event_name":"StartTrial",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Submit application to Facebook",
+	   "configValues":{
+		  "event_name":"SubmitApplication",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send Subscribe to Facebook",
+	   "configValues":{
+		  "event_name":"Subscribe",
+		  "partner_agent": "sapcdp"
+	  }
+    },
+	{
+      "resourcePath": "/{PIXEL_ID}/events/post",
+      "name": "Send View content to Facebook",
+	   "configValues":{
+		  "event_name":"ViewContent",
+		  "partner_agent": "sapcdp"
+	  }
+    }
+  ],
+  "preDefinedEvents": [],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      
+      "PIXEL_ID": {
+        "title": "Facebook's Pixel",
+        "description": "The Facebook's Pixel",
+        "type": "string",
+        "scopes": [
+          "application"
+        ]
+      },
+	   "event_name": {
+        "title": "Facebook's event name",
+        "description": "Facebook's event name",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+	  "test_event_code": {
+        "title": "Facebook's test event code",
+        "description": "Facebook's test event code",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+	  "partner_agent": {
+        "title": "Facebook's partner agent",
+        "description": "Facebook's partner agent",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      }
+	  
+    }
+  },
+  "securitySchemes": {
+    "facebookAuth": {
+      "type": "object",
+      "allowAdditionalProperties": false,
+      "required": [
+        "access_token"
+      ],
+      "properties": {
+        "access_token": {
+          "title": "Access Token",
+          "description": "The pixel access token to use for authentication",
+          "type": "string",
+          "in": "query"
+        }
+      }
+    }
+  },
+  "pollingConfigs": {},
+  "connectorVersion": 1
+}

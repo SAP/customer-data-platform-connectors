@@ -1,0 +1,159 @@
+{
+	"enabled": false,
+	"name": "Google Cloud BigQuery",
+	"description": "Generic BQ",
+	"type": "REST",
+	"version": "1.0.0.0",
+	"category": "Generic",
+	"logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/googlebigquery.svg",
+	"externalDocs": "https://developers.gigya.com/",
+	"configSchema": {
+		"type": "object",
+		"allowAdditionalProperties": false,
+		"required": [
+			"projectId"
+		],
+		"properties": {
+			"projectId": {
+				"title": "The Google Cloud Project Id",
+				"description": "The google cloud project id",
+				"type": "string",
+				"scopes": [
+					"application"
+				]
+			},
+			"query": {
+				"title": "The query to use",
+				"description": "The query to use to query the database. Please specify a LIMIT (max is 1000)",
+				"type": "string",
+				"scopes": [
+					"application"
+				]
+			},
+			"recordTimeFieldName": {
+				"title": "The time field name(column name)",
+				"description": "Name of the field(column) indicating the time field",
+				"type": "string",
+				"scopes": [
+					"application"
+				]
+			},
+			"recordTimeFormat": {
+				"default": "iso",
+				"title": "The time field date-format",
+				"description": "The date-format of the field(column) specified in recordTimeFieldName",
+				"type": "string",
+				"scopes": [
+					"application"
+				]
+			}
+		}
+	},
+	"resources": {
+		"openapi": "3.0.0",
+		"info": {
+			"title": "Generic URL Connector",
+			"version": "1"
+		},
+		"paths": {
+			"/v2/projects/queries": {
+				"get": {
+					"tags": [
+						"Events"
+					],
+					"x-cdp-operation-settings": {
+						"pagingConfig": {
+							"type": "none"
+						},
+						"recordsLocatorPath": "records",
+						"customSteps": [
+							{
+								"name": "datasource.read.googlebigquery",
+								"provider": "idx"
+							}
+						]
+					},
+					"summary": "Get Data",
+					"description": "Get data by last updated date",
+					"parameters": [
+						{
+							"name": "projectId",
+							"in": "path",
+							"required": true
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "ok",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"x-cdp-schema-settings": {
+											"recordsLocatorPath": "records"
+										},
+										"properties": {
+											"records": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"dummy": {
+															"type": "string"
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"servers": [
+			{
+				"url": "https://bigquery.googleapis.com/bigquery"
+			}
+		],
+		"security": [
+			{
+				"oAuth2": [
+					"https://www.googleapis.com/auth/bigquery"
+				]
+			}
+		],
+		"components": {
+			"securitySchemes": {
+				"keys": {
+					"type": "object",
+					"allowAdditionalProperties": false,
+					"required": [
+						"client_email",
+						"private_key"
+					],
+					"properties": {
+						"client_email": {
+							"title": "Client Email",
+							"description": "The client email, as displayed in the Google Cloud service account file.",
+							"type": "string"
+						},
+						"private_key": {
+							"title": "Private Key",
+							"description": "A base-64 encoding of the private key, as displayed in the Google Cloud service account file. Select the entire key, from '-----BEGIN PRIVATE KEY----- To ----END PRIVATE KEY-----', included. Apply base-64 encoding",
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"predefinedEvents": [
+		{
+			"name": "Receive data from a Big Query Table",
+			"resourcePath": "/v2/projects/queries/get"
+		}
+	]
+}

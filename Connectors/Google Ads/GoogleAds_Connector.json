@@ -1,0 +1,153 @@
+{
+  "enabled": false,
+  "name": "Google Ads Connector",
+  "description": "Generic Google Ads Connector",
+  "category": "Marketing",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/marketing.svg",
+  "externalDocs": "https://developers.google.com/google-ads/api/docs/remarketing/audience-types/customer-match",
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Google Ads Connector",
+      "description": "CDP Google Ads Connector",
+      "version": "1.0.0"
+    },
+    "servers": [{
+      "url": "https://dummy.google.com",
+      "description": "CDP Google Ads Connector"
+    }],
+    "paths": {
+      "/dummy": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+          "x-cdp-operation-settings": {
+            "rateLimitConfig":{
+              "type": "RPS",
+              "rateLimitParameters": {
+                    "ratePerSecond": 1,
+                    "errorCodes": [ 404 ],
+                    "delayAfterRateLimitInSecond": 300
+                  }
+            },
+            "customSteps": [{
+              "name": "write.cdp.custom.google.ads",
+              "provider": "idx"
+            }]
+          },
+          "security": {
+            "oAuthNoScopes": []
+          },
+          "summary": "Add profile list to google audience",
+          "description": "add multiple profiles",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-cdp-schema-settings": {
+                    "metadataConfig": {
+                      "eventTimeField": null,
+                      "eventTimeFormat": null,
+                      "deduplicationField": null
+                    },
+                    "recordsLocatorPath": "records"
+                  },
+                  "properties": {
+                    "records": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "firstName": {
+                            "type": "string"
+                          },
+                          "lastName": {
+                            "type": "string"
+                          },
+                          "emailAddress": {
+                            "type": "string"
+                          },
+                          "phoneNumber": {
+                            "type": "string"
+                          },
+                          "thirdPartyUserId": {
+                            "type": "string"
+                          },
+                          "countryCode": {
+                            "type": "string"
+                          },
+                          "postalCode": {
+                            "type": "string"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "default": {
+          "type": "oauth2",
+          "flows": {
+            "authorizationCode": {
+              "scopes": {
+                "https://www.googleapis.com/auth/adwords": "adwords"
+              },
+              "tokenUrl": "https://oauth2.googleapis.com/token",
+              "refreshUrl": "https://oauth2.googleapis.com/token",
+              "authorizationUrl": "https://accounts.google.com/o/oauth2/auth?prompt=consent&access_type=offline"
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "Rest",
+  "preDefinedActions": [{
+    "resourcePath": "/dummy/post",
+    "name": "Export to Google Ads"
+  }],
+  "preDefinedEvents": [],
+  "pollingConfigs": {},
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+    ],
+    "properties": {
+      "customerId": {
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+      "developerToken": {
+        "type": "string",
+        "scopes": [
+          "application"
+        ]
+      },
+      "userListId": {
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      }
+    }
+  },
+  "version": "1.0.0.0"
+}

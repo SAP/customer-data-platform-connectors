@@ -1,0 +1,922 @@
+{
+    "enabled": false,
+    "name": "Mailchimp",
+    "description": "Mailchimp Connector",
+    "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/marketing.svg",
+    "category": "Marketing",
+    "externalDocs": "https://mailchimp.com/developer/",
+    "resources": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Mailchimp-CDP Connector",
+            "version": "1"
+        },
+        "paths": {
+            "/lists/{list_id}/members/{subscriber_hash}": {
+                "put": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Update information for a specific list member",
+                    "parameters": [
+                        {
+                            "name": "list_id",
+                            "in": "path",
+                            "required": true,
+                            "schema": {
+                                "type": "string",
+                                "default": "$list_id"
+                            },
+                            "description": "The unique ID for the list."
+                        },
+                        {
+                            "name": "subscriber_hash",
+                            "in": "path",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            },
+                            "description": "The MD5 hash of the lowercase version of the list member's email address"
+                        },
+                        {
+                            "name": "skip_merge_validation",
+                            "in": "query",
+                            "description": "If skipmergevalidation is true, member data will be accepted without merge field values, even if the merge field is usually required. This defaults to false.",
+                            "schema": {
+                                "type": "boolean",
+                                "default": "$skip_merge_validation"
+                            }
+                        }
+                    ],
+                    "requestBody": {
+                        "description": "Send a new transactional message through the Transactional API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/updateMember"
+                                }
+                            }
+                        },
+                        "required": true
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "ok",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/membersDetails"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/lists/{list_id}/members": {
+                "get": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "summary": "Get information about members in a specific Mailchimp list.",
+                    "parameters": [
+                        {
+                            "name": "list_id",
+                            "in": "path",
+                            "required": true,
+                            "schema": {
+                                "type": "string",
+                                "default": "$list_id"
+                            },
+                            "description": "The unique ID for the list."
+                        },
+                        {
+                            "name": "fields",
+                            "in": "query",
+                            "description": "A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+									"default": "$fields"
+                                }
+                            }
+                        },
+                        {
+                            "name": "exclude_fields",
+                            "in": "query",
+                            "description": "A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+									"default": "$exclude_fields"
+                                }
+                            }
+                        },
+                        {
+                            "name": "count",
+                            "in": "query",
+                            "description": "The number of records to return. Default value is 10. Maximum value is 1000",
+                            "schema": {
+                                "type": "number",
+                                "default": "$count"
+                            }
+                        },
+                        {
+                            "name": "offset",
+                            "in": "query",
+                            "description": "The number of records from a collection to skip. Iterating over large collections with this parameter can be slow. Default value is 0.",
+                            "schema": {
+                                "type": "number",
+                                "default": "$offset"
+                            }
+                        },
+                        {
+                            "name": "email_type",
+                            "in": "query",
+                            "description": "The email type.",
+                            "schema": {
+                                "type": "string",
+                                "default": "$email_type"
+                            }
+                        },
+                        {
+                            "name": "status",
+                            "in": "query",
+                            "description": "The subscriber's status. Possible values \"subscribed\", \"unsubscribed\", \"cleaned\", \"pending\", \"transactional\", or \"archived\"",
+                            "schema": {
+                                "type": "string",
+                                "default": "$status"
+                            }
+                        },
+                        {
+                            "name": "since_timestamp_opt",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$since_timestamp_opt"
+                            },
+                            "description": "Restrict results to subscribers who opted-in after the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00."
+                        },
+                        {
+                            "name": "before_timestamp_opt",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$before_timestamp_opt"
+                            },
+                            "description": "Restrict results to subscribers who opted-in before the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00"
+                        },
+                        {
+                            "name": "since_last_changed",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$since_last_changed"
+                            },
+                            "description": "Restrict results to subscribers whose information changed after the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00."
+                        },
+                        {
+                            "name": "before_last_changed",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$before_last_changed"
+                            },
+                            "description": "Restrict results to subscribers whose information changed before the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00"
+                        },
+                        {
+                            "name": "unique_email_id",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$unique_email_id"
+                            },
+                            "description": "A unique identifier for the email address across all Mailchimp lists. This parameter can be found in any links with Ecommerce Tracking enabled."
+                        },
+                        {
+                            "name": "vip_only",
+                            "in": "query",
+                            "schema": {
+                                "type": "boolean",
+                                "default": "$vip_only"
+                            },
+                            "description": "A filter to return only the list's VIP members. Passing true will restrict results to VIP list members, passing false will return all list members"
+                        },
+                        {
+                            "name": "interest_category_id",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$interest_category_id"
+                            },
+                            "description": "The unique id for the interest category"
+                        },
+                        {
+                            "name": "sort_field",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$sort_field"
+                            },
+                            "description": "Returns files sorted by the specified field. Possible values \"timestamp_opt\", \"timestamp_signup\", or \"last_changed\"."
+                        },
+                        {
+                            "name": "sort_dir",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$sort_dir"
+                            },
+                            "description": "Determines the order direction for sorted results. Possible values \"ASC\" or \"DESC\"."
+                        },
+                        {
+                            "name": "interest_ids",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$interest_ids"
+                            },
+                            "description": "Used to filter list members by interests. Must be accompanied by interestcategoryid and interest_match. The value must be a comma separated list of interest ids present for any supplied interest categories"
+                        },
+                        {
+                            "name": "interest_match",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$interest_match"
+                            },
+                            "description": "Used to filter list members by interests. Must be accompanied by interestcategoryid and interest_ids. \"any\" will match a member with any of the interest supplied, \"all\" will only match members with every interest supplied, and \"none\" will match members without any of the interest supplied. Possible values \"any\", \"all\", or \"none\"."
+                        },
+                        {
+                            "name": "since_last_campaign",
+                            "in": "query",
+                            "schema": {
+                                "type": "boolean",
+                                "default": "$since_last_campaign"
+                            },
+                            "description": "Filter subscribers by those subscribed/unsubscribed/pending/cleaned since last email campaign send. Member status is required to use this filter."
+                        },
+                        {
+                            "name": "unsubscribed_since",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$unsubscribed_since"
+                            },
+                            "description": "Filter subscribers by those unsubscribed since a specific date. Using any status other than unsubscribed with this filter will result in an error."
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "ok",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/GetLists"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "servers": [
+            {
+                "url": "$baseUrl"
+            }
+        ],
+        "security": [
+            {
+                "basicAuth": []
+            }
+        ],
+        "components": {
+            "securitySchemes": {
+                "basicAuth": {
+                    "type": "http",
+                    "scheme": "basic"
+                }
+            },
+            "schemas": {
+                "GetLists": {
+                    "type": "object",
+                    "description": "Manage members of a specific Mailchimp list, including currently subscribed, unsubscribed, and bounced members.",
+                    "properties": {
+                        "total_items": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "list_id": {
+                            "type": "string"
+                        },
+                        "members": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/membersDetails"
+                            }
+                        }
+                    }
+                },
+                "membersDetails": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "email_address": {
+                            "type": "string"
+                        },
+                        "unique_email_id": {
+                            "type": "string"
+                        },
+                        "web_id": {
+                            "type": "number"
+                        },
+                        "email_type": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "unsubscribe_reason": {
+                            "type": "string"
+                        },
+                        "ip_signup": {
+                            "type": "string"
+                        },
+                        "timestamp_signup": {
+                            "type": "string"
+                        },
+                        "ip_opt": {
+                            "type": "string"
+                        },
+                        "timestamp_opt": {
+                            "type": "string"
+                        },
+                        "member_rating": {
+                            "type": "number"
+                        },
+                        "last_changed": {
+                            "type": "string"
+                        },
+                        "language": {
+                            "type": "string"
+                        },
+                        "vip": {
+                            "type": "boolean"
+                        },
+                        "email_client": {
+                            "type": "string"
+                        },
+                        "source": {
+                            "type": "string"
+                        },
+                        "tags_count": {
+                            "type": "number"
+                        },
+                        "list_id": {
+                            "type": "string"
+                        },
+                        "stats": {
+                            "$ref": "#/components/schemas/statsDetails"
+                        },
+                        "merge_fields": {
+                            "$ref": "#/components/schemas/merge_fieldsDetails"
+                        },
+                        "location": {
+                            "$ref": "#/components/schemas/locationDetails"
+                        },
+                        "last_note": {
+                            "$ref": "#/components/schemas/last_noteDetails"
+                        },
+                        "tags": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/tagsDetails"
+                            }
+                        },
+                        "marketing_permissions": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/marketing_permissionsDetails"
+                            }
+                        }
+                    }
+                },
+                "merge_fieldsDetails": {
+                    "type": "object",
+                    "properties": {
+                        "FNAME": {
+                            "type": "string"
+                        },
+                        "LNAME": {
+                            "type": "string"
+                        },
+                        "ADDRESS": {
+                            "type": "string"
+                        },
+                        "PHONE": {
+                            "type": "string"
+                        },
+                        "BIRTHDAY": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "statsDetails": {
+                    "type": "object",
+                    "properties": {
+                        "avg_open_rate": {
+                            "type": "number"
+                        },
+                        "avg_click_rate": {
+                            "type": "number"
+                        },
+                        "ecommerce_data": {
+                            "$ref": "#/components/schemas/ecommerce_dataDetails"
+                        }
+                    }
+                },
+                "ecommerce_dataDetails": {
+                    "type": "object",
+                    "properties": {
+                        "total_revenue": {
+                            "type": "number"
+                        },
+                        "number_of_orders": {
+                            "type": "number"
+                        },
+                        "currency_code": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "last_noteDetails": {
+                    "type": "object",
+                    "properties": {
+                        "note_id": {
+                            "type": "integer"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        },
+                        "created_by": {
+                            "type": "string"
+                        },
+                        "note": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "tagsDetails": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "marketing_permissionsDetails": {
+                    "type": "object",
+                    "properties": {
+                        "marketing_permission_id": {
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "string"
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "locationDetails": {
+                    "type": "object",
+                    "properties": {
+                        "latitude": {
+                            "type": "number"
+                        },
+                        "longitude": {
+                            "type": "number"
+                        },
+                        "gmtoff": {
+                            "type": "integer"
+                        },
+                        "dstoff": {
+                            "type": "integer"
+                        },
+                        "country_code": {
+                            "type": "string"
+                        },
+                        "timezone": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "messageDetails": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "reject_reason": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "sendMessagesResponsee": {
+                    "type": "array",
+                    "description": "an array of objects for each recipient containing the key \"email\" with the email address, and details of the message status for that recipient",
+                    "items": {
+                        "$ref": "#/components/schemas/messageDetails"
+                    }
+                },
+                "updateMember": {
+                    "type": "object",
+                    "required": [
+                        "email_address",
+                        "status_if_new"
+                    ],
+                    "properties": {
+                        "email_address": {
+                            "type": "string"
+                        },
+                        "status_if_new": {
+                            "type": "string"
+                        },
+                        "email_type": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "merge_fields": {
+                            "type": "object",
+                            "properties": {
+                                "FNAME": {
+                                    "type": "string"
+                                },
+                                "LNAME": {
+                                    "type": "string"
+                                },
+                                "ADDRESS": {
+                                    "type": "string"
+                                },
+                                "PHONE": {
+                                    "type": "string"
+                                },
+                                "BIRTHDAY": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "ip_signup": {
+                            "type": "string"
+                        },
+                        "timestamp_signup": {
+                            "type": "string"
+                        },
+                        "ip_opt": {
+                            "type": "string"
+                        },
+                        "timestamp_opt": {
+                            "type": "string"
+                        },
+                        "language": {
+                            "type": "string"
+                        },
+                        "vip": {
+                            "type": "boolean"
+                        },
+                        "interests": {
+                            "type": "object"
+                        },
+                        "marketing_permissions": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "marketing_permission_id": {
+                                        "type": "string"
+                                    },
+                                    "enabled": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            },
+                            "additionalItems": true
+                        },
+                        "location": {
+                            "type": "object",
+                            "properties": {
+                                "latitude": {
+                                    "type": "number"
+                                },
+                                "longitude": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                },
+                "sendMessages": {
+                    "type": "object",
+                    "required": [
+                        "key",
+                        "message"
+                    ],
+                    "properties": {
+                        "key": {
+                            "type": "string",
+                            "description": "a valid api key.",
+                            "x-conditionally-required-description": "a valid api key is required"
+                        },
+                        "message": {
+                            "type": "object",
+                            "description": "The information on the message to send. {\"html\":\"\",\"text\":\"\",\"subject\":\"\",\"from_email\":\"\",\"from_name\":\"\",\"to\":[],\"headers\":{},\"important\":false,\"track_opens\":false,\"track_clicks\":false,\"auto_text\":false,\"auto_html\":false,\"inline_css\":false,\"url_strip_qs\":false,\"preserve_recipients\":false,\"view_content_link\":false,\"bcc_address\":\"\",\"tracking_domain\":\"\",\"signing_domain\":\"\",\"return_path_domain\":\"\",\"merge\":false,\"merge_language\":\"mailchimp\",\"global_merge_vars\":[],\"merge_vars\":[],\"tags\":[],\"subaccount\":\"\",\"google_analytics_domains\":[],\"google_analytics_campaign\":\"\",\"metadata\":{\"website\":\"\"},\"recipient_metadata\":[],\"attachments\":[],\"images\":[]},"
+                        },
+                        "async": {
+                            "type": "boolean",
+                            "description": "enable a background sending mode that is optimized for bulk sending. In async mode, messages/send will immediately return a status of \"queued\" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with no more than 10 recipients; messages with more than 10 recipients are always sent asynchronously, regardless of the value of async."
+                        },
+                        "ip_pool": {
+                            "type": "string",
+                            "description": "the name of the dedicated ip pool that should be used to send the message. If you do not have any dedicated IPs, this parameter has no effect. If you specify a pool that does not exist, your default pool will be used instead."
+                        },
+                        "send_at": {
+                            "type": "string",
+                            "description": "when this message should be sent as a UTC timestamp in YYYY-MM-DD HH:MM:SS format. If you specify a time in the past, the message will be sent immediately. An additional fee applies for scheduled email, and this feature is only available to accounts with a positive balance."
+                        }
+                    }
+                },
+                "sendMessageTemplate": {
+                    "type": "object",
+                    "required": [
+                        "key",
+                        "template_name",
+                        "template_content",
+                        "message"
+                    ],
+                    "properties": {
+                        "key": {
+                            "type": "string",
+                            "description": "a valid api key.",
+                            "x-conditionally-required-description": "a valid api key is required"
+                        },
+                        "template_name": {
+                            "type": "string",
+                            "description": "the immutable name or slug of a template that exists in the user's account. For backwards-compatibility, the template name may also be used but the immutable slug is preferred"
+                        },
+                        "template_content": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "an array of template content to send. Each item in the array should be a struct with two keys - name - the name of the content block to set the content for, and content - the actual content to put into the block."
+                        },
+                        "message": {
+                            "type": "object",
+                            "description": "the other information on the message to send - same as /messages/send, but without the html content"
+                        },
+                        "async": {
+                            "type": "boolean",
+                            "description": "enable a background sending mode that is optimized for bulk sending. In async mode, messages/send will immediately return a status of \"queued\" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with no more than 10 recipients; messages with more than 10 recipients are always sent asynchronously, regardless of the value of async."
+                        },
+                        "ip_pool": {
+                            "type": "string",
+                            "description": "the name of the dedicated ip pool that should be used to send the message. If you do not have any dedicated IPs, this parameter has no effect. If you specify a pool that does not exist, your default pool will be used instead."
+                        },
+                        "send_at": {
+                            "type": "string",
+                            "description": "when this message should be sent as a UTC timestamp in YYYY-MM-DD HH:MM:SS format. If you specify a time in the past, the message will be sent immediately. An additional fee applies for scheduled email, and this feature is only available to accounts with a positive balance."
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/lists/{list_id}/members/{subscriber_hash}/put",
+            "name": "Update a list member"
+        }
+    ],
+    "preDefinedEvents": [
+        {
+            "resourcePath": "/lists/{list_id}/members/get",
+            "name": "Get information about members in a specific Mailchimp list."
+        }
+    ],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "baseUrl"
+        ],
+        "properties": {
+            "sort_dir": {
+                "type": "string",
+                "title": "sort_dir",
+                "description": "Determines the order direction for sorted results. Possible values \"ASC\" or \"DESC\".",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "interest_match": {
+                "type": "string",
+                "title": "interest_match",
+                "description": "Used to filter list members by interests. Must be accompanied by interestcategoryid and interest_ids. \"any\" will match a member with any of the interest supplied, \"all\" will only match members with every interest supplied, and \"none\" will match members without any of the interest supplied. Possible values \"any\", \"all\", or \"none\".",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "vip_only": {
+                "type": "boolean",
+                "title": "vip_only",
+                "description": "A filter to return only the list's VIP members. Passing true will restrict results to VIP list members, passing false will return all list members",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "since_timestamp_opt": {
+                "type": "string",
+                "title": "since_timestamp_opt",
+                "description": "Restrict results to subscribers who opted-in after the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00.",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "interest_ids": {
+                "type": "string",
+                "title": "interest_ids",
+                "description": "Used to filter list members by interests. Must be accompanied by interestcategoryid and interest_match. The value must be a comma separated list of interest ids present for any supplied interest categories",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "interest_category_id": {
+                "type": "string",
+                "title": "interest_category_id",
+                "description": "The unique id for the interest category",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "baseUrl": {
+                "type": "string",
+                "title": "Base Url",
+                "description": "The base url of the provider e.g. https://us2.api.mailchimp.com/3.0",
+                "format": "uri",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "unique_email_id": {
+                "type": "string",
+                "title": "unique_email_id",
+                "description": "A unique identifier for the email address across all Mailchimp lists. This parameter can be found in any links with Ecommerce Tracking enabled.",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "sort_field": {
+                "type": "string",
+                "title": "sort_field",
+                "description": "Returns files sorted by the specified field. Possible values \"timestamp_opt\", \"timestamp_signup\", or \"last_changed\".",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "status": {
+                "type": "string",
+                "title": "Subscribers status",
+                "description": "Possible values \"subscribed\", \"unsubscribed\", \"cleaned\", \"pending\", \"transactional\", or \"archived\"",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "list_id": {
+                "type": "string",
+                "title": "List Id",
+                "description": "id of a MailChimp list",
+                "scopes": [
+                    "event",
+                    "action",
+                    "journey-action"
+                ]
+            },
+            "since_last_changed": {
+                "type": "string",
+                "title": "since_last_changed",
+                "description": "Restrict results to subscribers whose information changed after the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00.",
+                "default": "${lastRunTime:ISO}",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "offset": {
+                "type": "number",
+                "title": "Page number",
+                "description": "",
+                "default": 0,
+                "scopes": [
+                    "event"
+                ]
+            },
+            "unsubscribed_since": {
+                "type": "string",
+                "title": "unsubscribed_since",
+                "description": "Filter subscribers by those unsubscribed since a specific date. Using any status other than unsubscribed with this filter will result in an error.",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "count": {
+                "type": "number",
+                "title": "Page Size",
+                "description": "The number of records to return. Default value is 10. Maximum value is 1000",
+                "default": 10,
+                "scopes": [
+                    "event"
+                ]
+            },
+            "email_type": {
+                "type": "string",
+                "title": "Email Type",
+                "description": "The email type",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "fields": {
+                "type": "string",
+                "title": "Fields to include",
+                "description": "A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "exclude_fields": {
+                "type": "string",
+                "title": "Fields to exclude",
+                "description": "A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "since_last_campaign": {
+                "type": "boolean",
+                "title": "since_last_campaign",
+                "description": "Filter subscribers by those subscribed/unsubscribed/pending/cleaned since last email campaign send. Member status is required to use this filter.",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "before_last_changed": {
+                "type": "string",
+                "title": "before_last_changed",
+                "description": "Restrict results to subscribers whose information changed before the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "before_timestamp_opt": {
+                "type": "string",
+                "title": "before_timestamp_opt",
+                "description": "Restrict results to subscribers who opted-in before the set timeframe. We recommend ISO 8601 time format 2015-10-21T15:41:36+00:00",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "skip_merge_validation": {
+                "type": "boolean",
+                "title": "skip_merge_validation",
+                "description": "Should skip merge validation",
+                "scopes": [
+                    "action"
+                ]
+            }
+        }
+    },
+    "pollingConfigs": {
+        "/lists/{list_id}/members/get": {
+            "recordsLocator": "members",
+            "pagingConfig": {
+                "type": "offset",
+                "pageFieldName": "offset",
+                "pageSizeFieldName": "count"
+            }
+        }
+    },
+    "version": "1.0.0.0"
+}

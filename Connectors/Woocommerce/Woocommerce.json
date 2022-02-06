@@ -1,0 +1,973 @@
+{
+  "enabled": false,
+  "name": "Woocommerce",
+  "description": "Generic WooCommerce connector",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/woocommerce.svg",
+  "category": "Commerce",
+  "resources": {
+    "openapi": "3.0.0",
+    "paths": {
+      "/wp-json/wc/v3/customers": {
+        "get": {
+          "summary": "Get Customers",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "query",
+              "required": false,
+              "name": "userKey"
+            },
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "query",
+              "required": false,
+              "name": "secret"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/customerSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/wp-json/wc/v3/orders": {
+        "get": {
+          "summary": "Get orders",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "query",
+              "required": false,
+              "name": "userKey"
+            },
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "query",
+              "required": false,
+              "name": "secret"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/orderSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/wp-json/wc/v3/customers/{customerId}": {
+        "put": {
+          "summary": "Update Customer",
+          "parameters": [
+            {
+              "name": "customerId",
+              "in": "path",
+              "type": "string",
+              "schema": {
+                "type": "string"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/customerSchema"
+                  }
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customerSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CustomerUpserted": {
+        "post": {
+          "summary": "Customer Created WebHook",
+          "requestBody": {
+            "description": "Webhook for getting new customer from WooCommerce",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customerWebhookSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "OrderUpserted": {
+        "post": {
+          "summary": "Order Created or updated WebHook",
+          "requestBody": {
+            "description": "Webhook for getting new customer from WooCommerce",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/orderWebhookSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "webhooks": {
+      "CustomerUpserted": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook for getting WooCommerce Customer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/customerWebhookSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "OrderUpserted": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook for getting WooCommerce Order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/orderWebhookSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "title": "Dekel WooCommerce 2021-08-16 DDD - WS 52025954",
+      "version": "1.0.0"
+    },
+    "components": {
+      "securitySchemes": {
+        "default": {
+          "type": "http",
+          "scheme": "basic"
+        }
+      },
+      "schemas": {
+        "customerSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "date_created": {
+              "type": "string"
+            },
+            "date_created_gmt": {
+              "type": "string"
+            },
+            "date_modified": {
+              "type": "string"
+            },
+            "date_modified_gmt": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "billing": {
+              "$ref": "#/components/schemas/billingSchema"
+            },
+            "shipping": {
+              "$ref": "#/components/schemas/shippingSchema"
+            },
+            "is_paying_customer": {
+              "type": "boolean"
+            },
+            "avatar_url": {
+              "type": "string"
+            },
+            "meta_data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "_links": {
+              "type": "object",
+              "properties": {
+                "self": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "collection": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+
+        },
+        "customerWebhookSchema": {
+          "x-cdp-schema-settings": {
+            "recordsLocatorPath": "$",
+            "metadataConfig": {}
+          },
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "date_created": {
+              "type": "string"
+            },
+            "date_created_gmt": {
+              "type": "string"
+            },
+            "date_modified": {
+              "type": "string"
+            },
+            "date_modified_gmt": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "billing": {
+              "$ref": "#/components/schemas/billingSchema"
+            },
+            "shipping": {
+              "$ref": "#/components/schemas/shippingSchema"
+            },
+            "is_paying_customer": {
+              "type": "boolean"
+            },
+            "avatar_url": {
+              "type": "string"
+            },
+            "meta_data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "_links": {
+              "type": "object",
+              "properties": {
+                "self": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "collection": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "orderSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "parent_id": {
+              "type": "integer"
+            },
+            "number": {
+              "type": "string"
+            },
+            "order_key": {
+              "type": "string"
+            },
+            "created_via": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "date_created": {
+              "type": "string"
+            },
+            "date_created_gmt": {
+              "type": "string"
+            },
+            "date_modified": {
+              "type": "string"
+            },
+            "date_modified_gmt": {
+              "type": "string"
+            },
+            "discount_total": {
+              "type": "string"
+            },
+            "discount_tax": {
+              "type": "string"
+            },
+            "shipping_total": {
+              "type": "string"
+            },
+            "shipping_tax": {
+              "type": "string"
+            },
+            "cart_tax": {
+              "type": "string"
+            },
+            "total": {
+              "type": "string"
+            },
+            "total_tax": {
+              "type": "string"
+            },
+            "prices_include_tax": {
+              "type": "boolean"
+            },
+            "customer_id": {
+              "type": "integer"
+            },
+            "customer_ip_address": {
+              "type": "string"
+            },
+            "customer_user_agent": {
+              "type": "string"
+            },
+            "customer_note": {
+              "type": "string"
+            },
+            "billing": {
+              "$ref": "#/components/schemas/billingSchema"
+            },
+            "shipping": {
+              "$ref": "#/components/schemas/shippingSchema"
+            },
+            "payment_method": {
+              "type": "string"
+            },
+            "payment_method_title": {
+              "type": "string"
+            },
+            "transaction_id": {
+              "type": "string"
+            },
+            "date_paid": {
+              "type": "null"
+            },
+            "date_paid_gmt": {
+              "type": "null"
+            },
+            "date_completed": {
+              "type": "null"
+            },
+            "date_completed_gmt": {
+              "type": "null"
+            },
+            "cart_hash": {
+              "type": "string"
+            },
+            "currency_symbol": {
+              "type": "string"
+            },
+            "meta_data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "_links": {
+              "type": "object",
+              "properties": {
+                "self": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "collection": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "refunds": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "coupon_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "fee_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "shipping_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "tax_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "line_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "integer"
+                  },
+                  "variation_id": {
+                    "type": "integer"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "tax_class": {
+                    "type": "string"
+                  },
+                  "subtotal": {
+                    "type": "string"
+                  },
+                  "subtotal_tax": {
+                    "type": "string"
+                  },
+                  "total": {
+                    "type": "string"
+                  },
+                  "total_tax": {
+                    "type": "string"
+                  },
+                  "taxes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "meta_data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "sku": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "parent_name": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "orderWebhookSchema": {
+          "x-cdp-schema-settings": {
+            "recordsLocatorPath": "$",
+            "metadataConfig": {}
+          },
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "parent_id": {
+              "type": "integer"
+            },
+            "number": {
+              "type": "string"
+            },
+            "order_key": {
+              "type": "string"
+            },
+            "created_via": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "date_created": {
+              "type": "string"
+            },
+            "date_created_gmt": {
+              "type": "string"
+            },
+            "date_modified": {
+              "type": "string"
+            },
+            "date_modified_gmt": {
+              "type": "string"
+            },
+            "discount_total": {
+              "type": "string"
+            },
+            "discount_tax": {
+              "type": "string"
+            },
+            "shipping_total": {
+              "type": "string"
+            },
+            "shipping_tax": {
+              "type": "string"
+            },
+            "cart_tax": {
+              "type": "string"
+            },
+            "total": {
+              "type": "string"
+            },
+            "total_tax": {
+              "type": "string"
+            },
+            "prices_include_tax": {
+              "type": "boolean"
+            },
+            "customer_id": {
+              "type": "integer"
+            },
+            "customer_ip_address": {
+              "type": "string"
+            },
+            "customer_user_agent": {
+              "type": "string"
+            },
+            "customer_note": {
+              "type": "string"
+            },
+            "billing": {
+              "$ref": "#/components/schemas/billingSchema"
+            },
+            "shipping": {
+              "$ref": "#/components/schemas/shippingSchema"
+            },
+            "payment_method": {
+              "type": "string"
+            },
+            "payment_method_title": {
+              "type": "string"
+            },
+            "transaction_id": {
+              "type": "string"
+            },
+            "date_paid": {
+              "type": "null"
+            },
+            "date_paid_gmt": {
+              "type": "null"
+            },
+            "date_completed": {
+              "type": "null"
+            },
+            "date_completed_gmt": {
+              "type": "null"
+            },
+            "cart_hash": {
+              "type": "string"
+            },
+            "currency_symbol": {
+              "type": "string"
+            },
+            "meta_data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "_links": {
+              "type": "object",
+              "properties": {
+                "self": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "collection": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "refunds": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "coupon_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "fee_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "shipping_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "tax_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "line_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "product_id": {
+                    "type": "integer"
+                  },
+                  "variation_id": {
+                    "type": "integer"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "tax_class": {
+                    "type": "string"
+                  },
+                  "subtotal": {
+                    "type": "string"
+                  },
+                  "subtotal_tax": {
+                    "type": "string"
+                  },
+                  "total": {
+                    "type": "string"
+                  },
+                  "total_tax": {
+                    "type": "string"
+                  },
+                  "taxes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "meta_data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "sku": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "integer"
+                  },
+                  "parent_name": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "billingSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "company": {
+              "type": "string"
+            },
+            "address_1": {
+              "type": "string"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "postcode": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        },
+        "shippingSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "company": {
+              "type": "string"
+            },
+            "address_1": {
+              "type": "string"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "postcode": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "servers": [
+      {
+        "url": "$baseUrl"
+      }
+    ]
+  },
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/wp-json/wc/v3/customers/{customerId}/put",
+      "name": "Update Customer",
+      "description": "Update customer data",
+      "id": "HEYUotCHNkL4wVTpokoF8g"
+    }
+  ],
+  "preDefinedEvents": [
+    {
+      "resourcePath": "/wp-json/wc/v3/customers/get",
+      "name": "Get customers in batch",
+      "description": "Get customers in a batch since last run",
+      "id": "HKhSZgJlYLnXtQg592lO1Q"
+    },
+    {
+      "resourcePath": "/wp-json/wc/v3/orders/get",
+      "name": "Get orders in batch",
+      "description": "Get orders in a batch since last run",
+      "id": "HJD1z7FR_Cm4PUScTn2cVQ"
+    }
+  ],
+  "preDefinedEventListeners": [
+    {
+      "webhookPath": "CustomerUpserted/post",
+      "recordsLocator": "$",
+      "metadataConfig": {},
+      "name": "Listen for new or updated customer in real-time",
+      "id": "HIf1HwhTT5QYh62jL86nWw"
+    },
+    {
+      "webhookPath": "OrderUpserted/post",
+      "recordsLocator": "$",
+      "metadataConfig": {},
+      "name": "Listen for new or updated order in real-time",
+      "id": "HGjrQAAmdFWDG5-Bfdbj0A"
+    }
+  ],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "baseUrl"
+    ],
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "title": "API base url",
+        "description": "The base url of the Woocommerce instance e.g. https://myshop.com/wp-json",
+        "format": "uri",
+        "scopes": [
+          "application"
+        ]
+      }
+    }
+  },
+  "pollingConfigs": {
+    "/wp-json/wc/v3/customers/get": {
+      "recordsLocator": "$"
+    },
+    "/wp-json/wc/v3/orders/get": {
+      "recordsLocator": "$"
+    }
+  },
+  "version": "1.0.0.0"
+}

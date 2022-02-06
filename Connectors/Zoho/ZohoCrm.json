@@ -1,0 +1,953 @@
+{
+  "enabled": false,
+  "name": "Zoho CRM",
+  "description": "Zoho CRM connector",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/zoho.svg",
+  "category": "Commerce",
+  "resources": {
+    "openapi": "3.0.0",
+    "security": [
+      {
+        "oAuth2": [
+          "ZohoCRM.modules.ALL"
+        ]
+      }
+    ],
+    "paths": {
+      "/crm/v2.1/Leads": {
+        "get": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "integer"
+              },
+              "in": "query",
+              "required": false,
+              "name": "page"
+            },
+            {
+              "schema": {
+                "type": "integer",
+                "default": "100"
+              },
+              "in": "query",
+              "required": false,
+              "name": "per_page"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LeadRecordListSchema"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "",
+          "parameters": [],
+          "requestBody": {
+            "description": "Insert lead to Zoho CRM",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadRecordListSchema"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            },
+            "400": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "/crm/v2.1/Leads/{recordId}": {
+        "put": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "path",
+              "required": true,
+              "name": "recordId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadRecordListSchema"
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "path",
+              "required": true,
+              "name": "recordId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            },
+            "400": {
+              "description": "400 Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "/crm/v2.1/Contacts": {
+        "get": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "integer"
+              },
+              "in": "query",
+              "required": false,
+              "name": "page"
+            },
+            {
+              "schema": {
+                "type": "integer",
+                "default": "100"
+              },
+              "in": "query",
+              "required": false,
+              "name": "per_page"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ContactRecordListSchema"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "",
+          "parameters": [],
+          "requestBody": {
+            "description": "Insert Contact to Zoho CRM",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactRecordListSchema"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            },
+            "400": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "/crm/v2.1/Contacts/{recordId}": {
+        "put": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "path",
+              "required": true,
+              "name": "recordId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactRecordListSchema"
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "path",
+              "required": true,
+              "name": "recordId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            },
+            "400": {
+              "description": "400 Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "/crm/v2.1/Accounts": {
+        "get": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "integer"
+              },
+              "in": "query",
+              "required": false,
+              "name": "page"
+            },
+            {
+              "schema": {
+                "type": "integer",
+                "default": "100"
+              },
+              "in": "query",
+              "required": false,
+              "name": "per_page"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AccountRecordListSchema"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "",
+          "parameters": [],
+          "requestBody": {
+            "description": "Insert account to Zoho CRM",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountRecordListSchema"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            },
+            "400": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "/crm/v2.1/Accounts/{recordId}": {
+        "put": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "path",
+              "required": true,
+              "name": "recordId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountRecordListSchema"
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "",
+          "parameters": [
+            {
+              "schema": {
+                "type": "string"
+              },
+              "in": "path",
+              "required": true,
+              "name": "recordId"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            },
+            "400": {
+              "description": "400 Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "LeadsUpdate": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook for getting leeds from marketo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadsUpdateSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ContactsUpdate": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook for getting contacts from Zoho",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactsUpdateSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AccountsUpdate": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook for AccountsUpdate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountsUpdateSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "webhooks": {
+      "LeadsUpdate": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook for getting ZOHO Lead update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadsUpdateSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ContactsUpdate": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook for getting ZOHO Contact update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactsUpdateSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AccountsUpdate": {
+        "post": {
+          "requestBody": {
+            "description": "Webhook block for AccountsUpdate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountsUpdateSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "title": "Dekel ZOHO 2021-08-29 B",
+      "version": "1"
+    },
+    "components": {
+      "securitySchemes": {
+        "oAuth2": {
+          "type": "oauth2",
+          "flows": {
+            "authorizationCode": {
+              "tokenUrl": "https://accounts.zoho.com/oauth/v2/token",
+              "refreshUrl": "https://accounts.zoho.com/oauth/v2/token",
+              "authorizationUrl": "https://accounts.zoho.eu/oauth/v2/auth?access_type=offline",
+              "scopes": {
+                "ZohoCRM.modules.ALL": "ZohoCRM.modules.ALL"
+              }
+            }
+          }
+        }
+      },
+      "schemas": {
+        "UserRecord": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+            }
+          }
+        },
+        "LeadRecordListSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LeadRecordSchema"
+              }
+            }
+          }
+        },
+        "LeadRecordSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "First_Name": {
+              "type": "string"
+            },
+            "Last_Name": {
+              "type": "string"
+            },
+            "Phone": {
+              "type": "string"
+            },
+            "Email": {
+              "type": "string"
+            },
+            "Company": {
+              "type": "string"
+            },
+            "Last_Activity_Time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "Industry": {
+              "type": "string"
+            },
+            "Zip_Code": {
+              "type": "string"
+            },
+            "Modified_Time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "Created_Time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "City": {
+              "type": "string"
+            },
+            "State": {
+              "type": "string"
+            },
+            "Country": {
+              "type": "string"
+            },
+            "Annual_Revenue": {
+              "type": "integer"
+            },
+            "Website": {
+              "type": "string",
+              "format": "uri"
+            },
+            "Twitter": {
+              "type": "string"
+            },
+            "Full_Name": {
+              "type": "string"
+            },
+            "Salutation": {
+              "type": "string"
+            },
+            "Lead_Status": {
+              "type": "string"
+            },
+            "Skype_ID": {
+              "type": "string"
+            },
+            "Designation": {
+              "type": "string"
+            },
+            "Owner": {
+              "$ref": "#/components/schemas/UserRecord"
+            },
+            "Created_By": {
+              "$ref": "#/components/schemas/UserRecord"
+            },
+            "Lead_Source": {
+              "type": "string"
+            }
+          }
+        },
+        "ContactRecordListSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContactRecordSchema"
+              }
+            }
+          }
+        },
+        "ContactRecordSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "First_Name": {
+              "type": "string"
+            },
+            "Last_Name": {
+              "type": "string"
+            },
+            "Full_Name": {
+              "type": "string"
+            },
+            "Phone": {
+              "type": "string"
+            },
+            "Mobile": {
+              "type": "string"
+            },
+            "Email": {
+              "type": "string"
+            },
+            "Modified_Time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "Date_of_Birth": {
+              "type": "string",
+              "format": "date"
+            },
+            "Department": {
+              "type": "string"
+            },
+            "Owner": {
+              "$ref": "#/components/schemas/UserRecord"
+            },
+            "Modified_By": {
+              "$ref": "#/components/schemas/UserRecord"
+            },
+            "Created_By": {
+              "$ref": "#/components/schemas/UserRecord"
+            }
+          }
+        },
+        "AccountRecordListSchema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AccountRecordSchema"
+              }
+            }
+          }
+        },
+        "AccountRecordSchema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "Account_Name": {
+              "type": "string"
+            },
+            "Phone": {
+              "type": "string"
+            },
+            "Modified_Time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "Employees": {
+              "type": "integer"
+            },
+            "Owner": {
+              "$ref": "#/components/schemas/UserRecord"
+            },
+            "Modified_By": {
+              "$ref": "#/components/schemas/UserRecord"
+            },
+            "Created_By": {
+              "$ref": "#/components/schemas/UserRecord"
+            }
+          }
+        },
+        "LeadsUpdateSchema": {
+          "x-cdp-schema-settings": {
+            "recordsLocatorPath": "$",
+            "metadataConfig": {}
+          },
+          "type": "object",
+          "properties": {
+            "leadId": {
+              "type": "string"
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "modifiedTime": {
+              "type": "string"
+            },
+            "leadStatus": {
+              "type": "string"
+            },
+            "leadName": {
+              "type": "string"
+            }
+          }
+        },
+        "ContactsUpdateSchema": {
+          "x-cdp-schema-settings": {
+            "recordsLocatorPath": "$",
+            "metadataConfig": {}
+          },
+          "type": "object",
+          "properties": {
+            "contactId": {
+              "type": "string"
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "modifiedTime": {
+              "type": "string"
+            },
+            "contactOwnerId": {
+              "type": "string"
+            }
+          }
+        },
+        "AccountsUpdateSchema": {
+          "x-cdp-schema-settings": {
+            "recordsLocatorPath": "$",
+            "metadataConfig": {}
+          },
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string"
+            },
+            "accountName": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "accountOwnerId": {
+              "type": "string"
+            },
+            "modifiedTime": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "servers": [
+      {
+        "url": "$baseUrl"
+      }
+    ]
+  },
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/crm/v2.1/Leads/post",
+      "name": "Insert lead",
+      "description": "",
+      "id": "HBsRs4TK52iHxTnLoiSQqw"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Leads/{recordId}/put",
+      "name": "Update lead",
+      "description": "",
+      "id": "HKRH-tflBpjgkU3Tc6j-pQ"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Leads/{recordId}/delete",
+      "name": "Delete lead",
+      "description": "",
+      "id": "HNY6EK2owgsyBsK8tgSZGA"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Accounts/post",
+      "name": "Insert account",
+      "description": "",
+      "id": "HGkhQ_bvYmo0MKPGT5wONA"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Accounts/{recordId}/put",
+      "name": "Update account",
+      "description": "",
+      "id": "HLnO-n6c2DftT7Rlpmhd-A"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Accounts/{recordId}/delete",
+      "name": "Delete account",
+      "description": "",
+      "id": "HGpLUJTMM5FmgUUSj1YfyQ"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Contacts/post",
+      "name": "Insert Contact",
+      "description": "",
+      "id": "HIKYx2QjiFSOATqiqFVW5g"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Contacts/{recordId}/put",
+      "name": "Update contact",
+      "description": "",
+      "id": "HCUY7gYKBKqY_k44gXHfNA"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Contacts/{recordId}/delete",
+      "name": "Delete Contact",
+      "description": "",
+      "id": "HL2rT_I10fNxIpiG-wL0Lw"
+    }
+  ],
+  "preDefinedEvents": [
+    {
+      "resourcePath": "/crm/v2.1/Leads/get",
+      "name": "Get leads",
+      "description": "",
+      "id": "HNG-TyVSrYDVF_xPgKiUXw"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Contacts/get",
+      "name": "Get contacts",
+      "description": "",
+      "id": "HO01kFe_NTELRrUTqZ_SZw"
+    },
+    {
+      "resourcePath": "/crm/v2.1/Accounts/get",
+      "name": "Get accounts",
+      "description": "",
+      "id": "HFznYeOvg0eK8-vhamgErw"
+    }
+  ],
+  "preDefinedEventListeners": [
+    {
+      "webhookPath": "LeadsUpdate/post",
+      "metadataConfig": {},
+      "name": "Lead created or updated",
+      "id": "HCWgY6Z-xfxHITYgeoVS5g"
+    },
+    {
+      "webhookPath": "ContactsUpdate/post",
+      "recordsLocator": "$",
+      "metadataConfig": {},
+      "name": "Contact created or updated",
+      "id": "HJSuz1idx18yHR4yj5vHYQ"
+    },
+    {
+      "webhookPath": "AccountsUpdate/post",
+      "recordsLocator": "$",
+      "metadataConfig": {},
+      "name": "Accounts created or updated",
+      "id": "HC9jzF5Ml7Fsqqa6wgyjvQ"
+    }
+  ],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "baseUrl"
+    ],
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "title": "Base URL",
+        "description": "The provider's URL to call (e.g. https://www.zohoapis.eu)",
+        "format": "uri",
+        "scopes": [
+          "application"
+        ]
+      }
+    }
+  },
+  "pollingConfigs": {
+    "/crm/v2.1/Leads/get": {
+      "recordsLocator": "",
+      "pagingConfig": {
+        "type": "sequential",
+        "pageFieldName": "page"
+      }
+    },
+    "/crm/v2.1/Contacts/get": {
+      "recordsLocator": "",
+      "pagingConfig": {
+        "type": "sequential",
+        "pageFieldName": "page"
+      }
+    },
+    "/crm/v2.1/Accounts/get": {
+      "recordsLocator": "",
+      "pagingConfig": {
+        "type": "sequential",
+        "pageFieldName": "page"
+      }
+    }
+  },
+    "version": "1.0.0.0"
+}

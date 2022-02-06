@@ -1,0 +1,824 @@
+{
+	"enabled": false,
+	"name": "MS Dynamics 365",
+	"description": "MS Dynamics 365",
+	"logoUrl": "assets/img/connectors/default-icons/crm.svg",
+	"category": "crm",
+	"type": "Rest",
+	"preDefinedActions": [
+		{
+			"name": "Create a new contact",
+			"resourcePath": "/api/data/v9.1/contacts/post",
+			"description": "",
+			"enrichments": []
+		},
+		{
+			"name": "Update Contact",
+			"resourcePath": "/api/data/v9.1/contacts({id})/patch",
+			"description": "Update existing contact",
+			"enrichments": []
+		},
+		{
+			"name": "Create A New Lead",
+			"resourcePath": "/api/data/v9.1/leads/post",
+			"description": "Create A New Lead",
+			"enrichments": []
+		},
+		{
+			"name": "Update Lead",
+			"resourcePath": "/api/data/v9.1/leads({id})/patch",
+			"description": "Update Lead",
+			"enrichments": []
+		},
+		{
+			"name": "Create A New Account",
+			"resourcePath": "/api/data/v9.1/accounts/post",
+			"description": "Create A New Account",
+			"enrichments": []
+		},
+		{
+			"name": "Update Account",
+			"resourcePath": "/api/data/v9.1/accounts({id})/patch",
+			"description": "Update Account",
+			"enrichments": []
+		}
+	],
+	"preDefinedEvents": [
+		{
+			"name": "Get All Contacts",
+			"resourcePath": "/api/data/v9.1/contacts/get",
+			"description": "",
+			"enrichments": []
+		},
+		{
+			"name": "Get All Leads",
+			"resourcePath": "/api/data/v9.1/leads/get",
+			"description": "Get All Leads",
+			"enrichments": []
+		},
+		{
+			"name": "Get All Accounts",
+			"resourcePath": "/api/data/v9.1/accounts/get",
+			"description": "Get All Accounts",
+			"enrichments": []
+		}
+	],
+	"preDefinedEventListeners": [],
+	"resources": {
+		"openapi": "3.0.0",
+		"paths": {
+			"/api/data/v9.1/contacts": {
+				"get": {
+					"x-cdp-operation-settings": {
+						"pagingConfig": {
+							"type": "nextUrl",
+							"nextUrl": {
+								"in": "body",
+								"fieldName": [
+									"@odata.nextLink"
+								]
+							}
+						},
+						"keepOnlySchemaFields": true
+					},
+					"summary": "Get all existing contacts",
+					"parameters": [
+						{
+							"schema": {
+								"type": "string",
+								"default": "wwwww"
+							},
+							"in": "header",
+							"required": false,
+							"name": "dummy"
+						}
+					],
+					"tags": [
+						"produce"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {
+										"x-cdp-schema-settings": {
+											"recordsLocatorPath": "value"
+										},
+										"type": "object",
+										"properties": {
+											"value": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"additionalProperties": true,
+													"properties": {
+														"accountcategorycode": {
+															"type": "integer",
+															"title": "Account Category "
+														},
+														"mobilephone": {
+															"type": "string",
+															"title": "Mobile Number"
+														},
+														"birthdate": {
+															"type": "string",
+															"title": "Birthday"
+														},
+														"merged": {
+															"type": "boolean",
+															"title": "IsMerged"
+														},
+														"emailaddress1": {
+															"type": "string",
+															"title": "Email"
+														},
+														"modifiedon": {
+															"type": "string",
+															"title": "Changed Date"
+														},
+														"address1_composite": {
+															"type": "string",
+															"title": "Full Address"
+														},
+														"lastname": {
+															"type": "string",
+															"title": "Last Name",
+															"scopes": []
+														},
+														"firstname": {
+															"type": "string",
+															"title": "First Name"
+														},
+														"fullname": {
+															"type": "string",
+															"title": "Full Name"
+														},
+														"createdon": {
+															"type": "string",
+															"title": "Created Time"
+														},
+														"address1_country": {
+															"type": "string",
+															"title": "Country"
+														},
+														"address1_city": {
+															"type": "string",
+															"title": "City"
+														},
+														"fax": {
+															"type": "string",
+															"title": "Fax"
+														},
+														"contactid": {
+															"type": "string",
+															"title": "Identity"
+														},
+														"nickname": {
+															"type": "string",
+															"title": "Nickname"
+														}
+													}
+												},
+												"additionalItems": true
+											},
+											"@odata.nextLink": {
+												"type": "string",
+												"title": "Ref To Next Page",
+												"description": "URL reference to the next page"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"post": {
+					"summary": "Add a new contact",
+					"parameters": [],
+					"tags": [
+						"consume"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"telephone1": {
+											"type": "string",
+											"title": "Phone number"
+										},
+										"firstname": {
+											"type": "string",
+											"title": "First Name"
+										},
+										"lastname": {
+											"type": "string",
+											"title": "Last Name"
+										},
+										"emailaddress1": {
+											"type": "string",
+											"title": "Email"
+										},
+										"creditlimit": {
+											"type": "integer",
+											"title": "Credit Limit"
+										},
+										"creditlimit_base": {
+											"type": "integer",
+											"title": "Credit Limit Base"
+										},
+										"creditonhold": {
+											"type": "boolean",
+											"title": "Credit On Hold"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/data/v9.1/contacts({id})": {
+				"patch": {
+					"summary": "Update existing contact",
+					"parameters": [
+						{
+							"name": "id",
+							"in": "path",
+							"type": "string",
+							"schema": {
+								"type": "string"
+							},
+							"required": true
+						}
+					],
+					"tags": [
+						"consume"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"telephone1": {
+											"type": "string",
+											"title": "Phone number"
+										},
+										"firstname": {
+											"type": "string",
+											"title": "First Name"
+										},
+										"lastname": {
+											"type": "string",
+											"title": "Last Name"
+										},
+										"emailaddress1": {
+											"type": "string",
+											"title": "Email"
+										},
+										"creditlimit": {
+											"type": "integer",
+											"title": "Credit Limit"
+										},
+										"creditlimit_base": {
+											"type": "integer",
+											"title": "Credit Limit Base"
+										},
+										"contactid": {
+											"type": "string",
+											"title": "Identity"
+										},
+										"creditonhold": {
+											"type": "boolean",
+											"title": "Credit On Hold"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/data/v9.1/leads": {
+				"get": {
+					"x-cdp-operation-settings": {
+						"pagingConfig": {
+							"type": "nextUrl",
+							"nextUrl": {
+								"in": "body",
+								"fieldName": [
+									"@odata.nextLink"
+								]
+							}
+						},
+						"keepOnlySchemaFields": true
+					},
+					"summary": "Get all leads",
+					"parameters": [
+						{
+							"schema": {
+								"type": "string"
+							},
+							"in": "query",
+							"required": false,
+							"name": "dummy"
+						}
+					],
+					"tags": [
+						"produce"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {
+										"x-cdp-schema-settings": {
+											"recordsLocatorPath": "value"
+										},
+										"type": "object",
+										"properties": {
+											"value": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"additionalProperties": true,
+													"properties": {
+														"mobilephone": {
+															"type": "string",
+															"title": "Mobile"
+														},
+														"emailaddress1": {
+															"type": "string",
+															"title": "Email"
+														},
+														"lastname": {
+															"type": "string",
+															"title": "Last Name"
+														},
+														"firstname": {
+															"type": "string",
+															"title": "First Name"
+														},
+														"fullname": {
+															"type": "string",
+															"title": "Full Name"
+														},
+														"subject": {
+															"type": "string",
+															"title": "Topic"
+														},
+														"leadid": {
+															"type": "string",
+															"title": "Identity"
+														},
+														"telephone1": {
+															"title": "Phone",
+															"type": "string",
+															"scopes": []
+														}
+													}
+												},
+												"additionalItems": true
+											},
+											"@odata.nextLink": {
+												"type": "string",
+												"title": "Ref To Next Page",
+												"description": "URL reference to the next page"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"post": {
+					"summary": "Add a new lead",
+					"parameters": [],
+					"tags": [
+						"consume"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"subject": {
+											"type": "string",
+											"title": "Topic"
+										},
+										"telephone1": {
+											"type": "string",
+											"title": "Main Telephone"
+										},
+										"firstname": {
+											"type": "string",
+											"title": "First Name"
+										},
+										"lastname": {
+											"type": "string",
+											"title": "Last Name"
+										},
+										"emailaddress1": {
+											"type": "string",
+											"title": "Email"
+										},
+										"statuscode": {
+											"type": "integer",
+											"title": "Status Code"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/data/v9.1/leads({id})": {
+				"patch": {
+					"summary": "Update Lead",
+					"parameters": [
+						{
+							"name": "id",
+							"in": "path",
+							"type": "string",
+							"schema": {
+								"type": "string"
+							},
+							"required": true
+						}
+					],
+					"tags": [
+						"consume"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"subject": {
+											"type": "string",
+											"title": "Topic"
+										},
+										"telephone1": {
+											"type": "string",
+											"title": "Main Telephone"
+										},
+										"firstname": {
+											"type": "string",
+											"title": "First Name"
+										},
+										"lastname": {
+											"type": "string",
+											"title": "Last Name"
+										},
+										"emailaddress1": {
+											"type": "string",
+											"title": "Email"
+										},
+										"statuscode": {
+											"type": "integer",
+											"title": "Status Code"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/data/v9.1/accounts": {
+				"get": {
+					"x-cdp-operation-settings": {
+						"pagingConfig": {
+							"type": "nextUrl",
+							"nextUrl": {
+								"in": "body",
+								"fieldName": [
+									"@odata.nextLink"
+								]
+							}
+						},
+						"keepOnlySchemaFields": true
+					},
+					"summary": "Get All Accounts ",
+					"parameters": [
+						{
+							"schema": {
+								"type": "string"
+							},
+							"in": "query",
+							"required": false,
+							"name": "dummy"
+						}
+					],
+					"tags": [
+						"produce"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {
+										"x-cdp-schema-settings": {
+											"recordsLocatorPath": "value"
+										},
+										"type": "object",
+										"properties": {
+											"value": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"additionalProperties": true,
+													"properties": {
+														"emailaddress1": {
+															"type": "string",
+															"title": "Email"
+														},
+														"name": {
+															"type": "string",
+															"title": "Account Name"
+														},
+														"telephone1": {
+															"title": "Phone",
+															"type": "string",
+															"scopes": []
+														},
+														"accountid": {
+															"type": "string",
+															"title": "Identity"
+														},
+														"mobilephone": {
+															"type": "string",
+															"title": "Mobile"
+														},
+														"description": {
+															"type": "string",
+															"title": "Description"
+														}
+													}
+												},
+												"additionalItems": true
+											},
+											"@odata.nextLink": {
+												"type": "string",
+												"title": "Ref To Next Page",
+												"description": "URL reference to the next page"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"post": {
+					"summary": "Create A New Account",
+					"parameters": [
+						{
+							"name": "id",
+							"in": "path",
+							"type": "string",
+							"schema": {
+								"type": "string"
+							},
+							"required": true
+						}
+					],
+					"tags": [
+						"consume"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string",
+											"title": "Account Name"
+										},
+										"telephone1": {
+											"type": "string",
+											"title": "Main Phone"
+										},
+										"address1_city": {
+											"type": "string",
+											"title": "City"
+										},
+										"creditonhold": {
+											"type": "boolean",
+											"title": "Credit On Hold"
+										},
+										"description": {
+											"type": "string",
+											"title": "Description"
+										},
+										"revenue": {
+											"type": "integer",
+											"title": "Revenue"
+										},
+										"accountcategorycode": {
+											"type": "integer",
+											"title": "Account category"
+										},
+										"description": {
+											"type": "string",
+											"title": "Description"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/data/v9.1/accounts({id})": {
+				"patch": {
+					"summary": "Update Account",
+					"parameters": [
+						{
+							"name": "id",
+							"in": "path",
+							"type": "string",
+							"schema": {
+								"type": "string"
+							},
+							"required": true
+						}
+					],
+					"tags": [
+						"consume"
+					],
+					"responses": {
+						"200": {
+							"content": {
+								"application/json": {
+									"schema": {}
+								}
+							}
+						}
+					},
+					"requestBody": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string",
+											"title": "Account Name"
+										},
+										"telephone1": {
+											"type": "string",
+											"title": "Main Phone"
+										},
+										"address1_city": {
+											"type": "string",
+											"title": "City"
+										},
+										"creditonhold": {
+											"type": "boolean",
+											"title": "Credit On Hold"
+										},
+										"description": {
+											"type": "string",
+											"title": "Description"
+										},
+										"revenue": {
+											"type": "integer",
+											"title": "Revenue"
+										},
+										"accountcategorycode": {
+											"type": "integer",
+											"title": "Account category"
+										},
+										"description": {
+											"type": "string",
+											"title": "Description"
+										},
+										"_primarycontactid_value": {
+											"type": "string",
+											"title": "Contact Identiy"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"info": {
+			"title": "MS Dynamic 365",
+			"version": "3.0.0"
+		},
+		"components": {
+			"securitySchemes": {
+				"default": {
+					"type": "oauth2",
+					"flows": {
+						"authorizationCode": {
+							"scopes": {
+								"User.ReadWrite.All": "read write permissions"
+							},
+							"x-cdp-authorization-settings": {
+								"parameters": {
+									"resource": {
+										"schema": {
+											"type": "string",
+											"default": "$baseUrl"
+										},
+										"in": [
+											"authorizationUrl",
+											"tokenUrl",
+											"refreshUrl"
+										]
+									}
+								}
+							},
+							"authorizationUrl": "",
+							"tokenUrl": "",
+							"refreshUrl": ""
+						}
+					}
+				}
+			}
+		},
+		"externalDocs": "",
+		"servers": [
+			{
+				"url": "$baseUrl"
+			}
+		]
+	},
+	"configSchema": {
+		"type": "object",
+		"additionalProperties": false,
+		"required": [
+			"baseUrl"
+		],
+		"properties": {
+			"baseUrl": {
+				"type": "string",
+				"title": "Base URL",
+				"description": "The provider's URL to call",
+				"format": "uri",
+				"scopes": [
+					"application"
+				]
+			}
+		}
+	},
+	"version": "1.0.0.0"
+}

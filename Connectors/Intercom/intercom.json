@@ -1,0 +1,591 @@
+{
+  
+  "enabled" : false,
+  "name": "Intercom",
+  "logoUrl": "assets/img/connectors/default-icons/commerce.svg",
+  "category": "Commerce",
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/contacts/{id}/put",
+      "name": "Update contact",
+      "description": "Update contact in intercom"
+    },
+    {
+      "resourcePath": "/contacts/post",
+      "name": "Create a new contact",
+      "description": "Create a new contact in Intercom"
+    }
+  ],
+  "enrichmentPoints": {
+    "tagsEnrichment": {
+      "resourcePath": "/contacts/{userId}/tags/get",
+      "description": "",
+      "configValues": {"userId": "$id"	}
+    },
+	 "segmentsEnrichment": {
+      "resourcePath": "/contacts/{userId}/segments/get",
+      "description": "",
+      "configValues": {"userId": "$id"	}
+    }
+  },
+  
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+           "userId": {
+				"type": "string",
+				"title": "",
+				"description": "",
+				"default": "myDefault2",
+				"scopes": ["enrichment"]
+			}
+        }
+    },
+  "preDefinedEvents": [
+        {
+            "resourcePath": "/contacts/search/post",
+            "name": "Get contacts and leads in batch",
+             "description": "Retrieving contacts from Intercom",
+			 "enrichments": [
+				{
+				  "enrichmentPoint": "tagsEnrichment",
+				  "toRequestMapping": [],
+				  "fromResponseMapping": [
+						{
+						  "sourceField": "data.id",
+						  "targetField": "tags.id"
+						},
+						{
+						  "sourceField": "data.name",
+						  "targetField": "tags.name"
+						}
+				  ]
+				},
+				{
+				  "enrichmentPoint": "segmentsEnrichment",
+				  "toRequestMapping": [],
+				  "fromResponseMapping": [
+						{
+						  "sourceField": "data.id",
+						  "targetField": "segments.id"
+						},
+						{
+						  "sourceField": "data.name",
+						  "targetField": "segments.name"
+						}
+				  ]
+				}
+			 ]
+        }
+    ],
+  "preDefinedEventListeners": [
+    {
+      "webhookPath": "intercomEvent/post",
+      "recordsLocator": "$",
+      "metadataConfig": {},
+      "name": "Get contacts and leads in real-time"
+    }
+  ],
+  "resources": {
+    "openapi": "3.0.0",
+    "paths": {
+      "/contacts": {
+        "post": {
+          "summary": "create a new contact",
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Accept",
+              "schema": {
+                "type": "string",
+                "default": "application/json"
+              },
+              "required": true,
+              "description": ""
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/contact"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/contacts/{id}": {
+        "put": {
+          "summary": "Update a contact",
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Accept",
+              "schema": {
+                "type": "string",
+                "default": "application/json"
+              },
+              "required": true,
+              "description": ""
+            },
+            {
+              "in": "path",
+              "name": "id",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "the contact id in intercom"
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/contact"
+                }
+              }
+            }
+          }
+        }
+      },
+	   "/contacts/search": {
+                "post": {
+                    "summary": "get users",
+					 "x-cdp-operation-settings": {
+                        "pagingConfig": {
+                            
+                           "type": "fromResponseToRequestBodyConfig",
+							  "fromResponseToRequestBody": {
+								"destinationLocator": "pagination.starting_after", 
+								"responseValueLocator" : "pages.next.starting_after"
+                
+							}
+                        }
+                    },
+                    "parameters": [
+                        {
+                            "in": "header",
+                            "name": "Accept",
+                            "schema": {
+                                "type": "string",
+                                "default": "application/json"
+                            },
+                            "required": true,
+                            "description": ""
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "content": {
+                                "application/json": {
+								
+                                    "schema": {
+										"x-cdp-schema-settings": {
+											
+										"recordsLocatorPath": "data"
+										},
+                                        "type": "object",
+										
+                                        "properties": {
+                                            "type": {
+                                                "type": "string"
+                                            },
+                                            "data": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+														"email": {
+														  "type": "string"
+														},
+														"phone": {
+														  "type": "string"
+														},
+														"name": {
+														  "type": "string"
+														},
+														"role": {
+														  "type": "string"
+														},
+														"unsubscribed_from_emails": {
+														  "type": "boolean"
+														},
+														"id": {
+																"type": "string"
+															},
+													
+														"tags": {
+															"type": "array",
+															"items": {
+															  "type": "object",
+															  
+															  "properties": {
+																"id": {
+																  "type": "string"
+																},
+																"name": {
+																  "type": "string"
+																}
+															  }
+															}
+															
+														 },
+																					 
+														"created_at": {
+														  "type": "integer"
+														  
+														},
+														 "segments": {
+															"type": "array",
+															"items": {
+															  "type": "object",
+															  
+															  "properties": {
+																"id": {
+																  "type": "string"
+																},
+																"name": {
+																  "type": "string"
+																}
+															  }
+															}
+															
+														 }
+
+													
+                                                }
+                                            }},
+											"pages": {
+												"type": "object",
+												"properties": {
+													"type": {
+														"type": "string"
+													},
+													"next": {
+														"type": "object",
+														"properties": {
+															"page": {
+																"type": "integer"
+															},
+															"starting_after": {
+																"type": "string"
+															}
+														}
+													},
+													"page": {
+														"type": "integer"
+													},
+													"per_page": {
+														"type": "integer"
+													},
+													"total_pages": {
+														"type": "integer"
+													}
+												}
+											}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "query": {
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "operator": {
+                                                    "type": "string",
+                                                    "default": "="
+                                                },
+                                                "field": {
+                                                    "type": "string",
+                                                    "default": "updated_at"
+                                                },
+                                                "value": {
+                                                    "type": "string",
+                                                    "default": "${lastRunTime:UNIX}"
+                                                }
+                                            }
+                                        },
+										"pagination": {
+                                            "type": "object",
+                                            
+                                            "properties": {
+                                                
+												"starting_after": {
+                                                    "type": "string"
+                                                    
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+			"/contacts/{userId}/tags": {
+				"get": {
+				  "summary": "",
+				  "parameters": [
+					{
+					  "name": "userId",
+					  "in": "path",
+					  "type": "string",
+					  "schema": {
+						"type": "string",
+						 "default": "$userId"
+					  },
+					  "required": true
+					},
+					{
+                            "in": "header",
+                            "name": "Accept",
+                            "schema": {
+                                "type": "string",
+                                "default": "application/json"
+                            },
+                            "required": true,
+                            "description": ""
+                     }
+				  ],
+				  "tags": [
+					"produce"
+				  ],
+				  "responses": {
+					"200": {
+					  "content": {
+						"application/json": {
+						  "schema": {
+							"type": "object",
+							"properties": {
+							  "data": {
+								"type": "array",
+								"items": {
+								  "type": "object",
+								  
+								  "properties": {
+									"id": {
+									  "type": "string"
+									},
+									"name": {
+									  "type": "string"
+									}
+								  }
+								}
+								
+							  }
+							}
+						  }
+						}
+					  }
+					}
+				  }
+				}
+      },
+	  "/contacts/{userId}/segments": {
+				"get": {
+				  "summary": "",
+				  "parameters": [
+					{
+					  "name": "userId",
+					  "in": "path",
+					  "type": "string",
+					  "schema": {
+						"type": "string",
+						 "default": "$userId"
+					  },
+					  "required": true
+					},
+					{
+                            "in": "header",
+                            "name": "Accept",
+                            "schema": {
+                                "type": "string",
+                                "default": "application/json"
+                            },
+                            "required": true,
+                            "description": ""
+                     }
+				  ],
+				  "tags": [
+					"produce"
+				  ],
+				  "responses": {
+					"200": {
+					  "content": {
+						"application/json": {
+						  "schema": {
+							"type": "object",
+							"properties": {
+							  "data": {
+								"type": "array",
+								"items": {
+								  "type": "object",
+								  
+								  "properties": {
+									"id": {
+									  "type": "string"
+									},
+									"name": {
+									  "type": "string"
+									}
+								  }
+								}
+								
+							  }
+							}
+						  }
+						}
+					  }
+					}
+				  }
+				}
+      }
+    },
+    "webhooks": {
+      "intercomEvent": {
+        "post": {
+          "summary": "",
+          "responses": {
+            "200": {
+              "description": "Return a 200 status to indicate that the webhook was received successfully"
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "item": {
+                          "type": "object",
+                          "properties": {
+                            "email": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "phone": {
+                              "type": "string"
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "topic": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "integer"
+                    }
+                  },
+                  "x-cdp-schema-settings": {
+                    "metadataConfig": {
+                      "eventTimeField": null,
+                      "deduplicationField": "id",
+                      "eventTimeFormat": "UNIX"
+                    },
+                    "recordsLocatorPath": "$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "title": "Intercom",
+      "version": "1"
+    },
+    "components": {
+      "schemas": {
+        "contact": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "unsubscribed_from_emails": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+	  "securitySchemes": {
+        "default": {
+          "type": "oauth2",
+          "flows": {
+            "authorizationCode": {
+              "scopes": {},
+              "authorizationUrl": "https://app.intercom.com/oauth",
+              "tokenUrl": "https://api.intercom.io/auth/eagle/token",
+              "refreshUrl": "https://api.intercom.io/auth/eagle/token"
+            }
+          }
+        }
+      }
+    },
+    "externalDocs": "https://api.intercom.io/",
+    "servers": [
+      {
+        "url": "https://api.intercom.io"
+      }
+    ]
+  },
+  "version": "1.0.0.0"
+}

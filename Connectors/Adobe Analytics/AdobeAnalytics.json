@@ -1,0 +1,324 @@
+{
+  "enabled": false,
+  "name": "Adobe Analytics Connector",
+  "description": "Adobe Analytics Connector",
+  "logoUrl": "https://cdpconnectorsintegration.blob.core.windows.net/uploads/marketing.svg",
+  "category": "Marketing",
+  "externalDocs": "https://www.adobe.io/apis/experiencecloud/analytics/docs.html#!AdobeDocs/analytics-2.0-apis/master/README.md",
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Adobe Analytics Connector",
+      "description": "Adobe Analytics Connector",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "$baseURL",
+        "description": "Adobe Analytics Connector"
+      }
+    ],
+    "paths": {
+      "/dummyyummy": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+          "x-cdp-path-settings": {
+            "customSteps": [
+              {
+                "name": "datasource.write.adobeanalytics",
+                "provider": "idx"
+              }
+            ]
+          },
+          "summary": "Post user's data as csv files",
+          "description": "Post user's data as csv files",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-cdp-schema-settings": {
+                    "recordsLocatorPath": "records"
+                  },
+                  "properties": {
+                    "records": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "aamlh": {
+                            "type": "string"
+                          },
+                          "browserHeight": {
+                            "type": "string"
+                          },
+                          "browserWidth": {
+                            "type": "string"
+                          },
+                          "campaign": {
+                            "type": "string"
+                          },
+                          "channel": {
+                            "type": "string"
+                          },
+                          "colorDepth": {
+                            "type": "string"
+                          },
+                          "connectionType": {
+                            "type": "string"
+                          },
+                          "contextData": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "product": {
+                                  "type": "string"
+                                },
+                                "color": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "cookiesEnabled": {
+                            "type": "string"
+                          },
+                          "currencyCode": {
+                            "type": "string"
+                          },
+                          "events": {
+                            "type": "string"
+                          },
+                          "homePage": {
+                            "type": "string"
+                          },
+                          "ipaddress": {
+                            "type": "string"
+                          },
+                          "javaEnabled": {
+                            "type": "string"
+                          },
+                          "javaScriptVersion": {
+                            "type": "string"
+                          },
+                          "language": {
+                            "type": "string"
+                          },
+                          "linkName": {
+                            "type": "string"
+                          },
+                          "linkType": {
+                            "type": "string"
+                          },
+                          "linkURL": {
+                            "type": "string"
+                          },
+                          "pageName": {
+                            "type": "string"
+                          },
+                          "pageType": {
+                            "type": "string"
+                          },
+                          "pageURL": {
+                            "type": "string"
+                          },
+                          "plugins": {
+                            "type": "string"
+                          },
+                          "products": {
+                            "type": "string"
+                          },
+                          "purchaseID": {
+                            "type": "string"
+                          },
+                          "referrer": {
+                            "type": "string"
+                          },
+                          "reportSuiteID": {
+                            "type": "string"
+                          },
+                          "resolution": {
+                            "type": "string"
+                          },
+                          "server": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "timestamp": {
+                            "type": "string"
+                          },
+                          "tnta": {
+                            "type": "string"
+                          },
+                          "trackingServer": {
+                            "type": "string"
+                          },
+                          "transactionID": {
+                            "type": "string"
+                          },
+                          "userAgent": {
+                            "type": "string"
+                          },
+                          "visitorID": {
+                            "type": "string"
+                          },
+                          "marketingCloudVisitorID": {
+                            "type": "string"
+                          },
+                          "zip": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/dummyyummy/post",
+      "name": "Adobe Analytics Send Users",
+      "configValues": {
+        "webhookUrl": "https://webhook.site/bd93f45c-c135-48d7-bc5c-fda954dc9fdd"
+      }
+    }
+  ],
+  "preDefinedEvents": [],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "baseURL"
+    ],
+    "properties": {
+      "defaultPageName": {
+        "type": "string",
+		"description": "Default value to be used in csv for defaultPageName",
+        "scopes": [
+          "action"
+        ]
+      },
+      "defaultReportSuiteID": {
+        "type": "string",
+		"description": "Default value to be used in csv for defaultReportSuiteID",
+        "scopes": [
+          "action"
+        ]
+      },
+      "defaultUserAgent": {
+        "type": "string",
+		"description": "Default value to be used in csv for defaultUserAgent",
+        "scopes": [
+          "action"
+        ]
+      },
+      "customerIDTypes": {
+        "type": "string",
+		"description": "Comma-separated Customer ID Types",
+        "scopes": [
+          "action"
+        ]
+      },
+      "marketingCloudSeedType": {
+        "type": "string",
+		"description": "Customer ID Type to use as the seed for the Marketing Cloud Visitor ID. This value has to be present in customerIDTypes",
+        "scopes": [
+          "action"
+        ]
+      },
+      "webhookUrl": {
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+      "baseURL": {
+        "type": "string",
+        "title": "Base URL",
+        "description": "The base url of the provider",
+        "format": "uri",
+		"default": "https://analytics-collection.adobe.io",
+        "scopes": [
+          "application"
+        ]
+      },
+	  "imsBaseUrl": {
+        "type": "string",
+        "title": "Base URL",
+        "description": "Base URL for Adobe BDIA",
+        "format": "uri",
+		"default": "https://ims-na1.adobelogin.com",
+        "scopes": [
+          "application"
+        ]
+      },
+      "selectQuery": {
+        "type": "string",
+        "title": "Select Query",
+        "description": "query to pass to Adobe Analytics",
+        "scopes": [
+          "event"
+        ]
+      }
+    }
+  },
+  "pollingConfigs": {},
+  "securitySchemes": {
+    "customAuth": {
+      "type": "object",
+      "allowAdditionalProperties": false,
+      "required": [
+        "clientId",
+        "clientSecret",
+        "organizationId",
+        "technicalAccountId",
+        "privateKey"
+      ],
+      "properties": {
+        "clientId": {
+          "title": "clientId",
+          "description": "clientId",
+          "type": "string",
+          "in": "header"
+        },
+        "clientSecret": {
+          "title": "clientSecret",
+          "description": "clientSecret",
+          "type": "string",
+          "in": "header"
+        },
+        "organizationId": {
+          "title": "organizationId",
+          "description": "organizationId",
+          "type": "string",
+          "in": "header"
+        },
+        "technicalAccountId": {
+          "title": "technicalAccountId",
+          "description": "technicalAccountId",
+          "type": "string",
+          "in": "header"
+        },
+        "privateKey": {
+          "title": "privateKey",
+          "description": "privateKey",
+          "type": "string",
+          "in": "header"
+        }
+      }
+    }
+  },
+  "version": "1.0.0.0"
+}

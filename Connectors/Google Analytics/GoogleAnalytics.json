@@ -1,0 +1,106 @@
+{
+  "enabled": false,
+  "name": "Google Analytics",
+  "description": "Google Analytics Connector",
+  "logoUrl": "assets/img/connectors/default-icons/marketing.svg",
+  "category": "Marketing",
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/collect/post",
+      "name": "Post data to UA",
+      "description": "Post data to Google Universal Analytics"
+    }
+  ],
+  "preDefinedEvents": [],
+  "preDefinedEventListeners": [],
+  "pollingConfigs": {
+    "/collect/post": {}
+  },
+  "externalDocs": "https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide",
+  "resources": {
+    "openapi": "3.0.0",
+    "paths": {
+      "/collect": {
+        "post": {
+          "summary": "",
+          "parameters": [],
+          "tags": [
+            "consume"
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "requestBody": {
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "v": {
+                      "type": "string",
+                      "title": "(v) Api Version",
+                      "default": "1"
+                    },
+                    "t": {
+                      "type": "string",
+                      "title": "(t) Hit type",
+                      "default": "pageview"
+                    },
+                    "cid": {
+                      "type": "string",
+                      "title": "(cid) Client ID"
+                    },
+                    "tid": {
+                      "type": "string",
+                      "title": "(tid) Tracking ID"
+                    },
+                    "dp": {
+                      "type": "string",
+                      "title": "(dp) Page path"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "info": {
+      "title": "Google Analytics connector",
+      "version": "1.0.0"
+    },
+    "components": {},
+    "servers": [
+      {
+        "url": "$baseUrl"
+      }
+    ]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "baseUrl"
+    ],
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "title": "Google Analytics base url",
+        "format": "uri",
+        "default": "https://www.google-analytics.com",
+        "scopes": [
+          "application"
+        ]
+      }
+    }
+  },
+  "version": "1.0.0.0"
+}

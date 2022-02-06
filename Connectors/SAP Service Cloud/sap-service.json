@@ -1,0 +1,840 @@
+{
+    "enabled": false,
+    "name": "SAP Service Cloud",
+    "description": "Generic Service Cloud Connector through CPI. Please import relevant CPI packages from https://api.sap.com",
+    "logoUrl": "/assets/img/connectors/sap.svg",
+    "category": "Service",
+    "externalDocs": "https://help.sap.com/viewer/1364b70b9cbb417ea5e2d80e966d4f49/LATEST/en-US/6c0a463cc9ca450cbd01a9a5057ce682.html",
+    "resources": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Service Cloud-CDP Connector",
+            "version": "1"
+        },
+        "servers": [
+            {
+                "url": "$baseUrl"
+            }
+        ],
+        "security": [
+            {
+                "basicAuth": []
+            }
+        ],
+        "paths": {
+            "/ServiceCloud/GetCustomers": {
+                "get": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "summary": "Get Customer Data",
+                    "description": "Get Individual Customers by last updated date",
+                    "operationId": "GetCustomerData",
+                    "parameters": [
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$timestamp"
+                            },
+                            "required": true,
+                            "description": "Results are filtered by ChangeOn date according to this value"
+                        },
+                        {
+                            "name": "pageSize",
+                            "in": "query",
+                            "schema": {
+                                "type": "integer",
+                                "default": "$pageSize"
+                            },
+                            "required": true,
+                            "description": "The maximum number of items to return per request"
+                        },
+                        {
+                            "name": "pageNumber",
+                            "in": "query",
+                            "schema": {
+                                "type": "integer",
+                                "default": "$pageNumber"
+                            },
+                            "required": true,
+                            "description": "The start position for pagination"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "A collection of customers",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/GetCustomersResponse"
+                                    }
+                                }
+                            }
+                        },
+                        "default": {
+                            "description": "A default error response"
+                        }
+                    }
+                }
+            },
+            "/ServiceCloud/GetTickets": {
+                "get": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "summary": "Get Tickets",
+                    "description": "Get Service Requests (Tickets) by last updated date",
+                    "operationId": "GetTickets",
+                    "parameters": [
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$timestamp"
+                            },
+                            "required": true,
+                            "description": "Results are filtered by opened or closed date according to this value"
+                        },
+                        {
+                            "name": "pageSize",
+                            "in": "query",
+                            "schema": {
+                                "type": "integer",
+                                "default": "$pageSize"
+                            },
+                            "required": true,
+                            "description": "The maximum number of items to return per request"
+                        },
+                        {
+                            "name": "pageNumber",
+                            "in": "query",
+                            "schema": {
+                                "type": "integer",
+                                "default": "$pageNumber"
+                            },
+                            "required": true,
+                            "description": "The start position for pagination"
+                        },
+                        {
+                            "name": "mode",
+                            "in": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "$getTicketsMode",
+                                "enum": [
+                                    "opened",
+                                    "closed"
+                                ]
+                            },
+                            "required": true,
+                            "description": "Indicates if pull mode is opened tickets or closed tickets"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "A collection of tickets",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/GetTicketsResponse"
+                                    }
+                                }
+                            }
+                        },
+                        "default": {
+                            "description": "A default error response"
+                        }
+                    }
+                }
+            },
+            "/ServiceCloud/CreateTicket": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Create Ticket",
+                    "description": "Create Service Request (Ticket)",
+                    "operationId": "CreateTicket",
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateTicketRequest"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "204": {
+                            "description": "Success with no additional response"
+                        },
+                        "400": {
+                            "description": "An error response"
+                        }
+                    }
+                }
+            },
+            "/ServiceCloud/UpsertCustomer": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Upsert Customer",
+                    "description": "Upsert Customer",
+                    "operationId": "UpsertCustomer",
+                    "parameters": [
+                        {
+                            "name": "customerId",
+                            "in": "query",
+                            "schema": {
+                                "type": "string"
+                            },
+                            "required": false,
+                            "description": "The Object ID corresponding to the Individual Customer in Service Cloud"
+                        }
+                    ],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateCustomerRequest"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "204": {
+                            "description": "Success with no additional response"
+                        },
+                        "400": {
+                            "description": "An error response"
+                        }
+                    }
+                }
+            }
+        },
+        "components": {
+            "securitySchemes": {
+                "basicAuth": {
+                    "type": "http",
+                    "scheme": "basic"
+                }
+            },
+            "schemas": {
+                "GetCustomersResponse": {
+                    "type": "object",
+                    "properties": {
+                        "result": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "POBoxIndicator": {
+                                        "type": "string"
+                                    },
+                                    "POBoxDeviatingStateCodeText": {
+                                        "type": "string"
+                                    },
+                                    "VisitDuration": {
+                                        "type": "string"
+                                    },
+                                    "Email": {
+                                        "type": "string"
+                                    },
+                                    "ObjectID": {
+                                        "type": "string"
+                                    },
+                                    "ExternalSystem": {
+                                        "type": "string"
+                                    },
+                                    "POBoxDeviatingStateCode": {
+                                        "type": "string"
+                                    },
+                                    "TitleCodeText": {
+                                        "type": "string"
+                                    },
+                                    "FormattedName": {
+                                        "type": "string"
+                                    },
+                                    "AcademicTitleCode": {
+                                        "type": "string"
+                                    },
+                                    "CustomerID": {
+                                        "type": "string"
+                                    },
+                                    "CreationOn": {
+                                        "type": "string"
+                                    },
+                                    "LanguageCode": {
+                                        "type": "string"
+                                    },
+                                    "NormalisedPhone": {
+                                        "type": "string"
+                                    },
+                                    "FormattedPostalAddressDescription": {
+                                        "type": "string"
+                                    },
+                                    "LifeCycleStatusCode": {
+                                        "type": "string"
+                                    },
+                                    "Street": {
+                                        "type": "string"
+                                    },
+                                    "ProfessionCode": {
+                                        "type": "string"
+                                    },
+                                    "UUID": {
+                                        "type": "string"
+                                    },
+                                    "BirthName": {
+                                        "type": "string"
+                                    },
+                                    "GenderCode": {
+                                        "type": "string"
+                                    },
+                                    "BestReachedByCodeText": {
+                                        "type": "string"
+                                    },
+                                    "LastVisitingDate": {
+                                        "type": "string"
+                                    },
+                                    "LanguageCodeText": {
+                                        "type": "string"
+                                    },
+                                    "City": {
+                                        "type": "string"
+                                    },
+                                    "Initials": {
+                                        "type": "string"
+                                    },
+                                    "NickName": {
+                                        "type": "string"
+                                    },
+                                    "NormalisedMobile": {
+                                        "type": "string"
+                                    },
+                                    "AddressLine2": {
+                                        "type": "string"
+                                    },
+                                    "AddressLine1": {
+                                        "type": "string"
+                                    },
+                                    "AdditionalHouseNumber": {
+                                        "type": "string"
+                                    },
+                                    "BestReachedByCode": {
+                                        "type": "string"
+                                    },
+                                    "TaxJurisdictionCode": {
+                                        "type": "string"
+                                    },
+                                    "MaritalStatusCode": {
+                                        "type": "string"
+                                    },
+                                    "AddressLine5": {
+                                        "type": "string"
+                                    },
+                                    "AddressLine4": {
+                                        "type": "string"
+                                    },
+                                    "RecommendedVisitingFrequency": {
+                                        "type": "string"
+                                    },
+                                    "WebSite": {
+                                        "type": "string"
+                                    },
+                                    "AcademicTitleCodeText": {
+                                        "type": "string"
+                                    },
+                                    "LastName": {
+                                        "type": "string"
+                                    },
+                                    "MaritalStatusCodeText": {
+                                        "type": "string"
+                                    },
+                                    "ChangedOn": {
+                                        "type": "string"
+                                    },
+                                    "District": {
+                                        "type": "string"
+                                    },
+                                    "BirthDate": {
+                                        "type": "string"
+                                    },
+                                    "POBoxDeviatingCountryCodeText": {
+                                        "type": "string"
+                                    },
+                                    "CareOfName": {
+                                        "type": "string"
+                                    },
+                                    "POBox": {
+                                        "type": "string"
+                                    },
+                                    "Building": {
+                                        "type": "string"
+                                    },
+                                    "HouseNumber": {
+                                        "type": "string"
+                                    },
+                                    "ExternalID": {
+                                        "type": "string"
+                                    },
+                                    "CountryCodeText": {
+                                        "type": "string"
+                                    },
+                                    "GenderCodeText": {
+                                        "type": "string"
+                                    },
+                                    "NationalityCountryCode": {
+                                        "type": "string"
+                                    },
+                                    "ProfessionCodeText": {
+                                        "type": "string"
+                                    },
+                                    "StateCodeText": {
+                                        "type": "string"
+                                    },
+                                    "County": {
+                                        "type": "string"
+                                    },
+                                    "StreetPostalCode": {
+                                        "type": "string"
+                                    },
+                                    "POBoxDeviatingCountryCode": {
+                                        "type": "string"
+                                    },
+                                    "LifeCycleStatusCodeText": {
+                                        "type": "string"
+                                    },
+                                    "TimeZoneCodeText": {
+                                        "type": "string"
+                                    },
+                                    "Phone": {
+                                        "type": "string"
+                                    },
+                                    "NamePrefixCode": {
+                                        "type": "string"
+                                    },
+                                    "TitleCode": {
+                                        "type": "string"
+                                    },
+                                    "AdditionalLastName": {
+                                        "type": "string"
+                                    },
+                                    "NamePrefixCodeText": {
+                                        "type": "string"
+                                    },
+                                    "CountryCode": {
+                                        "type": "string"
+                                    },
+                                    "Room": {
+                                        "type": "string"
+                                    },
+                                    "LatestRecommendedVisitingDate": {
+                                        "type": "string"
+                                    },
+                                    "NationalityCountryCodeText": {
+                                        "type": "string"
+                                    },
+                                    "Floor": {
+                                        "type": "string"
+                                    },
+                                    "NextVisitingDate": {
+                                        "type": "string"
+                                    },
+                                    "FirstName": {
+                                        "type": "string"
+                                    },
+                                    "StateCode": {
+                                        "type": "string"
+                                    },
+                                    "MiddleName": {
+                                        "type": "string"
+                                    },
+                                    "Mobile": {
+                                        "type": "string"
+                                    },
+                                    "OrderBlockingReasonCode": {
+                                        "type": "string"
+                                    },
+                                    "POBoxDeviatingCity": {
+                                        "type": "string"
+                                    },
+                                    "TaxJurisdictionCodeText": {
+                                        "type": "string"
+                                    },
+                                    "POBoxPostalCode": {
+                                        "type": "string"
+                                    },
+                                    "TimeZoneCode": {
+                                        "type": "string"
+                                    },
+                                    "DifferentCity": {
+                                        "type": "string"
+                                    },
+                                    "Fax": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "GetTicketsResponse": {
+                    "type": "object",
+                    "properties": {
+                        "result": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "ObjectID": {
+                                        "type": "string"
+                                    },
+                                    "BuyerPartyID": {
+                                        "type": "string"
+                                    },
+                                    "SalesOrderID": {
+                                        "type": "string"
+                                    },
+                                    "RequestedFulfillmentPeriodStartDateTime": {
+                                        "type": "string"
+                                    },
+                                    "ResolvedOnDateTime": {
+                                        "type": "string"
+                                    },
+                                    "EscalationStatusCodeText": {
+                                        "type": "string"
+                                    },
+                                    "RequestedFulfillmentPeriodEndDateTime": {
+                                        "type": "string"
+                                    },
+                                    "WarrantyID": {
+                                        "type": "string"
+                                    },
+                                    "WarrantyTo": {
+                                        "type": "string"
+                                    },
+                                    "DataOriginTypeCodeText": {
+                                        "type": "string"
+                                    },
+                                    "CompleteDuedatetimeContent": {
+                                        "type": "string"
+                                    },
+                                    "Name": {
+                                        "type": "string"
+                                    },
+                                    "ServiceRequestUserLifeCycleStatusCode": {
+                                        "type": "string"
+                                    },
+                                    "WarrantyFrom": {
+                                        "type": "string"
+                                    },
+                                    "ProcessingTypeCodeText": {
+                                        "type": "string"
+                                    },
+                                    "RequestInitialReceiptdatetimecontent": {
+                                        "type": "string"
+                                    },
+                                    "ID": {
+                                        "type": "string"
+                                    },
+                                    "IncidentServiceIssueCategoryID": {
+                                        "type": "string"
+                                    },
+                                    "UUID": {
+                                        "type": "string"
+                                    },
+                                    "ProductRecipientPartyID": {
+                                        "type": "string"
+                                    },
+                                    "ServicePriorityCode": {
+                                        "type": "string"
+                                    },
+                                    "RequestCloseddatetimeContent": {
+                                        "type": "string"
+                                    },
+                                    "FirstReactionDuedatetimeContent": {
+                                        "type": "string"
+                                    },
+                                    "WarrantyUUID": {
+                                        "type": "string"
+                                    },
+                                    "externalCustomerID": {
+                                        "type": "string"
+                                    },
+                                    "ProductRecipientPartyName": {
+                                        "type": "string"
+                                    },
+                                    "ServicePriorityCodeText": {
+                                        "type": "string"
+                                    },
+                                    "RequestFinisheddatetimeContent": {
+                                        "type": "string"
+                                    },
+                                    "RequestedTotalRequestorDuration": {
+                                        "type": "string"
+                                    },
+                                    "EscalationTimePointDateTime": {
+                                        "type": "string"
+                                    },
+                                    "EscalationStatusCode": {
+                                        "type": "string"
+                                    },
+                                    "RequestedTotalProcessingDuration": {
+                                        "type": "string"
+                                    },
+                                    "ProductRecipientPartyUUID": {
+                                        "type": "string"
+                                    },
+                                    "ResolvedOntimeZoneCode": {
+                                        "type": "string"
+                                    },
+                                    "CreationDateTime": {
+                                        "type": "string"
+                                    },
+                                    "ServiceRequestUserLifeCycleStatusCodeText": {
+                                        "type": "string"
+                                    },
+                                    "RequestInProcessdatetimeContent": {
+                                        "type": "string"
+                                    },
+                                    "DataOriginTypeCode": {
+                                        "type": "string"
+                                    },
+                                    "SerialID": {
+                                        "type": "string"
+                                    },
+                                    "ProcessingTypeCode": {
+                                        "type": "string"
+                                    },
+                                    "ResolvedOntimeZoneCodeText": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "CreateTicketRequest": {
+                    "type": "object",
+                    "properties": {
+                        "BuyerPartyID": {
+                            "type": "string"
+                        },
+                        "Name": {
+                            "type": "string",
+                            "default": "$ticketName"
+                        },
+                        "ProductID": {
+                            "type": "string"
+                        },
+                        "SalesOrderID": {
+                            "type": "string"
+                        },
+                        "ServiceRequestTextCollection": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "Text": {
+                                        "type": "string",
+                                        "default": "$ticketDescription"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "UpdateCustomerRequest": {
+                    "type": "object",
+                    "properties": {
+                        "Email": {
+                            "type": "string"
+                        },
+                        "TitleCode": {
+                            "type": "string"
+                        },
+                        "Initials": {
+                            "type": "string"
+                        },
+                        "FirstName": {
+                            "type": "string"
+                        },
+                        "MiddleName": {
+                            "type": "string"
+                        },
+                        "LastName": {
+                            "type": "string"
+                        },
+                        "MaritalStatusCode": {
+                            "type": "string"
+                        },
+                        "HouseNumber": {
+                            "type": "string"
+                        },
+                        "AddressLine2": {
+                            "type": "string"
+                        },
+                        "AddressLine1": {
+                            "type": "string"
+                        },
+                        "County": {
+                            "type": "string"
+                        },
+                        "StreetPostalCode": {
+                            "type": "string"
+                        },
+                        "Street": {
+                            "type": "string"
+                        },
+                        "City": {
+                            "type": "string"
+                        },
+                        "StateCode": {
+                            "type": "string"
+                        },
+                        "District": {
+                            "type": "string"
+                        },
+                        "CountryCode": {
+                            "type": "string"
+                        },
+                        "BirthDate": {
+                            "type": "string"
+                        },
+                        "GenderCode": {
+                            "type": "string"
+                        },
+                        "Phone": {
+                            "type": "string"
+                        },
+                        "Mobile": {
+                            "type": "string"
+                        },
+                        "NationalityCountryCode": {
+                            "type": "string"
+                        },
+                        "ExternalID": {
+                            "type": "string"
+                        },
+                        "LanguageCode": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/ServiceCloud/CreateTicket/post",
+            "name": "Create Service Request (Ticket) in Service Cloud"
+        },
+        {
+            "resourcePath": "/ServiceCloud/UpsertCustomer/post",
+            "name": "Upsert individual customer in Service Cloud"
+        }
+    ],
+    "preDefinedEvents": [
+        {
+            "resourcePath": "/ServiceCloud/GetCustomers/get",
+            "name": "Get all individual customers in batch from Service Cloud"
+        },
+        {
+            "resourcePath": "/ServiceCloud/GetTickets/get",
+            "name": "Get service requests (Tickets) from Service Cloud"
+        }
+    ],
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+            "baseUrl"
+        ],
+        "properties": {
+            "pageSize": {
+                "type": "integer",
+                "title": "Page Size",
+                "description": "The maximum number of items to return per request",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "timestamp": {
+                "type": "string",
+                "title": "timestamp",
+                "description": "Timestamp of last successful schedule execution",
+                "default": "${lastRunTime:ISO}",
+                "scopes": []
+            },
+            "baseUrl": {
+                "type": "string",
+                "title": "baseUrl",
+                "description": "The base url of the SAP Cloud Platform Integration tenant (e.g. https://d700149-iflmap.hcisbt.eu2.hana.ondemand.com/http) containing the SAP Service Cloud packages",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "ticketName": {
+                "type": "string",
+                "title": "New ticket name",
+                "description": "Applies only for 'Create Ticket' action. Ticket name sent to SAP Service Cloud when creating a new ticket",
+                "scopes": [
+                    "action",
+                    "journey-action"
+                ]
+            },
+            "getTicketsMode": {
+                "type": "string",
+                "title": "Tickets Pull Mode",
+                "description": "Applies only for 'Get Tickets' event. Enter 'opened' or 'closed' to pull tickets recently opened or closed.",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "pageNumber": {
+                "type": "integer",
+                "title": "Page Number",
+                "description": "The start position for pagination",
+                "scopes": [
+                    "event"
+                ]
+            },
+            "ticketDescription": {
+                "type": "string",
+                "title": "New ticket description",
+                "description": "Applies only for 'Create Ticket' action. Ticket description sent to SAP Service Cloud when creating a new ticket",
+                "scopes": [
+                    "action",
+                    "journey-action"
+                ]
+            }
+        }
+    },
+    "pollingConfigs": {
+        "/ServiceCloud/GetTickets/get": {
+            "recordsLocator": "result",
+            "pagingConfig": {
+                "pageFieldName": "pageNumber",
+                "pageSizeFieldName": "pageSize",
+                "type": "sequential"
+            }
+        },
+        "/ServiceCloud/GetCustomers/get": {
+            "recordsLocator": "result",
+            "pagingConfig": {
+                "pageFieldName": "pageNumber",
+                "pageSizeFieldName": "pageSize",
+                "type": "sequential"
+            }
+        }
+    },
+    "version": "1.0.0.0"
+}

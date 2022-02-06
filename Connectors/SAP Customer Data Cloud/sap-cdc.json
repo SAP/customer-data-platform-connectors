@@ -1,0 +1,1479 @@
+                {
+                    "enabled": false,
+                    "name": "SAP Customer Data Cloud",
+                    "vendor": "SAP CDC",
+                    "description": "SAP Customer Data Cloud Connector",
+                    "logoUrl": "/assets/img/connectors/sap.svg",
+                    "category": "CIAM",
+                    "externalDocs": "https://help.sap.com/viewer/product/SAP_CUSTOMER_DATA_CLOUD/GIGYA/en-US",
+                    "resources":
+                    {
+                        "openapi": "3.0.1",
+                        "info":
+                        {
+                            "title": "CDC-CDP Connector",
+                            "version": "1.5"
+                        },
+                        "paths":
+                        {
+                            "/accounts.getAccountInfo":
+                            {
+                                "get":
+                                {
+                                    "summary": "Get account information",
+                                    "parameters": [
+                                    {
+                                        "in": "query",
+                                        "name": "UID",
+                                        "schema":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "required": true,
+                                        "description": "the query to use to filter the account store"
+                                    }],
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "Successful operation",
+                                            "content":
+                                            {
+                                                "application/json":
+                                                {
+                                                    "schema":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "results":
+                                                            {
+                                                                "type": "array",
+                                                                "items":
+                                                                {
+                                                                    "$ref": "#/components/schemas/CDCFullAccountSchema"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "/accounts.setAccountInfo":
+                            {
+                                "post":
+                                {
+                                    "parameters": [
+                                    {
+                                        "in": "query",
+                                        "name": "httpStatusCodes",
+                                        "schema":
+                                        {
+                                            "type": "string",
+                                            "default": "$httpStatusCodes"
+                                        },
+                                        "required": false,
+                                        "description": "When set as true, gigya inner http status code will be reflected in the actual response status code"
+                                    }],
+                                    "summary": "Update existing account",
+                                    "requestBody":
+                                    {
+                                        "required": true,
+                                        "content":
+                                        {
+                                            "application/x-www-form-urlencoded":
+                                            {
+                                                "schema":
+                                                {
+                                                    "$ref": "#/components/schemas/CDCUpdateAccount"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "OK"
+                                        }
+                                    }
+                                }
+                            },
+                            "/accounts.importFullAccount":
+                            {
+                                "post":
+                                {
+                                    "parameters": [
+                                    {
+                                        "in": "query",
+                                        "name": "httpStatusCodes",
+                                        "schema":
+                                        {
+                                            "type": "string",
+                                            "default": "$httpStatusCodes"
+                                        },
+                                        "required": true,
+                                        "description": "When set as true, gigya inner http status code will be reflected in the actual response status code"
+                                    }],
+                                    "summary": "Import full accounts",
+                                    "requestBody":
+                                    {
+                                        "required": true,
+                                        "content":
+                                        {
+                                            "application/x-www-form-urlencoded":
+                                            {
+                                                "schema":
+                                                {
+                                                    "$ref": "#/components/schemas/CDCUpdateAccount"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "OK"
+                                        }
+                                    }
+                                }
+                            },
+                            "/accounts.importLiteAccount":
+                            {
+                                "post":
+                                {
+                                    "parameters": [
+                                    {
+                                        "in": "query",
+                                        "name": "httpStatusCodes",
+                                        "schema":
+                                        {
+                                            "type": "string",
+                                            "default": "$httpStatusCodes"
+                                        },
+                                        "required": true,
+                                        "description": "When set as true, gigya inner http status code will be reflected in the actual response status code"
+                                    }],
+                                    "summary": "Import email accounts",
+                                    "requestBody":
+                                    {
+                                        "required": true,
+                                        "content":
+                                        {
+                                            "application/x-www-form-urlencoded":
+                                            {
+                                                "schema":
+                                                {
+                                                    "$ref": "#/components/schemas/CDCNewLiteAccount"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "OK"
+                                        }
+                                    }
+                                }
+                            },
+                            "/accounts.search":
+                            {
+                                "get":
+                                {
+                                    "summary": "Search with a query",
+                                    "parameters": [
+                                    {
+                                        "in": "query",
+                                        "name": "query",
+                                        "schema":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "required": true,
+                                        "description": "the query to use to filter the account store"
+                                    }],
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "Successful operation",
+                                            "content":
+                                            {
+                                                "application/json":
+                                                {
+                                                    "schema":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "results":
+                                                            {
+                                                                "type": "array",
+                                                                "items":
+                                                                {
+                                                                    "$ref": "#/components/schemas/CDCLiteAccountSchema"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "post":
+                                {
+                                    "summary": "Search with a query",
+                                    "parameters": [
+                                    {
+                                        "in": "query",
+                                        "name": "query",
+                                        "schema":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "required": true,
+                                        "description": "the query to use to filter the account store"
+                                    }],
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "Successful operation",
+                                            "content":
+                                            {
+                                                "application/json":
+                                                {
+                                                    "schema":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "results":
+                                                            {
+                                                                "type": "array",
+                                                                "items":
+                                                                {
+                                                                    "$ref": "#/components/schemas/CDCFullAccountSchema"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "/accounts.groups.search":
+                            {
+                                "post":
+                                {
+                                    "summary": "Get Relationships",
+                                    "parameters": [
+                                    {
+                                        "schema":
+                                        {
+                                            "type": "string",
+                                            "default": "$relationshipQuery"
+                                        },
+                                        "in": "query",
+                                        "required": true,
+                                        "name": "query"
+                                    },
+                                    {
+                                        "schema":
+                                        {
+                                            "type": "string",
+                                            "default": "$model"
+                                        },
+                                        "in": "query",
+                                        "required": true,
+                                        "name": "model"
+                                    }],
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "success",
+                                            "content":
+                                            {
+                                                "application/json":
+                                                {
+                                                    "schema":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "results":
+                                                            {
+                                                                "type": "array",
+                                                                "items":
+                                                                {
+                                                                    "$ref": "#/components/schemas/CDCGroupsRelationshipSchema"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "get":
+                                {
+                                    "summary": "Get Groups",
+                                    "parameters": [
+                                    {
+                                        "schema":
+                                        {
+                                            "type": "string",
+                                            "default": "$model"
+                                        },
+                                        "in": "query",
+                                        "required": true,
+                                        "name": "model"
+                                    },
+                                    {
+                                        "schema":
+                                        {
+                                            "type": "string",
+                                            "default": "$groupQuery"
+                                        },
+                                        "in": "query",
+                                        "required": true,
+                                        "name": "query"
+                                    }],
+                                    "responses":
+                                    {
+                                        "200":
+                                        {
+                                            "description": "success",
+                                            "content":
+                                            {
+                                                "application/json":
+                                                {
+                                                    "schema":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "results":
+                                                            {
+                                                                "type": "array",
+                                                                "items":
+                                                                {
+                                                                    "$ref": "#/components/schemas/CDCGroupsGroupSchema"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "servers": [
+                        {
+                            "url": "$baseUrl"
+                        }],
+                        "components":
+                        {
+                            "schemas":
+                            {
+                                "CDCStaticProfile":
+                                {
+                                    "type": "object",
+                                    "properties":
+                                    {
+                                        "firstName":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "lastName":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "nickname":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "address":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "age":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "bio":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "birthDay":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "birthMonth":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "birthYear":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "capabilities":
+                                        {
+                                            "type": "object",
+                                            "properties":
+                                            {
+                                                "login":
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                "notifications":
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                "actions":
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                "friends":
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                "status":
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                "contacts":
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                "photos":
+                                                {
+                                                    "type": "boolean"
+                                                }
+                                            }
+                                        },
+                                        "certifications":
+                                        {
+                                            "type": "array",
+                                            "items":
+                                            {
+                                                "type": "object",
+                                                "properties":
+                                                {
+                                                    "name":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "authority":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "number":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "startDate":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "endDate":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "city":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "country":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "education":
+                                        {
+                                            "type": "array",
+                                            "items":
+                                            {
+                                                "type": "object",
+                                                "properties":
+                                                {
+                                                    "school":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "schoolType":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "fieldOfStudy":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "degree":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "startYear":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "endYear":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "educationLevel":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "email":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "favorites":
+                                        {
+                                            "type": "array",
+                                            "items":
+                                            {
+                                                "type": "object",
+                                                "properties":
+                                                {
+                                                    "interests":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "id":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "name":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "category":
+                                                            {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "activities":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "id":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "name":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "category":
+                                                            {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "books":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "id":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "name":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "category":
+                                                            {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "music":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "id":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "name":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "category":
+                                                            {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "television":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "id":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "name":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "category":
+                                                            {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "movies":
+                                                    {
+                                                        "type": "object",
+                                                        "properties":
+                                                        {
+                                                            "id":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "name":
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            "category":
+                                                            {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "followersCount":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "followingCount":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "gender":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "hometown":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "industry":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "interestedIn":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "interests":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "languages":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "likes":
+                                        {
+                                            "type": "array",
+                                            "items":
+                                            {
+                                                "type": "object",
+                                                "properties":
+                                                {
+                                                    "name":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "category":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "id":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "time":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "timestamp":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "locale":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "patents":
+                                        {
+                                            "type": "array",
+                                            "items":
+                                            {
+                                                "type": "object",
+                                                "properties":
+                                                {
+                                                    "title":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "summary":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "number":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "office":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "status":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "date":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "url":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "phones":
+                                        {
+                                            
+                                                "type": "array",
+                                                "items":
+                                                {
+                                                    "type": "object",
+                                                    "properties":
+                                                    {
+                                                        "type":
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        "number":
+                                                        {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            
+                                        },
+                                        "photoURL":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "politicalView":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "professionalHeadline":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "profileURL":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "publications":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "relationshipStatus":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "religion":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "skills":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "specialities":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "state":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "timezone":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "thumbnailURL":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "UID":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "username":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "work":
+                                        {
+                                            "type": "array",
+                                            "items":
+                                            {
+                                                "type": "object",
+                                                "properties":
+                                                {
+                                                    "company":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "companyID":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "title":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "companySize":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "startDate":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "endDate":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "industry":
+                                                    {
+                                                        "type": "string"
+                                                    },
+                                                    "isCurrent":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "zip":
+                                        {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "CDCNewLiteAccount":
+                                {
+                                    "type": "object",
+                                    "properties":
+                                    {
+                                        "email":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "profile":
+                                        {
+                                            "$ref": "#/components/schemas/CDCStaticProfile"
+                                        },
+                                        "data":
+                                        {
+                                            "type": "object"
+                                        },
+                                        "subscriptions":
+                                        {
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "CDCUpdateAccount":
+                                {
+                                    "type": "object",
+                                    "properties":
+                                    {
+                                        "UID":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "profile":
+                                        {
+                                            "$ref": "#/components/schemas/CDCStaticProfile"
+                                        },
+                                        "data":
+                                        {
+                                            "type": "object"
+                                        },
+                                        "subscriptions":
+                                        {
+                                            "type": "object"
+                                        },
+                                        "preferences":
+                                        {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "required": [
+                                        "UID"
+                                    ]
+                                },
+                                "CDCLiteAccountSchema":
+                                {
+                                    "type": "object",
+                                    "properties":
+                                    {
+                                        "email":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "profile":
+                                        {
+                                            "$ref": "#/components/schemas/CDCStaticProfile"
+                                        },
+                                        "data":
+                                        {
+                                            "type": "object"
+                                        },
+                                        "subscriptions":
+                                        {
+                                            "$ref": "#/components/schemas/ECPMSubscriptionsConverted"
+                                        },
+                                        "preferences":  
+                                        {
+                                            "$ref": "#/components/schemas/ECPMPreferencesConverted"
+                                        },
+                                        "UID":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "created":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "createdTimestamp":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "lastUpdated":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "channel":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "token":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "hasLiteAccount":
+                                        {
+                                            "type": "boolean"
+                                        },
+                                        "hasFullAccount":
+                                        {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "CDCFullAccountSchema":
+                                {
+                                    "type": "object",
+                                    "properties":
+                                    {
+                                        "profile":
+                                        {
+                                            "$ref": "#/components/schemas/CDCStaticProfile"
+                                        },
+                                        "data":
+                                        {
+                                            "type": "object"
+                                        },
+                                        "subscriptions":
+                                        {
+                                            "$ref": "#/components/schemas/ECPMSubscriptionsConverted"
+                                        },
+                                        "preferences":
+                                        {
+                                            "$ref": "#/components/schemas/ECPMPreferencesConverted"
+                                        },
+                                        "UID":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "created":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "createdTimestamp":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "emails":
+                                        {
+                                            "type": "object",
+                                            "properties":
+                                            {
+                                                "verified":
+                                                {
+                                                    "type": "array",
+                                                    "items":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "unverified":
+                                                {
+                                                    "type": "array",
+                                                    "items":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "identities":
+                                        {
+                                            "type": "array",
+                                            "items":
+                                            {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "isActive":
+                                        {
+                                            "type": "boolean"
+                                        },
+                                        "isLockedOut":
+                                        {
+                                            "type": "boolean"
+                                        },
+                                        "isRegistered":
+                                        {
+                                            "type": "boolean"
+                                        },
+                                        "isVerified":
+                                        {
+                                            "type": "boolean"
+                                        },
+                                        "lastLogin":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "lastLoginLocation":
+                                        {
+                                            "type": "object",
+                                            "properties":
+                                            {
+                                                "country":
+                                                {
+                                                    "type": "string"
+                                                },
+                                                "coordinates":
+                                                {
+                                                    "type": "object",
+                                                    "properties":
+                                                    {
+                                                        "lon":
+                                                        {
+                                                            "type": "number"
+                                                        },
+                                                        "lat":
+                                                        {
+                                                            "type": "number"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "lastUpdated":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "loginProvider":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "oldestDataUpdated":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "phoneNumber":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "registered":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "regSource":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "socialProviders":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "verified":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "loginIDs":
+                                        {
+                                            "type": "object",
+                                            "properties":
+                                            {
+                                                "emails":
+                                                {
+                                                    "type": "array",
+                                                    "items":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "unverifiedEmails":
+                                                {
+                                                    "type": "array",
+                                                    "items":
+                                                    {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "username":
+                                                {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "ECPMSubscriptionsConverted":
+                                {
+                                    "type": "array",
+                                    "items":
+                                    {
+                                        "type": "object",
+                                        "properties":
+                                        {
+                                            "externalId":
+                                            {
+                                                "type": "string"
+                                            },
+                                            "status":
+                                            {
+                                                "type": "string"
+                                            },
+                                            "date":
+                                            {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "channelType":
+                                            {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "ECPMPreferencesConverted":
+                                {
+                                    "type": "array",
+                                    "items":
+                                    {
+                                        "type": "object",
+                                        "properties":
+                                        {
+                                            "externalId":
+                                            {
+                                                "type": "string"
+                                            },
+                                            "status":
+                                            {
+                                                "type": "string"
+                                            },
+                                            "date":
+                                            {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        }
+                                    }
+                                },
+                                "CDCGroupsGroupSchema":
+                                {
+                                    "type": "object",
+                                    "properties":
+                                    {
+                                        "groupId":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "model":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "lastUpdated":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "lastUpdatedTimestamp":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "groupData":
+                                        {
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties":
+                                            {}
+                                        },
+                                        "created":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "createdTimestamp":
+                                        {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "CDCGroupsRelationshipSchema":
+                                {
+                                    "type": "object",
+                                    "properties":
+                                    {
+                                        "groupId":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "model":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "lastUpdated":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "lastUpdatedTimestamp":
+                                        {
+                                            "type": "integer"
+                                        },
+                                        "UID":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "relationshipData":
+                                        {
+                                            "type": "object"
+                                        },
+                                        "profile":
+                                        {
+                                            "$ref": "#/components/schemas/CDCStaticProfile"
+                                        },
+                                        "memberSince":
+                                        {
+                                            "type": "string"
+                                        },
+                                        "memberSinceTimestamp":
+                                        {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "type": "Rest",
+                    "preDefinedActions": [
+                    {
+                        "resourcePath": "/accounts.setAccountInfo/post",
+                        "name": "Update an existing account"
+                    },
+                    {
+                        "resourcePath": "/accounts.importFullAccount/post",
+                        "name": "Create a new full account"
+                    },
+                    {
+                        "resourcePath": "/accounts.importLiteAccount/post",
+                        "name": "Create a new lite account"
+                    }],
+                    "preDefinedEvents": [
+                    {
+                        "resourcePath": "/accounts.search/get",
+                        "name": "Get lite or email accounts in batch",
+                        "configValues":
+                        {
+                            "accountType": "emailAccounts"
+                        }
+                    },
+                    {
+                        "resourcePath": "/accounts.search/post",
+                        "name": "Get full accounts in batch",
+                        "configValues":
+                        {
+                            "accountType": "accounts"
+                        }
+                    },
+                    {
+                        "name": "Get groups relationships in batch",
+                        "resourcePath": "/accounts.groups.search/post",
+                        "description": "Get Group Relationship"
+                    },
+                    {
+                        "name": "Get groups in batch",
+                        "resourcePath": "/accounts.groups.search/get",
+                        "description": "Get Groups"
+                    }],
+                    "configSchema":
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["baseUrl", "accountType"],
+                        "properties":
+                        {
+                            "httpStatusCodes":
+                            {
+                                "type": "string",
+                                "title": "httpStatusCodes",
+                                "description": "When set as true, gigya inner http status code will be reflected in the actual response status code",
+                                "default": "true",
+                                "scopes": []
+                            },
+                            "baseUrl":
+                            {
+                                "type": "string",
+                                "title": "API base url",
+                                "description": "e.g. https://accounts.eu1.gigya.com",
+                                "default": "https://accounts.eu1.gigya.com",
+                                "scopes": ["application"]
+                            },
+                            "accountType":
+                            {
+                                "type": "string",
+                                "title": "Account Type",
+                                "description": "accounts or emailAccounts. this is used to query",
+                                "default": "accounts",
+                                "scopes": ["event"]
+                            },
+                            "relationshipQuery":
+                            {
+                                "type": "string",
+                                "title": "relationshipQuery",
+                                "default": "select * from relationship where lastUpdated > '${lastRunTime:ISO}' LIMIT 10000",
+                                "scopes": []
+                            },
+                            "groupQuery":
+                            {
+                                "type": "string",
+                                "title": "groupQuery",
+                                "default": "select * from groups where lastUpdated > '${lastRunTime:ISO}' LIMIT 10000",
+                                "scopes": []
+                            },
+                            "model":
+                            {
+                                "type": "string",
+                                "title": "Model ID",
+                                "scopes": [
+                                    "event"
+                                ]
+                            }
+                        }
+                    },
+                    "securitySchemes":
+                    {
+                        "CDC":
+                        {
+                            "type": "object",
+                            "allowAdditionalProperties": false,
+                            "required": [
+                                "userKey",
+                                "secret",
+                                "apiKey"
+                            ],
+                            "properties":
+                            {
+                                "userKey":
+                                {
+                                    "title": "User Key",
+                                    "description": "Your CDC user or application key",
+                                    "type": "string",
+                                    "in": "query"
+                                },
+                                "secret":
+                                {
+                                    "title": "Secret",
+                                    "description": "The secret key to use",
+                                    "type": "string",
+                                    "in": "query"
+                                },
+                                "apiKey":
+                                {
+                                    "title": "API Key",
+                                    "description": "The API key of the site to use",
+                                    "type": "string",
+                                    "in": "query"
+                                }
+                            }
+                        }
+                    },
+                    "pollingConfigs":
+                    {
+                        "/accounts.search/get":
+                        {
+                            "recordsLocator": "results"
+                        },
+                        "/accounts.search/post":
+                        {
+                            "recordsLocator": "results"
+                        },
+                        "/accounts.groups.search/post":
+                        {
+                            "recordsLocator": "results"
+                        },
+                        "/accounts.groups.search/get":
+                        {
+                            "recordsLocator": "results"
+                        }
+                    },
+                    "version": "1.0.0.0"
+                }

@@ -1,0 +1,153 @@
+{
+  "enabled": false,
+  "name": "Optimizely",
+  "description": "Creating audience and sending user data to Optimizely",
+  "logoUrl": "assets/img/connectors/default-icons/commerce.svg",
+  "category": "Marketing",
+  "externalDocs": "https://library.optimizely.com/docs/api/app/v2/index.html#operation/create_list_attribute",
+  "resources": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Optimizely Facebook Connector",
+      "description": "Optimizely Facebook Connector",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "$baseURL"
+      }
+    ],
+    "paths": {
+      "/list_attributes": {
+        "post": {
+          "tags": [
+            "Actions"
+          ],
+          "x-cdp-operation-settings": {
+            "customSteps": [
+              {
+                "name": "write.cdp.custom.optimizely.update",
+                "provider": "idx"
+              }
+            ],
+            "rateLimitConfig": {
+              "type": "RPS",
+              "rateLimitParameters": {
+                "ratePerSecond": 5,
+                "errorCodes": [
+                  606,
+                  607,
+                  608
+                ],
+                "delayAfterRateLimitInSecond": 20
+              }
+            }
+          },
+          "summary": "Post multiple accounts",
+          "description": "post multiple accounts",
+          
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-cdp-schema-settings": {
+                    "recordsLocatorPath": "data"
+                  },
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          
+                          "optimizely_id": {
+                            "type": "string",
+                            "title": "optimizely id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "Rest",
+  "preDefinedActions": [
+    {
+      "resourcePath": "/list_attributes/post",
+      "name": "Override audience list in a batch"
+    }
+  ],
+  "preDefinedEvents": [],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "baseURL": {
+        "title": "Base URL",
+        "description": "The Facebook marketing API: https://graph.facebook.com/v11.0",
+        "type": "string",
+        "format": "uri",
+        "scopes": [
+          "application"
+        ]
+      },
+      "list_attribute_id": {
+        "title": "Optimizely list attribute ID",
+        "description": "Optimizely list attribute ID",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+      "description": {
+        "title": "Optimizely list attribute description",
+        "description": "Optimizely list attribute description",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+      "name": {
+        "title": "Optimizely list attribute name",
+        "description": "Optimizely list attribute name",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      },
+      "key_field": {
+        "title": "Your site JS varaible name",
+        "description": "Your site JS varaible name",
+        "type": "string",
+        "scopes": [
+          "action"
+        ]
+      }
+    }
+  },
+ "securitySchemes": {
+    "optimizely": {
+      "type": "object",
+      "allowAdditionalProperties": false,
+      "required": [
+        "Authorization"
+      ],
+      "properties": {
+        "Authorization": {
+          "title": "Bearer token",
+          "in": "header",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "pollingConfigs": {},
+  "version": "1.0.0.0"
+}

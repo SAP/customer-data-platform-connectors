@@ -1,0 +1,389 @@
+{	
+   "enabled": false,
+   "type":"Rest",
+   "version": "1.0.0.0",
+   "name":"Campaign Monitor",
+   "description":"Campaign Monitor",
+   "logoUrl":"https://www.campaignmonitor.com/wp-content/themes/cm-theme/assets/ico/cm-marque.svg",
+   "category":"Services",
+   "externalDocs":"https://www.campaignmonitor.com/api/",
+   "securitySchemes":{
+      "apiKey":{
+         "type":"object",
+         "allowAdditionalProperties":false,
+         "required":[
+            "apiKey"
+         ],
+         "properties":{
+            "apiKey":{
+               "title":"Api Key",
+               "description":"Api Key",
+               "type":"string",
+               "in":"header"
+            }
+         }
+      }
+   },
+   "configSchema":{
+      "type":"object",
+      "additionalProperties":false,
+	  "required": [
+            "listId"
+        ],
+      "properties":{
+         "listId":{
+            "type":"string",
+            "title":"List ID",
+            "description":"Id of the subscribers list",
+            "scopes":[
+               "application",
+               "action",
+               "event"
+            ]
+         },         
+		 "statuses":{
+            "type":"object",
+			"properties":{
+				"active":{
+				 "type":"boolean",
+				 "title": "Active"
+				},
+				"unconfirmed":{
+				 "type":"boolean",
+				 "title": "Unconfirmed"
+				},
+				"unsubscribed":{
+				 "type":"boolean",
+				 "title": "Unsubscribed"
+				},
+				"bounced":{
+				 "type":"boolean",
+				 "title": "Bounced"
+				},
+				"deleted":{
+				 "type":"boolean",
+				 "title": "Deleted"
+				}
+			},			
+            "title":"Subscribers statuses",
+            "description":"Subscribers statuses",           
+            "scopes":[
+               "event"
+            ]
+         },
+		 "subscribe":{
+			"type": "boolean",
+			"default": true,
+			"scopes":[
+               "action"
+            ],
+			"widget": {
+				 "formlyConfig": {
+					"validation": {
+						"pattern": ".*"
+					},
+					"templateOptions": {
+						"disabled": true
+					}
+				}
+			}
+		 }
+      }
+   },
+   "resources":{
+      "openapi":"3.0.0",
+      "info":{
+         "title":"Campaign Monitor Connector",
+         "version":"1"
+      },
+      "servers":[
+         {
+            "url":"https://api.createsend.com"
+         }
+      ],
+      "paths":{
+         "/subscribers":{
+            "get":{
+               "x-cdp-operation-settings":{
+				  "pagingConfig": {						
+					 "type": "none"
+				  },
+                  "customSteps":[
+                     {
+                        "name":"datasource.read.cdp.campaignmonitor",
+                        "vendor":"idx"
+                     }
+                  ]
+               },
+               "tags":[
+                  "Events"
+               ],
+               "summary":"Load of subscribers",
+               "description":"Load of subscribers",
+               "operationId":"LoadSubscribers",
+               "responses":{
+                  "200":{
+                     "description":"Successful operation",
+                     "content":{
+                        "application/json":{
+                           "schema":{
+                              "type":"object",
+                              "x-cdp-schema-settings":{
+                                 "recordsLocatorPath":"Results"
+                              },
+                              "properties":{
+                                 "Results":{
+                                    "type":"array",
+                                    "items":{
+                                       "$ref":"#/components/schemas/Subscriber"
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         },
+         "/import":{
+            "post":{
+               "tags":[
+                  "Actions"
+               ],
+               "summary":"Import subscribers",
+               "description":"Import subscribers",
+               "operationId":"ImportSubscribers",
+               "x-cdp-operation-settings":{
+                   "rateLimitConfig": {
+                        "type": "RPS",
+                        "rateLimitParameters": {
+                        "ratePerSecond": 100,
+                        "errorCodes": [ 606, 607 ],
+                        "delayAfterRateLimitInSecond": 300
+                    }
+                    },
+                  "customSteps":[
+                     {
+                        "name":"datasource.write.cdp.campaignmonitorimporter",
+                        "vendor":"idx"
+                     }
+                  ]
+               },
+               "requestBody":{
+                  "required":true,
+                  "content":{
+                     "application/json":{
+                        "schema":{
+						   "$ref":"#/components/schemas/ImportSubscriberRequest"	                           
+                        }
+                     }
+                  }
+               },
+               "responses":{
+                  "200":{
+                     "description":"Result status",
+                     "content":{
+                        "application/json":{
+                           "schema":{
+                              "$ref":"#/components/schemas/ImportSubscribersResponse"
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         },
+		 "/unsubscribe":{
+            "post":{
+               "tags":[
+                  "Actions"
+               ],
+               "summary":"Unsubscribe subscribers",
+               "description":"Unsubscribe subscribers",
+               "operationId":"UnsubscribeSubscribers",
+               "x-cdp-operation-settings":{
+                   "rateLimitConfig": {
+                        "type": "RPS",
+                        "rateLimitParameters": {
+                        "ratePerSecond": 100,
+                        "errorCodes": [ 606, 607 ],
+                        "delayAfterRateLimitInSecond": 300
+                    }
+                    },
+                  "customSteps":[
+                     {
+                        "name":"datasource.write.cdp.campaignmonitorimporter",
+                        "vendor":"idx"
+                     }
+                  ]
+               },
+               "requestBody":{
+                  "required":true,
+                  "content":{
+                     "application/json":{
+                        "schema":{
+						   "$ref":"#/components/schemas/UnsubscribeRequest"	                           
+                        }
+                     }
+                  }
+               },
+               "responses":{
+                  "200":{
+                     "description":"Result status",
+                     "content":{
+                        "application/json":{
+                           "schema":{
+                              "$ref":"#/components/schemas/ImportSubscribersResponse"
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "components":{
+         "schemas":{
+            "Subscriber":{
+               "type":"object",
+               "properties":{
+                  "EmailAddress":{
+                     "type":"string"
+                  },
+                  "Name":{
+                     "type":"string"
+                  },
+                  "FirstName":{
+                     "type":"string"
+                  },
+                  "LastName":{
+                     "type":"string"
+                  },
+                  "Date":{
+                     "type":"string"
+                  },
+                  "State":{
+                     "type":"string",
+					 "enum":["Active", "Unconfirmed", "Unsubscribed", "Bounced", "Deleted"]
+                  },
+                  "ReadsEmailWith":{
+                     "type":"string"
+                  },
+                  "ConsentToTrack":{
+                     "type":"string"
+                  }
+               }
+            },
+			"ImportSubscriberRequest":{
+				"type": "object",
+				"x-cdp-schema-settings": {
+				  "recordsLocatorPath": "Subscribers"
+				},
+				"properties": {
+					"Subscribers":{
+						"type": "array",
+						"description": "List of subscribers for input",
+						"items": {
+						  "$ref": "#/components/schemas/SubscriberForImport"
+						}
+					}
+				}
+			},
+			"UnsubscribeRequest":{
+				"type": "object",
+				"x-cdp-schema-settings": {
+				  "recordsLocatorPath": "emailsList"
+				},
+				"properties": {
+					"emailsList":{
+						"type": "array",
+						"description": "List of emails to unsubscribe",
+						"items": {
+						  "$ref": "#/components/schemas/SubscriberForUnsubscribe"
+						}
+					}
+				}
+			},
+			"SubscriberForImport":{
+               "type":"object",
+               "properties":{
+                  "EmailAddress":{
+                     "type":"string"
+                  },
+                  "FirstName":{
+                     "type":"string"
+                  },
+                  "LastName":{
+                     "type":"string"
+                  },
+                  "ConsentToTrack":{
+                     "type":"string",
+                     "enum":[
+                        "Yes",
+                        "No",
+                        "Unchanged"
+                     ]
+                  }
+               }
+            },
+            "SubscriberForUnsubscribe":{
+               "type":"object",
+               "properties":{
+                  "EmailAddress":{
+                     "type":"string"
+                  }
+               }
+            },
+            "ImportSubscribersResponse":{
+               "type":"object",
+               "properties":{
+                  "FailureDetails":{
+                     "type":"array",
+                     "items":{
+                        
+                     }
+                  },
+                  "TotalUniqueEmailsSubmitted":{
+                     "type":"integer"
+                  },
+                  "TotalExistingSubscribers":{
+                     "type":"integer"
+                  },
+                  "TotalNewSubscribers":{
+                     "type":"integer"
+                  },
+                  "DuplicateEmailsInSubmission":{
+                     "type":"array",
+                     "items":{
+                        
+                     }
+                  }
+               }
+            }
+         }
+      }
+   },
+   "preDefinedEvents":[
+      {
+         "resourcePath":"/subscribers/get",
+         "name":"Get subscribers"
+      }
+   ],
+   "preDefinedActions":[
+      {
+         "resourcePath":"/import/post",
+         "name":"Create and update subscribers in batch",
+		 "configValues":{
+			"subscribe": true
+		 }
+      },
+	  {
+         "resourcePath":"/unsubscribe/post",
+         "name":"Update unsubscribes",
+		 "configValues":{
+			"subscribe": false
+		 }
+      }
+   ]
+}

@@ -1,0 +1,1328 @@
+{
+    "enabled": false,
+    "name": "Zendesk",
+    "description": "Generic Zendesk Connector",
+    "type": "REST",
+    "version": "1.0.0.0",
+    "category": "Services",
+    "logoUrl": "https://cdn.icon-icons.com/icons2/2429/PNG/512/zendesk_logo_icon_147198.png",
+    "externalDocs": "https://developer.zendesk.com/api-reference/",
+    "configSchema": {
+        "type": "object",
+        "allowAdditionalProperties": false,
+        "required": [
+            "baseURL"
+        ],
+        "properties": {
+            "baseURL": {
+                "title": "Base URL",
+                "description": "The base url of the provider",
+                "type": "string",
+                "format": "uri",
+                "scopes": [
+                    "application"
+                ]
+            },
+            "tokenUrl": {
+                "title": "Token URL",
+                "description": "The token url of the provider",
+                "type": "string",
+                "scopes": [
+                    "application"
+                ]
+            }
+        }
+    },
+    "resources": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Zendesk-CDP Connector",
+            "version": "1"
+        },
+        "webhooks": {
+            "GetTickets": {
+                "post": {
+                    "requestBody": {
+                        "description": "Webhook for getting tickets from Zendesk",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WebhookTicket"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "GetUsers": {
+                "post": {
+                    "requestBody": {
+                        "description": "Webhook for getting tickets from Zendesk",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WebhookUser"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "paths": {
+            "/GetTickets": {
+                "post": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "requestBody": {
+                        "description": "Webhook for getting tickets from Zendesk",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WebhookTicket"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "null",
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/GetUsers": {
+                "post": {
+                    "tags": [
+                        "Events"
+                    ],
+                    "requestBody": {
+                        "description": "Webhook for getting tickets from Zendesk",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WebhookUser"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "null",
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/users/search": {
+                "get": {
+                    "tags": [
+                        "Batch Event"
+                    ],
+                    "x-cdp-operation-settings": {
+                        "pagingConfig": {
+                            "type": "none"
+                        }
+                    },
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "updated>${lastRunTime:ISO}"
+                            },
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get users from Zendesk",
+                    "responses": {
+                        "200": {
+                            "description": "ok",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "x-cdp-schema-settings": {
+                                            "metadataConfig": {
+                                                "eventTimeField": null,
+                                                "eventTimeFormat": null,
+                                                "deduplicationField": null
+                                            },
+                                            "pagingConfig": {
+                                                "type": "nextUrl",
+                                                "nextUrl": {
+                                                    "in": "body",
+                                                    "fieldName": "next_page"
+                                                }
+                                            },
+                                            "recordsLocatorPath": "users"
+                                        },
+                                        "properties": {
+                                            "users": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/components/schemas/Users"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/users/create_many": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Create user in Zendesk",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "manyusers": {
+                                            "title": "manyusers",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Users"
+                                            },
+                                            "additionalProperties": false,
+                                            "description": "many users"
+                                        }
+                                    },
+                                    "x-cdp-schema-settings": {
+                                        "recordsLocatorPath": "manyusers",
+                                        "metadataConfig": {}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "null",
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/users": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Create user in Zendesk",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "x-cdp-schema-settings": {
+                                    "metadataConfig": {
+                                        "eventTimeField": null,
+                                        "eventTimeFormat": null,
+                                        "deduplicationField": null
+                                    },
+                                    "recordsLocatorPath": "user"
+                                },
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Users"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/search": {
+                "get": {
+                    "tags": [
+                        "Batch Event"
+                    ],
+                    "x-cdp-operation-settings": {
+                        "pagingConfig": {
+                            "type": "none"
+                        }
+                    },
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "query",
+                            "schema": {
+                                "type": "string",
+                                "default": "type:ticket updated>${lastRunTime:ISO}"
+                            },
+                            "required": true
+                        }
+                    ],
+                    "summary": "Get tickets from Zendesk",
+                    "responses": {
+                        "200": {
+                            "description": "ok",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "x-cdp-schema-settings": {
+                                            "metadataConfig": {
+                                                "eventTimeField": null,
+                                                "eventTimeFormat": null,
+                                                "deduplicationField": null
+                                            },
+                                            "pagingConfig": {
+                                                "type": "nextUrl",
+                                                "nextUrl": {
+                                                    "in": "body",
+                                                    "fieldName": "next_page"
+                                                }
+                                            },
+                                            "recordsLocatorPath": "results"
+                                        },
+                                        "properties": {
+                                            "results": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/components/schemas/results"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/tickets": {
+                "post": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Create ticket in Zendesk",
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "x-cdp-schema-settings": {
+                                    "metadataConfig": {
+                                        "eventTimeField": null,
+                                        "eventTimeFormat": null,
+                                        "deduplicationField": null
+                                    },
+                                    "recordsLocatorPath": "user"
+                                },
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ticket": {
+                                            "type": "object",
+                                            "properties": {
+                                                "comment": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "body": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "priority": {
+                                                    "type": "string"
+                                                },
+                                                "subject": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Ticket"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/users/{user_id}": {
+                "put": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Update user in Zendesk",
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "user_id",
+                            "schema": {
+                                "type": "string"
+                            },
+                            "required": true,
+                            "description": "the unique id of the user"
+                        }
+                    ],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "x-cdp-schema-settings": {
+                                    "metadataConfig": {
+                                        "eventTimeField": null,
+                                        "eventTimeFormat": null,
+                                        "deduplicationField": null
+                                    }
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/v2/tickets/{ticket_id}": {
+                "put": {
+                    "tags": [
+                        "Actions"
+                    ],
+                    "summary": "Update ticket in Zendesk",
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "ticket_id",
+                            "schema": {
+                                "type": "string"
+                            },
+                            "required": true,
+                            "description": "the unique id of the ticket"
+                        }
+                    ],
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "x-cdp-schema-settings": {
+                                    "metadataConfig": {
+                                        "eventTimeField": null,
+                                        "eventTimeFormat": null,
+                                        "deduplicationField": null
+                                    }
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ticket"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "",
+                            "content": {
+                                "application/json": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "servers": [
+            {
+                "url": "$baseURL"
+            }
+        ],
+        "security": [
+            {
+                "basicAuth": []
+            }
+        ],
+        "components": {
+            "schemas": {
+                "WebhookTicket": {
+                    "x-cdp-schema-settings": {
+                        "metadataConfig": {
+                            "deduplicationField": "ticketid"
+                        },
+                        "recordsLocatorPath": "$"
+                    },
+                    "type": "object",
+                    "properties": {
+                        "ticketid": {
+                            "type": "string"
+                        },
+                        "ticketstatus": {
+                            "type": "string"
+                        },
+                        "useremail": {
+                            "type": "string"
+                        },
+                        "userid": {
+                            "type": "string"
+                        },
+                        "userfirstname": {
+                            "type": "string"
+                        },
+                        "userlastname": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "WebhookUser": {
+                    "x-cdp-schema-settings": {
+                        "metadataConfig": {
+                            "deduplicationField": "id"
+                        },
+                        "recordsLocatorPath": "$"
+                    },
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "firstname": {
+                            "type": "string"
+                        },
+                        "fullname": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Ticket": {
+                    "type": "object",
+                    "properties": {
+                        "ticket": {
+                            "type": "object",
+                            "properties": {
+                                "url": {
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "external_id": {
+                                    "type": "string"
+                                },
+                                "comment": {
+                                    "type": "object",
+                                    "properties": {
+                                        "body": {
+                                            "type": "string"
+                                        },
+                                        "public": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "via": {
+                                    "type": "object",
+                                    "properties": {
+                                        "channel": {
+                                            "type": "string"
+                                        },
+                                        "source": {
+                                            "type": "object",
+                                            "properties": {
+                                                "from": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "title": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "to": {
+                                                    "type": "object"
+                                                },
+                                                "rel": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "updated_at": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "subject": {
+                                    "type": "string"
+                                },
+                                "raw_subject": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "priority": {
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "type": "string"
+                                },
+                                "recipient": {
+                                    "type": "string"
+                                },
+                                "requester_id": {
+                                    "type": "integer"
+                                },
+                                "submitter_id": {
+                                    "type": "integer"
+                                },
+                                "assignee_id": {
+                                    "type": "integer"
+                                },
+                                "organization_id": {
+                                    "type": "integer"
+                                },
+                                "group_id": {
+                                    "type": "integer"
+                                },
+                                "collaborator_ids": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "follower_ids": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "email_cc_ids": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "forum_topic_id": {
+                                    "type": "integer"
+                                },
+                                "problem_id": {
+                                    "type": "integer"
+                                },
+                                "has_incidents": {
+                                    "type": "boolean"
+                                },
+                                "is_public": {
+                                    "type": "boolean"
+                                },
+                                "due_at": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "tags": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "custom_fields": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {}
+                                    }
+                                },
+                                "satisfaction_rating": {
+                                    "type": "object",
+                                    "properties": {
+                                        "comment": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "score": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "sharing_agreement_ids": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "followup_ids": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "ticket_form_id": {
+                                    "type": "integer"
+                                },
+                                "brand_id": {
+                                    "type": "integer"
+                                },
+                                "allow_channelback": {
+                                    "type": "boolean"
+                                },
+                                "allow_attachments": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                },
+                "results": {
+                    "type": "object",
+                    "properties": {
+                        "url": {
+                            "type": "string"
+                        },
+                        "id": {
+                            "type": "integer"
+                        },
+                        "external_id": {
+                            "type": "string"
+                        },
+                        "via": {
+                            "type": "object",
+                            "properties": {
+                                "channel": {
+                                    "type": "string"
+                                },
+                                "source": {
+                                    "type": "object",
+                                    "properties": {
+                                        "from": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "to": {
+                                            "type": "object"
+                                        },
+                                        "rel": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "type": {
+                            "type": "string"
+                        },
+                        "subject": {
+                            "type": "string"
+                        },
+                        "raw_subject": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "priority": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "recipient": {
+                            "type": "string"
+                        },
+                        "requester_id": {
+                            "type": "integer"
+                        },
+                        "submitter_id": {
+                            "type": "integer"
+                        },
+                        "assignee_id": {
+                            "type": "integer"
+                        },
+                        "organization_id": {
+                            "type": "integer"
+                        },
+                        "group_id": {
+                            "type": "integer"
+                        },
+                        "collaborator_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "follower_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "email_cc_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "forum_topic_id": {
+                            "type": "integer"
+                        },
+                        "problem_id": {
+                            "type": "integer"
+                        },
+                        "has_incidents": {
+                            "type": "boolean"
+                        },
+                        "is_public": {
+                            "type": "boolean"
+                        },
+                        "due_at": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "tags": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "custom_fields": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {}
+                            }
+                        },
+                        "fields": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {}
+                            }
+                        },
+                        "satisfaction_rating": {
+                            "type": "object",
+                            "properties": {
+                                "comment": {
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "score": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "sharing_agreement_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "followup_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "ticket_form_id": {
+                            "type": "integer"
+                        },
+                        "brand_id": {
+                            "type": "integer"
+                        },
+                        "allow_channelback": {
+                            "type": "boolean"
+                        },
+                        "allow_attachments": {
+                            "type": "boolean"
+                        },
+                        "result_type": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "Users": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "url": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "time_zone": {
+                            "type": "string"
+                        },
+                        "iana_time_zone": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        },
+                        "shared_phone_number": {
+                            "type": "boolean"
+                        },
+                        "locale": {
+                            "type": "string"
+                        },
+                        "locale_id": {
+                            "type": "integer"
+                        },
+                        "organization_id": {
+                            "type": "integer"
+                        },
+                        "role": {
+                            "type": "string"
+                        },
+                        "external_id": {
+                            "type": "boolean"
+                        },
+                        "verified": {
+                            "type": "boolean"
+                        },
+                        "tags": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "alias": {
+                            "type": "string"
+                        },
+                        "active": {
+                            "type": "boolean"
+                        },
+                        "shared": {
+                            "type": "boolean"
+                        },
+                        "shared_agent": {
+                            "type": "boolean"
+                        },
+                        "last_login_at": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "two_factor_auth_enabled": {
+                            "type": "boolean"
+                        },
+                        "signature": {
+                            "type": "string"
+                        },
+                        "details": {
+                            "type": "string"
+                        },
+                        "notes": {
+                            "type": "string"
+                        },
+                        "role_type": {
+                            "type": "integer"
+                        },
+                        "custom_role_id": {
+                            "type": "integer"
+                        },
+                        "moderator": {
+                            "type": "boolean"
+                        },
+                        "ticket_restriction": {
+                            "type": "string"
+                        },
+                        "only_private_comments": {
+                            "type": "boolean"
+                        },
+                        "restricted_agent": {
+                            "type": "boolean"
+                        },
+                        "suspended": {
+                            "type": "boolean"
+                        },
+                        "default_group_id": {
+                            "type": "integer"
+                        },
+                        "report_csv": {
+                            "type": "boolean"
+                        },
+                        "user_fileds": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {}
+                            }
+                        },
+                        "photo": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "file_name": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "integer"
+                                },
+                                "content_url": {
+                                    "type": "string"
+                                },
+                                "mapped_content_url": {
+                                    "type": "string"
+                                },
+                                "content_type": {
+                                    "type": "string"
+                                },
+                                "size": {
+                                    "type": "integer"
+                                },
+                                "width": {
+                                    "type": "integer"
+                                },
+                                "height": {
+                                    "type": "integer"
+                                },
+                                "inline": {
+                                    "type": "boolean"
+                                },
+                                "deleted": {
+                                    "type": "boolean"
+                                },
+                                "thumbnails": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "url": {
+                                                "type": "string"
+                                            },
+                                            "file_name": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "content_url": {
+                                                "type": "string"
+                                            },
+                                            "mapped_content_url": {
+                                                "type": "string"
+                                            },
+                                            "content_type": {
+                                                "type": "string"
+                                            },
+                                            "size": {
+                                                "type": "integer"
+                                            },
+                                            "width": {
+                                                "type": "integer"
+                                            },
+                                            "height": {
+                                                "type": "integer"
+                                            },
+                                            "inline": {
+                                                "type": "boolean"
+                                            },
+                                            "deleted": {
+                                                "type": "boolean"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "User": {
+                    "type": "object",
+                    "properties": {
+                        "user": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "locale": {
+                                    "type": "string"
+                                },
+                                "locale_id": {
+                                    "type": "integer"
+                                },
+                                "organization_id": {
+                                    "type": "integer"
+                                },
+                                "phone": {
+                                    "type": "string"
+                                },
+                                "shared_phone_number": {
+                                    "type": "boolean"
+                                },
+                                "photo": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "url": {
+                                            "type": "string"
+                                        },
+                                        "file_name": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "integer"
+                                        },
+                                        "content_url": {
+                                            "type": "string"
+                                        },
+                                        "mapped_content_url": {
+                                            "type": "string"
+                                        },
+                                        "content_type": {
+                                            "type": "string"
+                                        },
+                                        "size": {
+                                            "type": "integer"
+                                        },
+                                        "width": {
+                                            "type": "integer"
+                                        },
+                                        "height": {
+                                            "type": "integer"
+                                        },
+                                        "inline": {
+                                            "type": "boolean"
+                                        },
+                                        "deleted": {
+                                            "type": "boolean"
+                                        },
+                                        "thumbnails": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "url": {
+                                                        "type": "string"
+                                                    },
+                                                    "file_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "content_url": {
+                                                        "type": "string"
+                                                    },
+                                                    "mapped_content_url": {
+                                                        "type": "string"
+                                                    },
+                                                    "content_type": {
+                                                        "type": "string"
+                                                    },
+                                                    "size": {
+                                                        "type": "integer"
+                                                    },
+                                                    "width": {
+                                                        "type": "integer"
+                                                    },
+                                                    "height": {
+                                                        "type": "integer"
+                                                    },
+                                                    "inline": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "deleted": {
+                                                        "type": "boolean"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "role": {
+                                    "type": "string"
+                                },
+                                "time_zone": {
+                                    "type": "string"
+                                },
+                                "updated_at": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "verified": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "securitySchemes": {
+                "basicAuth": {
+                    "type": "http",
+                    "scheme": "basic"
+                }
+            }
+        }
+    },
+    "preDefinedActions": [
+        {
+            "name": "Create user in Zendesk",
+            "resourcePath": "/api/v2/users/post"
+        },
+        {
+            "name": "Create ticket in Zendesk",
+            "resourcePath": "/api/v2/tickets/post"
+        },
+        {
+            "name": "Update user in Zendesk",
+            "resourcePath": "/api/v2/users/{user_id}/put"
+        },
+        {
+            "name": "Update ticket in Zendesk",
+            "resourcePath": "/api/v2/tickets/{ticket_id}/put"
+        },
+        {
+            "name": "create many users in Zendesk",
+            "resourcePath": "/api/v2/users/create_many/post"
+        }
+    ],
+    "preDefinedEvents": [
+        {
+            "name": "Get users from Zendesk in batch",
+            "resourcePath": "/api/v2/users/search/get"
+        },
+        {
+            "name": "Get tickets from Zendesk in batch",
+            "resourcePath": "/api/v2/search/get"
+        }
+    ],
+    "preDefinedEventListeners": [
+        {
+            "name": "Get tickets from zendesk in real-time",
+            "webhookPath": "GetTickets/post",
+            "recordsLocator": "$"
+        },
+        {
+            "name": "Get users from zendesk in real-time",
+            "webhookPath": "GetUsers/post",
+            "recordsLocator": "$"
+        }
+    ]
+}

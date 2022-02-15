@@ -1,0 +1,169 @@
+{
+    "name": "Google Sub/Pub",
+    "description": "Google Sub/Pub connector",
+    "logoUrl": "assets/img/connectors/default-icons/commerce.svg",
+    "category": "Commerce",
+    "configSchema": {
+        "required": [
+            "project"
+        ],
+        "type": "object",
+        "properties": {
+            "project": {
+                "type": "string",
+                "scopes": [
+                    "application",
+                    "action"
+                ]
+            }
+        }
+    },
+    "externalDocs": "https://cloud.google.com/pubsub/docs/reference/rest/v1/projects.topics/publish",
+    "resources": {
+        "openapi": "3.0.0",
+        "paths": {
+            "/{project}/topics/{topic}:publish": {
+                "post": {
+                    "summary": "publishing messages to topic",
+                    "parameters": [
+                        {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "in": "path",
+                            "required": true,
+                            "name": "project"
+                        },
+                        {
+                            "schema": {
+                                "type": "string"
+                            },
+                            "in": "path",
+                            "required": true,
+                            "name": "topic"
+                        }
+                    ],
+                    "tags": [
+                        "consume"
+                    ],
+                    "responses": {
+                        "200": {
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "messageIds": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                },
+                                                "additionalItems": true,
+                                                "title": "messageIds",
+                                                "description": "message Ids"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "messages": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "data": {
+                                                        "type": "string",
+                                                        "title": "data",
+                                                        "default": ""
+                                                    },
+                                                    "attributes": {
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {},
+                                                        "title": "attributes"
+                                                    }
+                                                }
+                                            },
+                                            "additionalItems": true,
+                                            "title": "messages"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "info": {
+            "title": "Google Sub/Pub",
+            "version": "1"
+        },
+        "components": {
+            "securitySchemes": {
+                "default": {
+                    "type": "oauth2",
+                    "flows": {
+                        "authorizationCode": {
+                            "x-cdp-authorization-settings": {
+                                "parameters": {
+                                    "access_type": {
+                                        "schema": {
+                                            "type": "string",
+                                            "default": "offline"
+                                        },
+                                        "in": [
+                                            "authorizationUrl"
+                                        ]
+                                    },
+                                    "approval_prompt": {
+                                        "schema": {
+                                            "type": "string",
+                                            "default": "force"
+                                        },
+                                        "in": [
+                                            "authorizationUrl"
+                                        ]
+                                    }
+                                }
+                            },
+                            "tokenUrl": "https://oauth2.googleapis.com/token",
+                            "refreshUrl": "https://oauth2.googleapis.com/token",
+                            "authorizationUrl": "https://accounts.google.com/o/oauth2/auth",
+                            "scopes": {
+                                "https://www.googleapis.com/auth/pubsub": "https://www.googleapis.com/auth/pubsub"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "servers": [
+            {
+                "url": "https://pubsub.googleapis.com/v1/projects"
+            }
+        ]
+    },
+    "type": "Rest",
+    "preDefinedActions": [
+        {
+            "resourcePath": "/{project}/topics/{topic}:publish/post",
+            "name": "publish message to Google Pub/Sub",
+            "id": "HESRIV0g0iIip-TOb9d98A"
+        }
+    ],
+    "preDefinedEvents": [],
+    "preDefinedEventListeners": [],
+    "enrichmentPoints": {},
+    "enabled": false,
+    "version": "1.0.0.0"
+}

@@ -1,13 +1,208 @@
-# @SAP/repository-template
-Default templates of SAP's repositories. Provides template files including LICENSE, .reuse/dep5, Code of Conduct, etc... All repositories on github.com/SAP will be created based on this template.
 
-# Containing files
 
-1. The LICENSE file:
-In the most cases, the license of SAP's projects is `Apache 2.0`.
+## Welcome to Customer Data Platform Connectors Hub
 
-2. The .reuse/dep5 file: 
-The [Reuse Tool](https://reuse.software/) must be used for your open source project. You can find the .reuse/dep5 in the project initial. Please replace the parts inside the single angle quotation marks < > by the specific information for your repository.
+We're using the connectors to connect the CDP with the external world. Either receiving or pushing external data into the CDP, or sending various types of data from CDP to another platform. Here we want to share our knowledge on how to do that or maybe get the external point of view how to improve that or add the missing feature
 
-3. The README.md file (This file):
-Please edit this file as it is the primary description file for your project.
+## Legenda
+
+ - **Event** - pushing data to CDP
+	 - Webhook	
+	 - Schedual event
+ -  **Action** - Sending data from CDP
+	 - Journey (real time)
+	 - Audiance (batch - offline)
+ - **Mapping** - relations between request or responce schema to CDP entities (Profile, Action etc...)
+
+## Specification
+Our connector definition based on OpenAPI specification. You can use swagger tools for implementing the specification
+
+## Examples
+
+- **Action**
+	- at first, in the root element, add predefineAction element to define all the actions
+		
+
+```
+		"preDefinedActions":[
+		      {
+		         "resourcePath":"/import/post",
+		         "name":"Create and update subscribers in batch",
+				 "configValues":{
+					"subscribe": true
+				 }
+		      },
+			  {
+		         "resourcePath":"/unsubscribe/post",
+		         "name":"Update unsubscribes",
+				 "configValues":{
+					"subscribe": false
+				 }
+		      }
+		   ]
+```
+
+   then refer to the action definition when you describe the action
+```
+		"/import":{
+            "post":{
+               "tags":[
+                  "Actions"
+               ],
+               "summary":"Import subscribers",
+               "description":"Import subscribers",
+               "operationId":"ImportSubscribers",
+               "x-cdp-operation-settings":{
+                   "rateLimitConfig": {
+                        "type": "RPS",
+                        "rateLimitParameters": {
+                        "ratePerSecond": 100,
+                        "errorCodes": [ 606, 607 ],
+                        "delayAfterRateLimitInSecond": 300
+                    }
+                    }
+               },
+               "requestBody":{
+                  "required":true,
+                  "content":{
+                     "application/json":{
+                        "schema":{
+						   "$ref":"#/components/schemas/ImportSubscriberRequest"	                           
+                        }
+                     }
+                  }
+               },
+               "responses":{
+                  "200":{
+                     "description":"Result status",
+                     "content":{
+                        "application/json":{
+                           "schema":{
+                              "$ref":"#/components/schemas/ImportSubscribersResponse"
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+``` 
+   - **Events**
+	   - Webhook
+	       in the root element, add preDefinedEventListeners element to define all the webhhoks
+		   ```
+		     "preDefinedEventListeners": [
+		         {
+			      "webhookPath": "intercomEvent/post",
+			      "recordsLocator": "$",
+			      "name": "Get contacts and leads in real-time"
+			    }
+			  ]
+		  ```
+		  then refer to this definition when you describe the webhhok
+	      ```
+	        "webhooks": {
+				    "intercomEvent": {
+			      "post": {
+			        "summary": "",
+			        "responses": {
+			          "200": {
+			            "description": "Return a 200 status to indicate that the webhook was received successfully"
+			          }
+			        },
+			        "requestBody": {
+			          "content": {
+			            "application/json": {
+			              "schema": {
+			                "type": "object",
+			                "properties": {
+			                  "data": {
+			                    "type": "object",
+			                    "properties": {
+			                      "item": {
+			                        "type": "object",
+			                        "properties": {
+			                          "email": {
+			                            "type": "string"
+			                          },
+			                          "name": {
+			                            "type": "string"
+			                          },
+			                          "id": {
+			                            "type": "string"
+			                          },
+			                          "phone": {
+			                            "type": "string"
+			                          },
+			                          "created_at": {
+			                            "type": "string",
+			                            "format": "date-time"
+			                          }
+			                        }
+			                      }
+			                    }
+			                  },
+			                  "topic": {
+			                    "type": "string"
+			                  },
+			                  "id": {
+			                    "type": "string"
+			                  },
+			                  "created_at": {
+			                    "type": "integer"
+			                  }
+			                }
+			              }
+			            }
+			          }
+			        }
+			      }
+			    }
+			  }
+			```
+		- Event
+			in the root element, add preDefinedEvents element to define all the webhhoks
+			```
+			"preDefinedEvents":[
+		        {
+	           "resourcePath":"/subscribers/get",
+	           "name":"Get subscribers"
+		        }
+		    ]
+			```
+			and  then refer to this definition when you describe the event
+			```
+			"/subscribers": {
+		      "get": {
+		        "tags": [
+		          "Events"
+		        ],
+		        "summary": "Load of subscribers",
+		        "description": "Load of subscribers",
+		        "operationId": "LoadSubscribers",
+		        "responses": {
+		          "200": {
+		            "description": "Successful operation",
+		            "content": {
+		              "application/json": {
+		                "schema": {
+		                  "type": "object",
+		                  "x-cdp-schema-settings": {
+		                    "recordsLocatorPath": "Results"
+		                  },
+		                  "properties": {
+		                    "Results": {
+		                      "type": "array",
+		                      "items": {
+		                        "$ref": "#/components/schemas/Subscriber"
+		                      }
+		                    }
+		                  }
+		                }
+		              }
+		            }
+		          }
+		        }
+		      }
+		    }
+			```

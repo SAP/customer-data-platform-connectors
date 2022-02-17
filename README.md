@@ -88,8 +88,9 @@ Our connector definition based on OpenAPI specification. You can use swagger too
          }
 ``` 
    - **Events**
-	   - Webhook
-	       in the root element, add preDefinedEventListeners element to define all the webhhoks
+	   - **Webhook**
+	   
+	      in the root element, add preDefinedEventListeners element to define all the webhhoks
 		   ```
 		     "preDefinedEventListeners": [
 		         {
@@ -160,7 +161,7 @@ Our connector definition based on OpenAPI specification. You can use swagger too
 			    }
 			  }
 			```
-		- Event
+		- **Event**
 			in the root element, add preDefinedEvents element to define all the webhhoks
 			```
 			"preDefinedEvents":[

@@ -162,6 +162,7 @@ Our connector definition based on OpenAPI specification. You can use swagger too
 			  }
 			```
 		- **Event**
+		
 			in the root element, add preDefinedEvents element to define all the webhhoks
 			```
 			"preDefinedEvents":[

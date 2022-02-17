@@ -1,7 +1,5 @@
 # SAP Customer Data Platform Connectors Hub
 
-[![REUSE status](https://api.reuse.software/badge/github.com/fsfe/reuse-action)](https://api.reuse.software/info/github.com/fsfe/reuse-action)
-
 ## Description
 We're using the connectors to connect the CDP to external world. Either receiving or pushing external data into the CDP, or sending various types of data from CDP to another platform. Here we want to share our knowledge on how to do that or maybe get the external point of view how to improve that or add the missing feature
 

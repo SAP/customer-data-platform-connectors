@@ -24,7 +24,7 @@ None
 
 
 - **Action Example**
-	- In the root element, add predefineAction element to define all the actions
+	In the root element, add predefineAction element to define all the actions
 		
 
 	```
@@ -91,127 +91,127 @@ None
             }
          }
 	``` 
-	- **Events Example**
-	   - **Webhook**
-	   
-	      In the root element, add preDefinedEventListeners element to define all the webhooks
-		   ```
-		     "preDefinedEventListeners": [
-		         {
-			      "webhookPath": "intercomEvent/post",
-			      "recordsLocator": "$",
-			      "name": "Get contacts and leads in real-time"
-			    }
-			  ]
-		  ```
-		  Then refer to this definition when you describe the webhook
-	      ```
-	        "webhooks": {
-				    "intercomEvent": {
-			      "post": {
-			        "summary": "",
-			        "responses": {
-			          "200": {
-			            "description": "Return a 200 status to indicate that the webhook was received successfully"
-			          }
-			        },
-			        "requestBody": {
-			          "content": {
-			            "application/json": {
-			              "schema": {
-			                "type": "object",
-			                "properties": {
-			                  "data": {
-			                    "type": "object",
-			                    "properties": {
-			                      "item": {
-			                        "type": "object",
-			                        "properties": {
-			                          "email": {
-			                            "type": "string"
-			                          },
-			                          "name": {
-			                            "type": "string"
-			                          },
-			                          "id": {
-			                            "type": "string"
-			                          },
-			                          "phone": {
-			                            "type": "string"
-			                          },
-			                          "created_at": {
-			                            "type": "string",
-			                            "format": "date-time"
-			                          }
-			                        }
-			                      }
-			                    }
-			                  },
-			                  "topic": {
-			                    "type": "string"
-			                  },
-			                  "id": {
-			                    "type": "string"
-			                  },
-			                  "created_at": {
-			                    "type": "integer"
-			                  }
-			                }
-			              }
-			            }
-			          }
-			        }
-			      }
-			    }
+- **Events Example**
+	- **Webhook**
+   
+	In the root element, add preDefinedEventListeners element to define all the webhooks
+	```
+	 "preDefinedEventListeners": [
+		 {
+		  "webhookPath": "intercomEvent/post",
+		  "recordsLocator": "$",
+		  "name": "Get contacts and leads in real-time"
+		}
+	  ]
+	```
+	Then refer to this definition when you describe the webhook
+	```
+	"webhooks": {
+			"intercomEvent": {
+		  "post": {
+			"summary": "",
+			"responses": {
+			  "200": {
+				"description": "Return a 200 status to indicate that the webhook was received successfully"
 			  }
-			```
-		- **Event Example**
-		
-			In the root element, add preDefinedEvents element to define all the webhooks
-			```
-			"preDefinedEvents":[
-		        {
-	           "resourcePath":"/subscribers/get",
-	           "name":"Get subscribers"
-		        }
-		    ]
-			```
-			And  then refer to this definition when you describe the event
-			```
-			"/subscribers": {
-		      "get": {
-		        "tags": [
-		          "Events"
-		        ],
-		        "summary": "Load of subscribers",
-		        "description": "Load of subscribers",
-		        "operationId": "LoadSubscribers",
-		        "responses": {
-		          "200": {
-		            "description": "Successful operation",
-		            "content": {
-		              "application/json": {
-		                "schema": {
-		                  "type": "object",
-		                  "x-cdp-schema-settings": {
-		                    "recordsLocatorPath": "Results"
-		                  },
-		                  "properties": {
-		                    "Results": {
-		                      "type": "array",
-		                      "items": {
-		                        "$ref": "#/components/schemas/Subscriber"
-		                      }
-		                    }
-		                  }
-		                }
-		              }
-		            }
-		          }
-		        }
-		      }
-		    }
-			```
+			},
+			"requestBody": {
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "data": {
+						"type": "object",
+						"properties": {
+						  "item": {
+							"type": "object",
+							"properties": {
+							  "email": {
+								"type": "string"
+							  },
+							  "name": {
+								"type": "string"
+							  },
+							  "id": {
+								"type": "string"
+							  },
+							  "phone": {
+								"type": "string"
+							  },
+							  "created_at": {
+								"type": "string",
+								"format": "date-time"
+							  }
+							}
+						  }
+						}
+					  },
+					  "topic": {
+						"type": "string"
+					  },
+					  "id": {
+						"type": "string"
+					  },
+					  "created_at": {
+						"type": "integer"
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	```
+	- **Event Example**
+
+	In the root element, add preDefinedEvents element to define all the webhooks
+	```
+	"preDefinedEvents":[
+		{
+	   "resourcePath":"/subscribers/get",
+	   "name":"Get subscribers"
+		}
+	]
+	```
+	And  then refer to this definition when you describe the event
+	```
+	"/subscribers": {
+	  "get": {
+		"tags": [
+		  "Events"
+		],
+		"summary": "Load of subscribers",
+		"description": "Load of subscribers",
+		"operationId": "LoadSubscribers",
+		"responses": {
+		  "200": {
+			"description": "Successful operation",
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "x-cdp-schema-settings": {
+					"recordsLocatorPath": "Results"
+				  },
+				  "properties": {
+					"Results": {
+					  "type": "array",
+					  "items": {
+						"$ref": "#/components/schemas/Subscriber"
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	}
+	```
 
 ## Limitations
 None

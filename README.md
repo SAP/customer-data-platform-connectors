@@ -12,14 +12,14 @@ None
 ## Usage
 
 - **Terms**
-
- - **Event** - pushing data to CDP
-	 - Webhook	
-	 - Schedual event
- -  **Action** - Sending data from CDP
-	 - Journey (real time)
-	 - Audience (batch - offline)
- - **Mapping** - relations between request or response schema to CDP entities (Profile, Action etc...)
+	
+	- **Event** - pushing data to CDP
+		- Webhook	
+		- Schedual event
+	-  **Action** - Sending data from CDP
+		- Journey (real time)
+		- Audience (batch - offline)
+	- **Mapping** - relations between request or response schema to CDP entities (Profile, Action etc...)
 
 
 

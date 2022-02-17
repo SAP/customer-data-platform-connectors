@@ -1,30 +1,30 @@
 # SAP Customer Data Platform Connectors Hub
 
 ## Description
-We're using the connectors to connect the CDP to external world. Either receiving or pushing external data into the CDP, or sending various types of data from CDP to another platform. Here we want to share our knowledge on how to do that or maybe get the external point of view how to improve that or add the missing feature
+We're using the connectors to connect the CDP to the external world. Either receiving or pushing external data into the CDP, or sending various types of data from CDP to another platform. Here we want to share our knowledge on how to do that or maybe get the external point of view on how to improve that or add the missing feature
 
 ## Specification
-Our connector definition based on OpenAPI specification. You can use swagger tools for implementing the specification
+Our connector definition is based on OpenAPI specification. You can use swagger tools for implementing the specification
 
 ## Download and Installation
 None
 
 ## Usage
 
-- **Legenda**
+- **Terms**
 
  - **Event** - pushing data to CDP
 	 - Webhook	
 	 - Schedual event
  -  **Action** - Sending data from CDP
 	 - Journey (real time)
-	 - Audiance (batch - offline)
- - **Mapping** - relations between request or responce schema to CDP entities (Profile, Action etc...)
+	 - Audience (batch - offline)
+ - **Mapping** - relations between request or response schema to CDP entities (Profile, Action etc...)
 
 
 
 - **Action Example**
-	- at first, in the root element, add predefineAction element to define all the actions
+	- In the root element, add predefineAction element to define all the actions
 		
 
 	```
@@ -46,7 +46,7 @@ None
 		   ]
 	```
 
-	then refer to the action definition when you describe the action
+	Then refer to the action definition when you describe the action
 	```
 		"/import":{
             "post":{
@@ -94,7 +94,7 @@ None
 	- **Events Example**
 	   - **Webhook**
 	   
-	      in the root element, add preDefinedEventListeners element to define all the webhhoks
+	      In the root element, add preDefinedEventListeners element to define all the webhooks
 		   ```
 		     "preDefinedEventListeners": [
 		         {
@@ -104,7 +104,7 @@ None
 			    }
 			  ]
 		  ```
-		  then refer to this definition when you describe the webhhok
+		  Then refer to this definition when you describe the webhook
 	      ```
 	        "webhooks": {
 				    "intercomEvent": {
@@ -167,7 +167,7 @@ None
 			```
 		- **Event Example**
 		
-			in the root element, add preDefinedEvents element to define all the webhhoks
+			In the root element, add preDefinedEvents element to define all the webhooks
 			```
 			"preDefinedEvents":[
 		        {
@@ -176,7 +176,7 @@ None
 		        }
 		    ]
 			```
-			and  then refer to this definition when you describe the event
+			And  then refer to this definition when you describe the event
 			```
 			"/subscribers": {
 		      "get": {
@@ -212,8 +212,6 @@ None
 		      }
 		    }
 			```
-### SDK Options
-None
 
 ## Limitations
 None

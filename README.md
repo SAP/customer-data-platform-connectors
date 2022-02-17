@@ -1,10 +1,19 @@
+# SAP Customer Data Platform Connectors Hub
 
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP/customer-data-platform-connectors)](https://api.reuse.software/info/github.com/SAP/customer-data-platform-connectors)
 
-## Welcome to Customer Data Platform Connectors Hub
-
+## Description
 We're using the connectors to connect the CDP to external world. Either receiving or pushing external data into the CDP, or sending various types of data from CDP to another platform. Here we want to share our knowledge on how to do that or maybe get the external point of view how to improve that or add the missing feature
 
-## Legenda
+## Specification
+Our connector definition based on OpenAPI specification. You can use swagger tools for implementing the specification
+
+## Download and Installation
+None
+
+## Usage
+
+- **Legenda**
 
  - **Event** - pushing data to CDP
 	 - Webhook	
@@ -14,16 +23,13 @@ We're using the connectors to connect the CDP to external world. Either receivin
 	 - Audiance (batch - offline)
  - **Mapping** - relations between request or responce schema to CDP entities (Profile, Action etc...)
 
-## Specification
-Our connector definition based on OpenAPI specification. You can use swagger tools for implementing the specification
 
-## Examples
 
-- **Action**
+- **Action Example**
 	- at first, in the root element, add predefineAction element to define all the actions
 		
 
-```
+	```
 		"preDefinedActions":[
 		      {
 		         "resourcePath":"/import/post",
@@ -40,10 +46,10 @@ Our connector definition based on OpenAPI specification. You can use swagger too
 				 }
 		      }
 		   ]
-```
+	```
 
-   then refer to the action definition when you describe the action
-```
+	then refer to the action definition when you describe the action
+	```
 		"/import":{
             "post":{
                "tags":[
@@ -86,8 +92,8 @@ Our connector definition based on OpenAPI specification. You can use swagger too
                }
             }
          }
-``` 
-   - **Events**
+	``` 
+	- **Events Example**
 	   - **Webhook**
 	   
 	      in the root element, add preDefinedEventListeners element to define all the webhhoks
@@ -161,7 +167,7 @@ Our connector definition based on OpenAPI specification. You can use swagger too
 			    }
 			  }
 			```
-		- **Event**
+		- **Event Example**
 		
 			in the root element, add preDefinedEvents element to define all the webhhoks
 			```
@@ -208,3 +214,24 @@ Our connector definition based on OpenAPI specification. You can use swagger too
 		      }
 		    }
 			```
+### SDK Options
+None
+
+## Limitations
+None
+
+## Known Issues
+None
+
+## How to obtain support
+Via SAP standard support.
+https://developers.gigya.com/display/GD/Opening+A+Support+Incident
+
+## Contributing
+Via pull request to this repository.
+
+## To-Do (upcoming changes)
+None
+
+## Licensing
+Please see our [LICENSE](https://github.com/SAP/customer-data-platform-connectors/blob/main/LICENSES/Apache-2.0.txt) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/SAP/customer-data-platform-connectors)
